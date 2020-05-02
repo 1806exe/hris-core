@@ -22,12 +22,12 @@ import {
 } from 'src/core/helpers/response.helper';
 import { ApiResult, Pager } from 'src/core/interfaces';
 import { DeleteResponse } from 'src/core/interfaces/response/delete.interface';
-import { IDTOUIDObjectPropsResolver } from 'src/core/resolvers/id-to-uid-object-prop.resolver';
 import { getPagerDetails } from 'src/core/utilities';
 import { sanitizeResponseObject } from 'src/core/utilities/sanitize-response-object';
 import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
-
+import { APIPayloadResolver } from '@icodebible/utils/resolvers';
 import { MaintenanceBaseService } from '../services/base.service';
+import { PayloadConfig } from 'src/core/config/payload.config';
 
 export class MaintenanceBaseController<T extends HRISBaseEntity> {
   /**
@@ -146,8 +146,9 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
     @Body() createEntityDto,
   ): Promise<ApiResult> {
     try {
-      const procCreateEntityDTO = await IDTOUIDObjectPropsResolver(
+      const procCreateEntityDTO = await APIPayloadResolver(
         createEntityDto,
+        PayloadConfig,
       );
       const isIDExist = await this.maintenanceBaseService.findOneByUid(
         procCreateEntityDTO,
