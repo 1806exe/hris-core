@@ -11,7 +11,7 @@ import * as _ from 'lodash';
 import { HRISBaseEntity } from 'src/core/entities/base-entity';
 import { getSelections, getRelations } from 'src/core/utilities/get-fields.utility';
 import { getWhereConditions } from 'src/core/utilities';
-import { UIDToIDResolver } from 'src/core/resolvers/uid-to-id.resolver';
+import { UIDToIDResolver } from '@icodebible/utils/resolvers/uid-to-id';
 import { entityTableMapper } from 'src/core/resolvers/database-table.resolver';
 
 // class Factory {
