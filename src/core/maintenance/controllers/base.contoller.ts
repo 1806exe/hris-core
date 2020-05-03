@@ -91,10 +91,10 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
   async findOne(
     @Req() req: Request,
     @Res() res: Response,
-    @Param() params,
+    @Param() param,
   ): Promise<ApiResult> {
     try {
-      const isExist = await this.maintenanceBaseService.findOneByUid(params.id);
+      const isExist = await this.maintenanceBaseService.findOneByUid(param);
       const getResponse = isExist;
       if (isExist !== undefined) {
         return getSuccessResponse(res, sanitizeResponseObject(getResponse));
