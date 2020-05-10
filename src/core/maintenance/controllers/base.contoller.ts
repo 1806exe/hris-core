@@ -25,7 +25,7 @@ import { DeleteResponse } from 'src/core/interfaces/response/delete.interface';
 import { getPagerDetails } from 'src/core/utilities';
 import { sanitizeResponseObject } from 'src/core/utilities/sanitize-response-object';
 import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
-import { APIPayloadResolver } from '@icodebible/utils/resolvers';
+import { ObjectPropsResolver } from '@icodebible/utils/resolvers';
 import { MaintenanceBaseService } from '../services/base.service';
 import { PayloadConfig } from 'src/core/config/payload.config';
 
@@ -49,7 +49,9 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
   async findAll(@Query() query): Promise<ApiResult> {
     if (_.has(query, 'paging') && query.paging === 'false') {
       const allContents: T[] = await this.maintenanceBaseService.findAll();
-      return { [this.Model.plural]: allContents };
+      return {
+        [this.Model.plural]: _.map(allContents, sanitizeResponseObject),
+      };
     } else if (_.has(query, 'name')) {
       const foundName = await this.maintenanceBaseService.findOneByName(
         query.name,
@@ -99,7 +101,7 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
       if (isExist !== undefined) {
         return getSuccessResponse(res, sanitizeResponseObject(getResponse));
       } else {
-        return genericFailureResponse(res, params);
+        return genericFailureResponse(res, param);
       }
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -146,7 +148,7 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
     @Body() createEntityDto,
   ): Promise<ApiResult> {
     try {
-      const procCreateEntityDTO = await APIPayloadResolver(
+      const procCreateEntityDTO = await ObjectPropsResolver(
         createEntityDto,
         PayloadConfig,
       );
@@ -183,30 +185,38 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
   async update(
     @Req() req: Request,
     @Res() res: Response,
-    @Param() params,
+    @Param() param,
     @Body() updateEntityDto,
   ): Promise<ApiResult> {
-    const updateEntity = await this.maintenanceBaseService.findOneByUid(
-      params.id,
-    );
+    const updateEntity = await this.maintenanceBaseService.findOneByUid(param);
     if (updateEntity !== undefined) {
-      const resolvedEntityDTO: any = await this.maintenanceBaseService.EntityUidResolver(
+      const resolvedUpdateEntityDto = await ObjectPropsResolver(
         updateEntityDto,
-        updateEntity,
+        PayloadConfig,
       );
       // ! Removed Update Based By UID params and update automatically
       // ! By following the criteria if the uid exist the it will update
       // ! The item but if it is new then it will create new item
       const payload = await this.maintenanceBaseService.update(
-        resolvedEntityDTO,
+        updateEntity,
+        resolvedUpdateEntityDto,
       );
       if (payload) {
-        return res
-          .status(res.statusCode)
-          .json({ message: `Item with id ${params.id} updated successfully.` });
+        const omitId = _.omit(payload, ['id']);
+        const renameUIDToID = _.mapKeys(omitId, (value, key) => {
+          return key === 'uid' ? 'id' : key;
+        });
+        return res.status(res.statusCode).json({
+          payload: renameUIDToID,
+          message: `Item with id ${param.id} updated successfully.`,
+        });
+      } else {
+        return res.status(res.statusCode).json({
+          message: `No payload`,
+        });
       }
     } else {
-      return genericFailureResponse(res, params);
+      return genericFailureResponse(res, param);
     }
     return null;
   }
