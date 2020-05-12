@@ -13,13 +13,6 @@ import {
 import { Request, Response } from 'express';
 import * as _ from 'lodash';
 import { HRISBaseEntity } from 'src/core/entities/base-entity';
-import {
-  deleteSuccessResponse,
-  entityExistResponse,
-  genericFailureResponse,
-  getSuccessResponse,
-  postSuccessResponse,
-} from 'src/core/helpers/response.helper';
 import { ApiResult, Pager } from 'src/core/interfaces';
 import { DeleteResponse } from 'src/core/interfaces/response/delete.interface';
 import { getPagerDetails } from 'src/core/utilities';
@@ -28,6 +21,7 @@ import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
 import { ObjectPropsResolver } from '@icodebible/utils/resolvers';
 import { MaintenanceBaseService } from '../services/base.service';
 import { PayloadConfig } from 'src/core/config/payload.config';
+import { getSuccessResponse, genericFailureResponse, entityExistResponse, postSuccessResponse, deleteSuccessResponse } from 'src/core/helpers/maintenance-response.helper';
 
 export class MaintenanceBaseController<T extends HRISBaseEntity> {
   /**
@@ -96,9 +90,11 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
     @Param() param,
   ): Promise<ApiResult> {
     try {
-      const isExist = await this.maintenanceBaseService.findOneByUid(param);
-      const getResponse = isExist;
-      if (isExist !== undefined) {
+      const isEntityExist = await this.maintenanceBaseService.findOneByUid(
+        param,
+      );
+      const getResponse = isEntityExist;
+      if (isEntityExist !== undefined) {
         return getSuccessResponse(res, sanitizeResponseObject(getResponse));
       } else {
         return genericFailureResponse(res, param);
@@ -122,9 +118,11 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
     @Param() params,
   ): Promise<ApiResult> {
     try {
-      const isExist = await this.maintenanceBaseService.findOneByUid(params.id);
-      const getResponse = isExist;
-      if (isExist !== undefined) {
+      const isEntityExist = await this.maintenanceBaseService.findOneByUid(
+        params.id,
+      );
+      const getResponse = isEntityExist;
+      if (isEntityExist !== undefined) {
         return { [params.relation]: getResponse[params.relation] };
       } else {
         return genericFailureResponse(res, params);
@@ -162,10 +160,11 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
           procCreateEntityDTO,
         );
         if (createdEntity !== undefined) {
-          const isPropExcluded = delete createdEntity.id;
-          return isPropExcluded
-            ? postSuccessResponse(res, createdEntity)
-            : postSuccessResponse(res, createdEntity);
+          const omitId = await _.omit(createdEntity, ['id']);
+          const sanitizedCreatedEntity = _.mapKeys(omitId, (value, key) => {
+            return key === 'uid' ? 'id' : key;
+          });
+          return postSuccessResponse(res, sanitizedCreatedEntity);
         } else {
           return genericFailureResponse(res);
         }
@@ -235,14 +234,24 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
     @Res() res: Response,
   ): Promise<ApiResult> {
     try {
-      const isExist: any = await this.maintenanceBaseService.findOneByUid(
+      const isEntityExist: any = await this.maintenanceBaseService.findOneByUid(
         params,
       );
-      if (isExist !== undefined) {
+      if (isEntityExist !== undefined) {
         const deleteResponse: DeleteResponse = await this.maintenanceBaseService.delete(
-          isExist.id,
+          isEntityExist.id,
         );
-        return deleteSuccessResponse(req, res, params, deleteResponse);
+        const omittedId = await _.omit(isEntityExist, ['id']);
+        const sanitizedDeletedEntity = _.mapKeys(omittedId, (value, key) => {
+          return key === 'uid' ? 'id' : key;
+        });
+        return deleteSuccessResponse(
+          req,
+          res,
+          params,
+          deleteResponse,
+          sanitizedDeletedEntity,
+        );
       } else {
         return genericFailureResponse(res, params);
       }
