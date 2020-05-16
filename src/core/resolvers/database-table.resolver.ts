@@ -43,4 +43,8 @@ export const entityTableMapper = {
     reports: 'report',
     systeminfos: 'systeminfo',
     systemSettings: 'systemsetting',
+    sections: 'trainingsections',
+    units: 'trainingunit',
+    topics: 'trainingtopic',
+    curriculums: 'trainingcurriculum',
 };
