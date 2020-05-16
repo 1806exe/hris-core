@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
-import { BaseController } from '../../../core/controllers/base.contoller';
 import { OrganisationUnitLevel } from '../entities/organisation-unit-level.entity';
 import { OrganisationUnitLevelService } from '../services/organisation-unit-level.service';
+import { MaintenanceBaseController } from 'src/core/maintenance/controllers/base.contoller';
 
 @Controller('api/' + OrganisationUnitLevel.plural)
-export class OrganisationUnitLevelController extends BaseController<
+export class OrganisationUnitLevelController extends MaintenanceBaseController<
   OrganisationUnitLevel
 > {
   constructor(organisationUnitLevelService: OrganisationUnitLevelService) {
