@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { BaseService } from 'src/core/services/base.service';
 import { Report } from '../entities/report.entity';
 import { Repository, Connection } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { MaintenanceBaseService } from 'src/core/maintenance/services/base.service';
 
 @Injectable()
-export class ReportService extends BaseService<Report> {
+export class ReportService extends MaintenanceBaseService<Report> {
   constructor(
     @InjectRepository(Report)
     reportRepository: Repository<Report>,
@@ -16,7 +16,7 @@ export class ReportService extends BaseService<Report> {
 
   async envokeSQL(id) {
     const sqlView = await this.findOneByUid(id);
-    let results = {
+    const results = {
       pager: {
         page: 1,
         pageCount: 285,
@@ -34,10 +34,9 @@ export class ReportService extends BaseService<Report> {
         rows: [],
       },
     };
-    let data = await this.connection.query(sqlView.code);
-    console.log('Data:', data[0]);
+    const data = await this.connection.query(sqlView.code);
     if (data.length > 0) {
-      results.listGrid.headers = Object.keys(data[0]).map(key => {
+      results.listGrid.headers = Object.keys(data[0]).map((key) => {
         return {
           hidden: false,
           meta: false,
@@ -46,8 +45,8 @@ export class ReportService extends BaseService<Report> {
           type: 'string',
         };
       });
-      results.listGrid.rows = data.map(row => {
-        var newRow = [];
+      results.listGrid.rows = data.map((row) => {
+        const newRow = [];
         results.listGrid.headers.forEach((header, index) => {
           newRow[index] = row[header.name];
         });
