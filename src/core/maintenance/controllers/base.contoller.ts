@@ -202,12 +202,12 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
       );
       if (payload) {
         const omitId = _.omit(payload, ['id']);
-        const renameUIDToID = _.mapKeys(omitId, (value, key) => {
+        const entityResponse = _.mapKeys(omitId, (value, key) => {
           return key === 'uid' ? 'id' : key;
         });
         return res.status(res.statusCode).json({
-          payload: renameUIDToID,
           message: `Item with id ${param.id} updated successfully.`,
+          payload: entityResponse,
         });
       } else {
         return res.status(res.statusCode).json({
