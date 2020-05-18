@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { BaseService } from '../../../core/services/base.service';
 import { OrganisationUnitGroupSet } from '../entities/organisation-unit-group-set.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { MaintenanceBaseService } from 'src/core/maintenance/services/base.service';
 
 @Injectable()
-export class OrganisationUnitGroupSetService extends BaseService<
+export class OrganisationUnitGroupSetService extends MaintenanceBaseService<
   OrganisationUnitGroupSet
 > {
   constructor(
