@@ -87,7 +87,7 @@
     "cz-conventional-changelog": "^3.0.2",
     "graphql-tools": "^5.0.0",
     "husky": "^4.2.5",
-    "jest": "25.5.4",
+    "jest": "26.0.1",
     "nodemon": "2.0.4",
     "prettier": "2.0.5",
     "supertest": "4.0.2",
