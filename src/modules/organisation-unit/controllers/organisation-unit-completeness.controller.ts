@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
-import { BaseController } from '../../../core/controllers/base.contoller';
 import { OrganisationUnitCompleteness } from '../entities/organisation-unit-completeness.entity';
 import { OrganisationUnitCompletenessService } from '../services/organisation-unit-completeness.service';
+import { MaintenanceBaseController } from 'src/core/maintenance/controllers/base.contoller';
 
 @Controller('api/' + OrganisationUnitCompleteness.plural)
-export class OrganisationUnitCompletenessController extends BaseController<
+export class OrganisationUnitCompletenessController extends MaintenanceBaseController<
   OrganisationUnitCompleteness
 > {
   constructor(

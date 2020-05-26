@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TrainingCurriculumController } from './controllers/training-curriculum.controller';
-import { TrainingTopicController } from './controllers/training-method.controller';
+import { TrainingTopicController } from './controllers/training-topic.controller';
 import { TrainingSectionController } from './controllers/training-section.controller';
 import { TrainingSessionController } from './controllers/training-session.controller';
 import { TrainingSponsorController } from './controllers/training-sponsor.controller';
@@ -8,7 +8,7 @@ import { TrainingTrainerController } from './controllers/training-trainers.contr
 import { TrainingUnitController } from './controllers/training-unit.controller';
 import { TrainingVenueController } from './controllers/training-venue.controller';
 import { TrainingCurriculumService } from './services/training-curriculum.service';
-import { TrainingTopicService } from './services/training-method.service';
+import { TrainingTopicService } from './services/training-topic.service';
 import { TrainingSectionService } from './services/training-section.service';
 import { TrainingSessionService } from './services/training-session.service';
 import { TrainingSponsorService } from './services/training-sponsor.service';
