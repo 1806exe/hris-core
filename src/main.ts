@@ -3,6 +3,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import Compression from 'compression';
 import Session from 'express-session';
 import Helmet from 'helmet';
+import bodyParser from 'body-parser';
 
 import { AppModule } from './app.module';
 
@@ -23,6 +24,13 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.use(Helmet());
+
+  /**
+   * Support for sending large body side in form
+   */
+  app.use(bodyParser.urlencoded({ limit: '50mb' }));
+  app.use(bodyParser.json({ limit: '50mb' }));
+
   app.use(
     Session({
       secret: 'secret-key',
