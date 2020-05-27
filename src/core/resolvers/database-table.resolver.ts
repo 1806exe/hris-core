@@ -41,6 +41,7 @@ export const entityTableMapper = {
     dataStore: 'datastore',
     records: 'record',
     reports: 'report',
+    reportgroups: 'reportgroup',
     systeminfos: 'systeminfo',
     systemSettings: 'systemsetting',
     sections: 'trainingsections',
