@@ -52,7 +52,7 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
       relations: getRelations(fields, metaData),
       where: getWhereConditions(filter),
       take: size,
-      skip: page,
+      skip: page * size,
     });
   }
 
@@ -139,7 +139,7 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
       savedEntity,
       entityTableMapper,
     );
-    const transformedEntity = _.merge(savedEntity, objModel)
+    const transformedEntity = _.merge(savedEntity, objModel);
     return await this.modelRepository.save(transformedEntity);
   }
 

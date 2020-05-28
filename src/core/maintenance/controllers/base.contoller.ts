@@ -53,7 +53,7 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
       return { [this.Model.plural]: foundName };
     }
 
-    const pagerDetails: Pager = getPagerDetails(query);
+    const pagerDetails: any = getPagerDetails(query);
 
     const [entityRes, totalCount]: [
       T[],
@@ -70,7 +70,7 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
         ...pagerDetails,
         pageCount: entityRes.length,
         total: totalCount,
-        nextPage: `/api/${this.Model.plural}?page=${pagerDetails.page + 1}`,
+        nextPage: `/api/${this.Model.plural}?page=${parseInt(pagerDetails.page) + 1}`,
       },
       [this.Model.plural]: _.map(entityRes, sanitizeResponseObject),
     };
