@@ -10,6 +10,7 @@ import {
   Res,
   UseGuards,
   Logger,
+  HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as _ from 'lodash';
@@ -71,9 +72,9 @@ export class BaseController<T extends HRISBaseEntity> {
         ...pagerDetails,
         pageCount: entityRes.length,
         total: totalCount,
-        nextPage: `/api/${this.Model.plural}?page=${parseInt(
-          pagerDetails.page,
-        ) + 1}`,
+        nextPage: `/api/${this.Model.plural}?page=${
+          parseInt(pagerDetails.page) + 1
+        }`,
       },
       [this.Model.plural]: _.map(entityRes, sanitizeResponseObject),
     };
@@ -210,7 +211,9 @@ export class BaseController<T extends HRISBaseEntity> {
         return genericFailureResponse(res, params);
       }
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      return res
+        .status(HttpStatus.NOT_FOUND)
+        .send(`A property with ID ${params.id} is not available`);
     }
   }
 
