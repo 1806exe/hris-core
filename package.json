@@ -59,7 +59,7 @@
     "lodash": "^4.17.15",
     "method-override": "^3.0.0",
     "nestjs-typeorm-paginate": "^2.0.3",
-    "node-pre-gyp": "^0.14.0",
+    "node-pre-gyp": "^0.15.0",
     "node-stream-zip": "^1.11.1",
     "passport": "^0.4.1",
     "passport-http": "^0.3.0",
