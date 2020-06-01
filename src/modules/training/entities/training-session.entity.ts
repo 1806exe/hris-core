@@ -28,7 +28,7 @@ export class TrainingSession extends TransactionTimestamp {
     name: 'uid',
   })
   uid: string;
-  
+
   @ManyToOne(
     () => OrganisationUnit,
     (OrganisationUnit: OrganisationUnit) => OrganisationUnit.trainingSessions,
@@ -94,11 +94,13 @@ export class TrainingSession extends TransactionTimestamp {
     name: 'deliverymode',
   })
   deliverymode: string | null;
-  @Column('character varying', {
-    nullable: true,
-    length: 256,
-    name: 'name',
+
+  @Column('boolean', {
+    nullable: false,
+    name: 'access',
   })
+  access: boolean;
+
   @ManyToMany(
     () => TrainingTopic,
     (TrainingMethod: TrainingTopic) => TrainingMethod.trainingSessions,
@@ -108,8 +110,8 @@ export class TrainingSession extends TransactionTimestamp {
   topics: TrainingTopic[];
 
   @OneToOne(
-    type => TrainingVenue,
-    trainingvenue => trainingvenue.trainingSessions,
+    (type) => TrainingVenue,
+    (trainingvenue) => trainingvenue.trainingSessions,
     { eager: true },
   )
   @JoinColumn({ name: 'venue' })
