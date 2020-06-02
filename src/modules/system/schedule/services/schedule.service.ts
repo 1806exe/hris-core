@@ -54,7 +54,7 @@ export class ScheduleService extends BaseService<Schedule>  implements OnModuleI
         process = (new OrgUnitGenerator(this.taskService, this.connetion)).start(task);
       } else if(schedule.type === 'CUSTOMPROCESS'){
         //let process:Process = await this.processService.findOneByUid(schedule.process);
-        process = (new CustomProcess(this.taskService, schedule.process)).start(task)
+        process = (new CustomProcess(this.taskService, schedule.process, this.connetion)).start(task)
       }
       process.then(()=>{
         Logger.log(

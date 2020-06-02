@@ -162,6 +162,7 @@ export class BaseService<T extends HRISBaseEntity> {
    */
   async update(dataModel: any): Promise<UpdateResult> {
     if (dataModel) {
+      dataModel.id = parseInt(dataModel.id);
       return await this.modelRepository.save(dataModel);
     }
   }
@@ -205,6 +206,7 @@ export class BaseService<T extends HRISBaseEntity> {
    */
   async EntityUidResolver(entityUpdates: any, entity: any) {
     if (entityUpdates) {
+      let id = entity.id;
       entity = { ...entity, id: entity.id };
       const objectKeys = Object.keys(entityUpdates);
       const relationUIDs = await Promise.all(
@@ -228,6 +230,7 @@ export class BaseService<T extends HRISBaseEntity> {
           },
         ),
       );
+      entity.id = id;
       return _.flatten(_.filter(relationUIDs, uid => uid === 0 || Boolean(uid)))
         .length >= 1
         ? entity

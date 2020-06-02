@@ -6,7 +6,7 @@ import { TaskService } from '../services/task.service';
 @Injectable()
 export class BackgroundProcess {
   protected task:Task
-  constructor(private taskService: TaskService) {}
+  constructor(protected taskService: TaskService) {}
   async start(task?:Task){
     this.task = task;
     try{
@@ -14,7 +14,7 @@ export class BackgroundProcess {
       await this.log({type:"SUCCESS",message:"Process finished successfully."});
     }catch(e){
       console.error(e);
-      await this.log({type:"ERROR",message: "("+await this.getProcessName()+")" + e.message});
+      await this.log({type:"ERROR",message: e.message});
     }
   }
   async getProcessName():Promise<string>{
@@ -24,7 +24,7 @@ export class BackgroundProcess {
       throw('Run Not Implemented')
   }
   async log(logdetails:{type:'ERROR'|'INFO'|'SUCCESS'|'WARNING',message:string,code?:number}){
-    console.log(logdetails.type,":",logdetails.message);
+    console.log(await this.getProcessName(),logdetails.type,":",logdetails.message);
     this.task.log.push({
       ...logdetails,
       timeStamp: (new Date()).toISOString(),

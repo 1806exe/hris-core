@@ -19,18 +19,22 @@ import { Injectable } from '@nestjs/common';
 import { TaskService } from '../services/task.service';
 import { Process } from '../../schedule/entities/process.entity';
 import { ProcessService } from '../../schedule/services/process.service';
+import Axios from 'axios';
 
 @Injectable()
 export class CustomProcess extends BackgroundProcess {
-  constructor(taskService: TaskService,private process:Process){
+  constructor(protected taskService: TaskService,private process:Process,
+    private connetion: Connection){
     super(taskService);
   }
   async run() {
-    console.log('Running things');
-    const execute = Function('context', 'console.log("This is happening")');
-    console.log('COde:',this.process.code);
-    execute({
-      log:this.log
+    const execute = Function('context', this.process.code);
+    await execute({
+      log:(logDetails)=>{
+        this.log(logDetails)
+      },
+      http: Axios,
+      db: this.connetion,
     });
   }
   async getProcessName():Promise<string>{
