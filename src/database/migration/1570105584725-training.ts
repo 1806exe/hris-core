@@ -312,12 +312,6 @@ export class training1570105584725 implements MigrationInterface {
         'ALTER TABLE "hris_traininginstance" RENAME TO "traininginstance"',
       );
       await queryRunner.query(
-        'ALTER TABLE "traininginstance" RENAME COLUMN "section_id" TO "sectionid"',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "traininginstance" RENAME COLUMN "unit_id" TO "unitid"',
-      );
-      await queryRunner.query(
         'ALTER TABLE "traininginstance" RENAME COLUMN "curriculum_id" TO "curriculumid"',
       );
       await queryRunner.query(
@@ -336,13 +330,7 @@ export class training1570105584725 implements MigrationInterface {
         'ALTER TABLE "traininginstance" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
       );
       await queryRunner.query(
-        'ALTER TABLE "traininginstance" ADD COLUMN IF NOT EXISTS "venueid" integer',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "traininginstance" ADD COLUMN IF NOT EXISTS "region" text',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "traininginstance" ADD COLUMN IF NOT EXISTS "district" text',
+        'ALTER TABLE "traininginstance" RENAME COLUMN "district" TO organisationunit',
       );
       await queryRunner.query(
         'ALTER TABLE "traininginstance" ADD COLUMN IF NOT EXISTS "venue" text',

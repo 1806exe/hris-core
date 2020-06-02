@@ -174,14 +174,12 @@ export class bigint1585295137513 implements MigrationInterface {
         ALTER TABLE trainingcurriculumtopicmember ALTER COLUMN "trainingcurriculumId" TYPE BIGINT;
         ALTER TABLE trainingcurriculumtopicmember ALTER COLUMN "trainingtopicId" TYPE BIGINT;
         ALTER TABLE trainingsession ALTER COLUMN id TYPE BIGINT;
-        ALTER TABLE trainingsession ALTER COLUMN sectionid TYPE BIGINT;
-        ALTER TABLE trainingsession ALTER COLUMN unitid TYPE BIGINT;
         ALTER TABLE trainingsession ALTER COLUMN curriculumid TYPE BIGINT;
         ALTER TABLE trainingsession ALTER COLUMN trainingid TYPE BIGINT;
         ALTER TABLE trainingtopic ALTER COLUMN id TYPE BIGINT;
         ALTER TABLE trainingsections ALTER COLUMN id TYPE BIGINT;
         ALTER TABLE trainingsession ALTER COLUMN sponsor TYPE BIGINT;
-        ALTER TABLE trainingsession ALTER COLUMN unitid TYPE BIGINT;
+        ALTER TABLE trainingsession ALTER COLUMN organisationunit TYPE BIGINT;
         ALTER TABLE trainingsession ALTER COLUMN curriculumid TYPE BIGINT;
         ALTER TABLE trainingsession ALTER COLUMN organiser TYPE BIGINT;
         ALTER TABLE trainingsponsor ALTER COLUMN id TYPE BIGINT;
@@ -251,7 +249,8 @@ export class bigint1585295137513 implements MigrationInterface {
         select uid(), sessionid,recordid from sessionparticipant
         INNER JOIN record ON(record.id=sessionparticipant.recordid) 
         INNER JOIN trainingsession ON(trainingsession.id = sessionparticipant.sessionid);
-       
+        ALTER TABLE trainingsections ADD COLUMN signature text;     
+        ALTER TABLE trainingsession ADD COLUMN access boolean;       
         `);
   }
 

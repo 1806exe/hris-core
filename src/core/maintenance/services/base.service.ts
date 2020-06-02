@@ -6,13 +6,16 @@ import {
   FindConditions,
 } from 'typeorm';
 
-import { isArray } from 'util';
 import * as _ from 'lodash';
 import { HRISBaseEntity } from 'src/core/entities/base-entity';
-import { getSelections, getRelations } from 'src/core/utilities/get-fields.utility';
+import {
+  getSelections,
+  getRelations,
+} from 'src/core/utilities/get-fields.utility';
 import { getWhereConditions } from 'src/core/utilities';
-import { UIDToIDResolver } from 'src/core/resolvers/uid-to-id.resolver';
 import { entityTableMapper } from 'src/core/resolvers/database-table.resolver';
+import { UIDToIDTransformation } from '@icodebible/utils/resolvers/uid-to-id';
+import { ObjectPayloadUpdater } from '@icodebible/utils/resolvers/updater';
 
 // class Factory {
 //   create<T>(type: (new () => T)): T {
@@ -25,7 +28,7 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
   constructor(
     private readonly modelRepository: Repository<T>,
     private readonly Model,
-  ) { }
+  ) {}
 
   async findAll(): Promise<T[]> {
     return await this.modelRepository.find();
@@ -49,7 +52,7 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
       relations: getRelations(fields, metaData),
       where: getWhereConditions(filter),
       take: size,
-      skip: page,
+      skip: page * size,
     });
   }
 
@@ -57,8 +60,13 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
    *
    * @param entity
    */
-  async findOneByUid(entity: any): Promise<T> {
-    return await this.modelRepository.findOne({ where: { uid : entity.id } });
+  async findOneByUid(param: any): Promise<T> {
+    /**
+     *
+     */
+    return await this.modelRepository.findOne({
+      where: { uid: _.has(param, 'id') ? param.id : undefined },
+    });
   }
 
   /**
@@ -74,7 +82,7 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
    * @param name
    */
   async findOneByName(name: string): Promise<T[]> {
-    return await this.modelRepository.find({ where: { name }});
+    return await this.modelRepository.find({ where: { name } });
   }
 
   /**
@@ -88,21 +96,21 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
       this.Model,
     );
     const savedEntity = model.save();
-    Object.keys(data).forEach(key => {
+    Object.keys(data).forEach((key) => {
       if (
         metaData.relations
-          .map(item => {
+          .map((item) => {
             return item.propertyName;
           })
           .indexOf(key) > -1
       ) {
         metaData.relations
-          .filter(item => {
+          .filter((item) => {
             return item.propertyName === key;
           })
-          .forEach(item => {
+          .forEach((item) => {
             if (item.relationType === 'one-to-many') {
-              data[key].forEach(child => {
+              data[key].forEach((child) => {
                 savedEntity[key].push(this.saveEntity(child, item.target));
               });
             }
@@ -125,15 +133,14 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
    */
   async create(entity: any): Promise<any> {
     const model = new this.Model();
-    // var metaData = this.modelRepository.manager.connection.getMetadata(this.model);
-    // var savedEntity = entity;
-    // model = {...model, ...entity};
-    Object.keys(entity).forEach(key => {
-      model[key] = entity[key];
-    });
-
-    // return model.save();
-    return await this.modelRepository.save(model);
+    const savedEntity = _.merge(model, entity);
+    const objModel = await UIDToIDTransformation(
+      this.modelRepository,
+      savedEntity,
+      entityTableMapper,
+    );
+    const transformedEntity = _.merge(savedEntity, objModel);
+    return await this.modelRepository.save(transformedEntity);
   }
 
   /**
@@ -152,11 +159,33 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
 
   /**
    *
-   * @param dataModel
+   * @param entity
+   * @param updates
    */
-  async update(dataModel: any): Promise<UpdateResult> {
-    if (dataModel) {
-      return await this.modelRepository.save(dataModel);
+  async update(entity: any, updates: any): Promise<UpdateResult> {
+    /**
+     *
+     */
+    if (entity && updates) {
+      /**
+       *
+       */
+      const resolvedEntityDTO: any = await ObjectPayloadUpdater(
+        entity,
+        updates,
+      );
+      /**
+       *
+       */
+      const transformedEntity: any = await UIDToIDTransformation(
+        this.modelRepository,
+        resolvedEntityDTO,
+        entityTableMapper,
+      );
+      /**
+       *
+       */
+      return await this.modelRepository.save(transformedEntity);
     }
   }
 
@@ -168,64 +197,6 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
     const condition: any = { id };
     if (condition) {
       return this.modelRepository.delete(condition);
-    }
-  }
-
-  /**
-   *
-   * @param entityRelationProps
-   * @param key
-   */
-  async getRelationUids(entityRelationProps: any[], key: string): Promise<any> {
-    return Promise.all(
-      await _.map(
-        entityRelationProps[key],
-        async (relationObj: any): Promise<any> => {
-          const relationUids = await UIDToIDResolver(
-            relationObj.uid,
-            this.modelRepository,
-            entityTableMapper[key],
-          );
-          return await relationUids;
-        },
-      ),
-    );
-  }
-
-  /**
-   *
-   * @param entityUpdates
-   * @param entity
-   */
-  async EntityUidResolver(entityUpdates: any, entity: any) {
-    if (entityUpdates) {
-      entity = { ...entity, id: entity.id };
-      const objectKeys = Object.keys(entityUpdates);
-      const relationUIDs = await Promise.all(
-        await _.map(
-          objectKeys,
-          async (key: string): Promise<any> => {
-            if (isArray(entityUpdates[key])) {
-              const result = await this.getRelationUids(entityUpdates, key);
-              entity[key] = [
-                ...entity[key],
-                ...(await this.getRelationUids(entityUpdates, key)),
-              ];
-              if (result) {
-                return await this.getRelationUids(entityUpdates, key);
-              }
-            } else {
-              if (_.has(entityUpdates, key) && _.has(entity, key)) {
-                entity[key] = entityUpdates[key];
-              }
-            }
-          },
-        ),
-      );
-      return _.flatten(_.filter(relationUIDs, uid => uid === 0 || Boolean(uid)))
-        .length >= 1
-        ? entity
-        : entity;
     }
   }
 }

@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as compression from 'compression';
-import * as rateLimit from 'express-rate-limit';
-import * as session from 'express-session';
-import * as helmet from 'helmet';
+import Compression from 'compression';
+import Session from 'express-session';
+import Helmet from 'helmet';
+import bodyParser from 'body-parser';
 
 import { AppModule } from './app.module';
 
@@ -23,9 +23,16 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
 
-  app.use(helmet());
+  app.use(Helmet());
+
+  /**
+   * Support for sending large body side in form
+   */
+  app.use(bodyParser.urlencoded({ limit: '50mb' }));
+  app.use(bodyParser.json({ limit: '50mb' }));
+
   app.use(
-    session({
+    Session({
       secret: 'secret-key',
       name: 'sess-tutorial',
       resave: false,
@@ -40,7 +47,7 @@ async function bootstrap() {
       max: 100, // limit each IP to 100 requests per windowMs
     }),
   );*/
-  app.use(compression());
+  app.use(Compression());
   // app.setGlobalPrefix('api');
   await app.listen(config.port);
 }

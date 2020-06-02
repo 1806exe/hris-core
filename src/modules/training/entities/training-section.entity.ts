@@ -15,6 +15,13 @@ export class TrainingSection extends EntityCoreProps {
   })
   id: number;
 
+  @Column({
+    nullable: true,
+    name: 'signature',
+    type: 'text'
+  })
+  signature: string;
+
   @OneToMany(
     type => TrainingCurriculum,
     trainingCurriculum => trainingCurriculum.section,

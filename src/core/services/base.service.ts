@@ -170,9 +170,9 @@ export class BaseService<T extends HRISBaseEntity> {
    *
    * @param id
    */
-  async delete(id: string): Promise<DeleteResult> {
-    const condition: any = { id };
-    if (condition) {
+  async delete(id: string): Promise<any> {
+    const condition: any = { uid:id };
+    if (id) {
       return this.modelRepository.delete(condition);
     }
   }

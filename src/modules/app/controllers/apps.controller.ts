@@ -5,7 +5,6 @@ import {
   Controller,
   Get,
   Post,
-  Body,
   UseInterceptors,
   UploadedFile,
   Param,
@@ -18,10 +17,13 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { getConfiguration } from 'src/core/utilities/configuration';
 import * as fs from 'fs';
-import * as StreamZip from 'node-stream-zip';
+import StreamZip from 'node-stream-zip';
 import { ApiResult } from 'src/core/interfaces';
 import { Request, Response } from 'express';
-import { postSuccessResponse, genericFailureResponse } from 'src/core/helpers/response.helper';
+import {
+  postSuccessResponse,
+  genericFailureResponse,
+} from 'src/core/helpers/response.helper';
 import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
 
 @Controller('api/' + App.plural)
@@ -37,15 +39,17 @@ export class AppsController extends BaseController<App> {
   @Get()
   @UseGuards(SessionGuard)
   async findAll(@Query() query): Promise<ApiResult> {
-    let results = await super.findAll(query)
-    if(results.apps){
-      results.apps = results.apps.filter((app)=>app.name.toLowerCase().indexOf('login') === -1)
+    const results = await super.findAll(query);
+    if (results.apps) {
+      results.apps = results.apps.filter(
+        (app) => app.name.toLowerCase().indexOf('login') === -1,
+      );
     }
-    results.apps = results.apps.map((app)=>{
+    results.apps = results.apps.map((app) => {
       return {
         ...app,
-        appicon: "../" + app.name.toLowerCase() +"/" + app.appicon
-      }
+        appicon: '../' + app.name.toLowerCase() + '/' + app.appicon,
+      };
     });
     return results;
   }
@@ -72,17 +76,17 @@ export class AppsController extends BaseController<App> {
     @UploadedFile() file,
   ): Promise<ApiResult> {
     try {
-      console.log('Here');
       const result: any = await this.uploadFile(file);
-      // tslint:disable-next-line: no-console
-      console.log('UPLOAD FILE::: ' + JSON.stringify(result));
       const apps: any[] = await this.service.findWhere({
         name: result.name,
       });
       if (apps.length === 0) {
         return super.create(req, res, result);
       } else {
-        const createdEntity = await this.service.updateByUID(apps[0].uid, result);
+        const createdEntity = await this.service.updateByUID(
+          apps[0].uid,
+          result,
+        );
         if (createdEntity !== undefined) {
           return postSuccessResponse(res, apps[0]);
         } else {
@@ -100,7 +104,7 @@ export class AppsController extends BaseController<App> {
    */
   uploadFile(file) {
     return new Promise((resolve, reject) => {
-      if(!file){
+      if (!file) {
         reject({
           message: 'File Does not exists',
         });
@@ -125,7 +129,7 @@ export class AppsController extends BaseController<App> {
         } else {
           zip.stream('manifest.webapp', (err, stream) => {
             const chunks = [];
-            stream.on('data', chunk => {
+            stream.on('data', (chunk) => {
               chunks.push(chunk);
             });
             stream.on('end', () => {
@@ -134,10 +138,7 @@ export class AppsController extends BaseController<App> {
                 const destination =
                   getConfiguration().apps +
                   '/' +
-                  manifest.name
-                    .toLowerCase()
-                    .split(' ')
-                    .join('');
+                  manifest.name.toLowerCase().split(' ').join('');
                 if (!fs.existsSync(destination)) {
                   fs.mkdirSync(destination);
                 }
@@ -145,11 +146,8 @@ export class AppsController extends BaseController<App> {
                   null,
                   getConfiguration().apps +
                     '/' +
-                    manifest.name
-                      .toLowerCase()
-                      .split(' ')
-                      .join(''),
-                  (err, count) => {
+                    manifest.name.toLowerCase().split(' ').join(''),
+                  () => {
                     zip.close();
                     resolve({
                       name: manifest.name,
@@ -192,6 +190,12 @@ export class AppsController extends BaseController<App> {
   @Get(':id/*')
   async loadFile(@Param() params, @Res() res) {
     // const result = await this.service.findOneByUid(params.id);
-    res.sendFile(getConfiguration().apps + '/' + params.id.toLowerCase() + '/' + params['0']);
+    res.sendFile(
+      getConfiguration().apps +
+        '/' +
+        params.id.toLowerCase() +
+        '/' +
+        params['0'],
+    );
   }
 }
