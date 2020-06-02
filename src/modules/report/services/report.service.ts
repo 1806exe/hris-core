@@ -8,14 +8,14 @@ import { MaintenanceBaseService } from 'src/core/maintenance/services/base.servi
 export class ReportService extends MaintenanceBaseService<Report> {
   constructor(
     @InjectRepository(Report)
-    reportRepository: Repository<Report>,
+    private reportRepository: Repository<Report>,
     private readonly connection: Connection,
   ) {
     super(reportRepository, Report);
   }
 
-  async envokeSQL(id) {
-    const sqlView = await this.findOneByUid(id);
+  async envokeSQL(id: string) {
+    const sqlView = await this.reportRepository.findOne({ where: { uid: id } });
     const results = {
       pager: {
         page: 1,
