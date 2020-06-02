@@ -97,9 +97,9 @@ export class ChartService extends BaseService<Chart> {
           dimension: 'pe',
           items: [
             {
-              uid: 'LAST_12_MONTHS',
-              dimensionItem: 'LAST_12_MONTHS',
-              displayName: 'LAST_12_MONTHS',
+              uid: 'LAST_10_YEARS',
+              dimensionItem: 'LAST_10_YEARS',
+              displayName: 'LAST_10_YEARS',
               dimensionItemType: 'PERIOD',
             },
           ],
@@ -152,8 +152,8 @@ export class ChartService extends BaseService<Chart> {
           dimension: 'dx',
           items: [
             {
-              uid: 'wo7ITisRXeE',
-              dimensionItem: 'wo7ITisRXeE',
+              uid: 'wo7ITisRXe1',
+              dimensionItem: 'wo7ITisRXe1',
               displayName: 'Retirement',
               dimensionItemType: 'INDICATOR',
             },
@@ -198,9 +198,9 @@ export class ChartService extends BaseService<Chart> {
           dimension: 'pe',
           items: [
             {
-              uid: 'LAST_12_MONTHS',
-              dimensionItem: 'LAST_12_MONTHS',
-              displayName: 'LAST_12_MONTHS',
+              uid: 'LAST_10_YEARS',
+              dimensionItem: 'LAST_10_YEARS',
+              displayName: 'LAST_10_YEARS',
               dimensionItemType: 'PERIOD',
             },
           ],
@@ -253,8 +253,8 @@ export class ChartService extends BaseService<Chart> {
           dimension: 'dx',
           items: [
             {
-              uid: 'yKypqIROIO9',
-              dimensionItem: 'yKypqIROIO9',
+              uid: '5289e934bde20',
+              dimensionItem: '5289e934bde20',
               displayName: 'Age Distribution',
               dimensionItemType: 'INDICATOR',
             },
@@ -269,7 +269,7 @@ export class ChartService extends BaseService<Chart> {
       dataDimensionItems: [
         {
           dataDimensionItemType: 'INDICATOR',
-          dataElement: { uid: 'yKypqIROIO9' },
+          dataElement: { uid: '5289e934bde20' },
         },
       ],
       categoryOptionGroupSetDimensions: [],
@@ -291,9 +291,9 @@ export class ChartService extends BaseService<Chart> {
           dimension: 'pe',
           items: [
             {
-              uid: 'LAST_12_MONTHS',
-              dimensionItem: 'LAST_12_MONTHS',
-              displayName: 'LAST_12_MONTHS',
+              uid: 'THIS_YEAR',
+              dimensionItem: 'THIS_YEAR',
+              displayName: 'THIS_YEAR',
               dimensionItemType: 'PERIOD',
             },
           ],

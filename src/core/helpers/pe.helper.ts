@@ -5,7 +5,7 @@ export function getISOPeriods(periods) {
             for (let i = (new Date()).getFullYear() - 10; i < (new Date()).getFullYear(); i++) {
                 returnPeriods.push("" + i);
             }
-        } else if (period === 'THIS_YEARS') {
+        } else if (period === 'THIS_YEAR') {
             returnPeriods.push("" + (new Date()).getFullYear());
         } else if (period === 'LAST_12_MONTHS') {
             let date = new Date();
