@@ -24,12 +24,13 @@ import Axios from 'axios';
 @Injectable()
 export class CustomProcess extends BackgroundProcess {
   constructor(protected taskService: TaskService,private process:Process,
-    private connetion: Connection){
+    private connetion: Connection, private parameters:{[x:string]:any}){
     super(taskService);
   }
   async run() {
     const execute = Function('context', this.process.code);
     await execute({
+      parameters: this.parameters,
       log:(logDetails)=>{
         this.log(logDetails)
       },

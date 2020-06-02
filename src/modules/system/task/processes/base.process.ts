@@ -11,9 +11,13 @@ export class BackgroundProcess {
     this.task = task;
     try{
       await this.run();
-      await this.log({type:"SUCCESS",message:"Process finished successfully."});
+      task.status = 'FINISHED';
+      task.endedat = new Date();
+      await this.taskService.update(this.task);
     }catch(e){
       console.error(e);
+      task.status = 'ERROR';
+      task.endedat = new Date();
       await this.log({type:"ERROR",message: e.message});
     }
   }
