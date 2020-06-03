@@ -4514,7 +4514,7 @@ export class report1570103156996 implements MigrationInterface {
           COUNT(*)
         FROM trainingsession rec
         INNER JOIN _organisationunitstructure ous ON(
-            ous.organisationunitid = rec.district
+            ous.organisationunitid = rec.organisationunit
             AND ou.id = ous.idlevel4
           )
         WHERE
@@ -4581,7 +4581,7 @@ export class report1570103156996 implements MigrationInterface {
                 COUNT(*)
               FROM trainingsession rec
               INNER JOIN _organisationunitstructure ous ON(
-                  ous.organisationunitid = rec.district
+                  ous.organisationunitid = rec.organisationunit
                   AND ou.id = ous.idlevel4
                 )
               WHERE
@@ -4648,7 +4648,7 @@ export class report1570103156996 implements MigrationInterface {
                 COUNT(*)
               FROM trainingsession rec
               INNER JOIN _organisationunitstructure ous ON(
-                  ous.organisationunitid = rec.district
+                  ous.organisationunitid = rec.organisationunit
                   AND ou.id = ous.idlevel4
                 )
               WHERE
@@ -4716,7 +4716,7 @@ export class report1570103156996 implements MigrationInterface {
                       COUNT(*)
                     FROM trainingsession rec
                     INNER JOIN _organisationunitstructure ous ON(
-                        ous.organisationunitid = rec.district
+                        ous.organisationunitid = rec.organisationunit
                         AND ou.id = ous.idlevel4
                       )
                     WHERE
@@ -4784,7 +4784,7 @@ export class report1570103156996 implements MigrationInterface {
               FROM
                   trainingsession rec
                   INNER JOIN _organisationunitstructure ous ON(
-                      ous.organisationunitid = rec.district
+                      ous.organisationunitid = rec.organisationunit
                       AND ou.id = ous.idlevel4
                   )
               WHERE
@@ -4861,7 +4861,7 @@ export class report1570103156996 implements MigrationInterface {
                 COUNT(*)
               FROM trainingsession rec
               INNER JOIN _organisationunitstructure ous ON(
-                  ous.organisationunitid = rec.district
+                  ous.organisationunitid = rec.organisationunit
                   AND ou.id = ous.idlevel4
                 )
               WHERE
@@ -4939,7 +4939,7 @@ export class report1570103156996 implements MigrationInterface {
                         FROM
                             trainingsession rec
                             INNER JOIN _organisationunitstructure ous ON(
-                                ous.organisationunitid = rec.district
+                                ous.organisationunitid = rec.organisationunit
                                 AND ou.id = ous.idlevel4
                             )
                         WHERE
