@@ -66,7 +66,7 @@ export class RecordsController extends BaseController<Record> {
       .status(HttpStatus.OK)
       .send(sanitizeResponseObject(recordValueResult));
   }
-  @Put('recordValues/:recordValue')
+  @Patch('recordValues/:recordValue')
   @UseGuards(SessionGuard)
   async updateRecord(
     @Param() recordValue,
