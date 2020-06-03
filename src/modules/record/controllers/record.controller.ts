@@ -73,7 +73,6 @@ export class RecordsController extends BaseController<Record> {
     @Body() createRecordDto,
     @Res() res,
   ): Promise<RecordValue> {
-    console.log(recordValue, createRecordDto)
     try {
       await this.recordService.updateRecordValue(recordValue.recordValue, createRecordDto);
       return res.status(HttpStatus.OK).send('Record Value Updated');
