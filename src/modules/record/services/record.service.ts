@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { generateUid } from 'src/core/helpers/makeuid';
 import { getWhereConditions } from 'src/core/utilities';
@@ -13,6 +13,7 @@ import { Repository } from 'typeorm';
 import { BaseService } from '../../../core/services/base.service';
 import { RecordValue } from '../entities/record-value.entity';
 import { Record } from '../entities/record.entity';
+import { response } from 'express';
 
 @Injectable()
 export class RecordService extends BaseService<Record> {
@@ -69,25 +70,21 @@ export class RecordService extends BaseService<Record> {
     const orgunitsquery = this.organisationunitRepository.createQueryBuilder();
     const getOrgunits = await orgunitsquery.getMany();
     const orgunits = await JSON.parse(
-      JSON.stringify(getOrgunits)
-        .split('OrganisationUnit')
-        .join(''),
+      JSON.stringify(getOrgunits).split('OrganisationUnit').join(''),
     );
 
     const formquery = this.formRepository.createQueryBuilder();
     const getForms = await formquery.getMany();
     const forms = await JSON.parse(
-      JSON.stringify(getForms)
-        .split('Form')
-        .join(''),
+      JSON.stringify(getForms).split('Form').join(''),
     );
 
     const whereParams = { ...where[0], ...where[1] };
     const actualForm = await forms.filter(
-      form => form.uid === whereParams.form,
+      (form) => form.uid === whereParams.form,
     );
     const actualOrgUnit = await orgunits.filter(
-      orgunit => orgunit.uid === whereParams.organisationUnit,
+      (orgunit) => orgunit.uid === whereParams.organisationUnit,
     );
 
     where = { organisationUnit: actualOrgUnit[0].id, form: actualForm[0].id };
@@ -109,7 +106,7 @@ export class RecordService extends BaseService<Record> {
     recordvalue.enddate,recordvalue.comment,recordvalue.entitledpayment,field.uid as field FROM recordvalue
     INNER JOIN field ON(field.id=recordvalue.fieldid)
     WHERE recordvalue.recordid IN(${records
-      .map(record => record.id)
+      .map((record) => record.id)
       .join(',')})`;
     let recordValues = await this.recordValueRepository.manager.query(query);
     return [
@@ -117,7 +114,7 @@ export class RecordService extends BaseService<Record> {
         return {
           ...record,
           recordValues: recordValues.filter(
-            recordValue => recordValue.recordid === record.id,
+            (recordValue) => recordValue.recordid === record.id,
           ),
         };
       }),
@@ -136,8 +133,10 @@ export class RecordService extends BaseService<Record> {
       entitledPayment,
     } = createRecordDto;
 
-   
-    const query = await this.fieldRepository.find({select: ['id'], where: [{uid: field}]})
+    const query = await this.fieldRepository.find({
+      select: ['id'],
+      where: [{ uid: field }],
+    });
     let idfield = query[0].id;
     let recordGot = (await this.recordRepository.findOne({ uid })).id;
     recordValue.uid = generateUid();
@@ -165,12 +164,21 @@ export class RecordService extends BaseService<Record> {
     uid: string,
     updateRecordValueDto: any,
   ): Promise<any> {
-    const recordValue = await this.recordValueRepository.findOne({ uid });
-    Object.keys(updateRecordValueDto).forEach(key => {
-      recordValue[key] = updateRecordValueDto[key];
+    const recordValue = await this.recordValueRepository.findOne({
+      where: { uid: uid },
     });
+    try {
+      Object.keys(updateRecordValueDto).forEach((key) => {
+        recordValue[key] = updateRecordValueDto[key];
+      });
+      await this.recordValueRepository.save(recordValue);
+    } catch (e) {
+      return e;
+    }
+  }
 
-    await this.recordValueRepository.save(recordValue);
+  async finOneRecordValue(uid: string): Promise<RecordValue> {
+    return this.recordValueRepository.findOne({ where: { uid: uid } });
   }
 
   async findOneByUid(uid: string): Promise<Record> {
