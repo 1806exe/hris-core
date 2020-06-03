@@ -69,12 +69,13 @@ export class RecordsController extends BaseController<Record> {
   @Put('recordValues/:recordValue')
   @UseGuards(SessionGuard)
   async updateRecord(
-    @Param('recordValue') recordValue,
+    @Param() recordValue,
     @Body() createRecordDto,
     @Res() res,
   ): Promise<RecordValue> {
+    console.log(recordValue, createRecordDto)
     try {
-      await this.recordService.updateRecordValue(recordValue, createRecordDto);
+      await this.recordService.updateRecordValue(recordValue.recordValue, createRecordDto);
       return res.status(HttpStatus.OK).send('Record Value Updated');
     } catch {
       return res
