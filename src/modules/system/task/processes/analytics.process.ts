@@ -45,7 +45,7 @@ export class AnalyticsGenerator extends BackgroundProcess {
           field.fieldid +
           ')';
       });
-      let createQuery = 'CREATE TABLE _temp_resource_table_' +
+      /*let createQuery = 'CREATE TABLE _temp_resource_table_' +
         form.uid +
         '(' +
         'created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,' +
@@ -56,7 +56,21 @@ export class AnalyticsGenerator extends BackgroundProcess {
         'ou character varying(13) NOT NULL,' +
         'formid integer NOT NULL' +
         additionalColumns +
-        ',PRIMARY KEY(instance))';
+        ',PRIMARY KEY(instance))';*/
+        let createQuery = 'CREATE TABLE _temp_resource_table_' +
+        form.uid +
+        '(' +
+        'id SERIAL PRIMARY KEY,' +
+        'created timestamp without time zone NULL DEFAULT LOCALTIMESTAMP,' +
+        'lastupdated timestamp without time zone NULL DEFAULT LOCALTIMESTAMP,' +
+        //'recordid integer NOT NULL DEFAULT nextval(\'record_recordid_seq\':: regclass)(INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1),'+
+        'uid character varying(13) COLLATE pg_catalog."default" NULL,' +
+        'instance character varying(64) COLLATE pg_catalog."default" NULL,' +
+        'ou character varying(13) NULL,' +
+        'formid integer NULL' +
+        additionalColumns +
+        //',PRIMARY KEY(instance))';
+        ')';
       this.log({ type: "INFO", message: `Creating Temporary table for ${form.uid}.` });
       await this.connetion.manager.query(createQuery);
 
@@ -64,10 +78,10 @@ export class AnalyticsGenerator extends BackgroundProcess {
         'INSERT INTO _temp_resource_table_' +
         form.uid +
         '(' +
-        'created,lastupdated,uid,instance,ou,formid' +
+        'instance,created,lastupdated,uid,ou,formid' +
         additionalInsertColumns +
         ')' +
-        'SELECT r.created,r.lastupdated,r.uid,r.instance,ou.uid,r.formid' +
+        'SELECT DISTINCT r.instance,r.created,r.lastupdated,r.uid,ou.uid,r.formid' +
         //+ ((fields.length > 0)?',':'')+
         fields
           .map((field, index) => {

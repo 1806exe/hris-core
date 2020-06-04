@@ -234,6 +234,7 @@ export class TrainingAnalyticsService {
       });
       query += ` INNER JOIN _periodstructure pes ON(${periodquery.join(' OR ')}) LIMIT 200000`;
     }
+    console.log(query);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
     analytics.rows = rows.map(row => {

@@ -158,7 +158,7 @@ export class AnalyticsController {
     );
   }
 
-  @Get('training')
+  @Get('training/:formid')
   async fetchTrainingAnalytics(
     @Param() params,
     @Query() query,
