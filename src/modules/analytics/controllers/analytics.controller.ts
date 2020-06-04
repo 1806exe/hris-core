@@ -3,11 +3,13 @@ import { AuthenticatedUser } from 'src/core/helpers/user-decorator.helper';
 import { TaskService } from 'src/modules/system/task/services/task.service';
 import { AnalyticsService } from '../services/analytics.service';
 import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
+import { TrainingAnalyticsService } from '../services/training.analytics.service';
 
 @Controller('api/analytics')
 export class AnalyticsController {
   constructor(
     private analyticsService: AnalyticsService,
+    private trainingAnalyticsService: TrainingAnalyticsService,
     private taskService: TaskService,
   ) {}
   @Get()
@@ -201,7 +203,7 @@ export class AnalyticsController {
         message: 'Organisation Unit dimension not found',
       };
     }
-    return await this.analyticsService.getAnalyticsRecords(
+    return await this.trainingAnalyticsService.getTrainingAnalyticsRecords(
       params.formid,
       ou,
       pe,
@@ -238,7 +240,7 @@ export class AnalyticsController {
       if (split[0] === 'ou') {
         ou = split[1].split(';');
       } else {
-        otherDimensions[split[0]] = split[1];
+        otherDimensions[split[0]] = split[1] +':' + split[2];
       }
     });
     console.log(otherDimensions);
@@ -254,8 +256,19 @@ export class AnalyticsController {
         message: 'Organisation Unit dimension not found',
       };
     }
-    return await this.analyticsService.getTrainingCoverageRecords(
-      params.formid,
+    let filter ={};
+    if(query.filter){
+      if (!Array.isArray(query.filter)) {
+        let split = query.filter.split(':');
+        filter[split[0]] = split[1] + ':' + split[2];
+      } else {
+        query.filter.forEach((fil)=>{
+          let split = fil.split(':');
+          filter[split[0]] = split[1] +':' + split[2];
+        })
+      }
+    }
+    return await this.trainingAnalyticsService.getTrainingCoverageRecords(
       ou,
       pe,
       otherDimensions,
