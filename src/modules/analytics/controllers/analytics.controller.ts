@@ -158,7 +158,7 @@ export class AnalyticsController {
     );
   }
 
-  @Get('training/:formid')
+  @Get('training/providers/:formid')
   async fetchTrainingAnalytics(
     @Param() params,
     @Query() query,
@@ -269,6 +269,73 @@ export class AnalyticsController {
       }
     }
     return await this.trainingAnalyticsService.getTrainingCoverageRecords(
+      ou,
+      pe,
+      otherDimensions,
+      {
+        user: user
+      }
+    );
+  }
+
+  @Get('training/sessions')
+  async fetchTrainingSessions(
+    @Param() params,
+    @Query() query,
+    @AuthenticatedUser() user,
+  ) {
+    console.log('query:', query);
+    let pe;
+    let ou;
+    let otherDimensions = {};
+    if (!query.dimension) {
+      return {
+        status: 'ERROR',
+        message:
+          'No dimension was provided. Please provide period(pe) and organisation unit(ou) dimension',
+      };
+    }
+    if (!Array.isArray(query.dimension)) {
+      console.log(query.dimension);
+      query.dimension = [query.dimension];
+    }
+    if (!Array.isArray(query.pe)) {
+      pe = query.pe.split(';');
+    }
+    query.dimension.forEach(dimension => {
+      let split = dimension.split(':');
+      if (split[0] === 'ou') {
+        ou = split[1].split(';');
+      } else {
+        otherDimensions[split[0]] = split[1] +':' + split[2];
+      }
+    });
+    console.log(otherDimensions);
+    if (!pe || pe[0] === '') {
+      return {
+        status: 'ERROR',
+        message: 'Period dimension not found',
+      };
+    }
+    if (!ou || ou[0] === '') {
+      return {
+        status: 'ERROR',
+        message: 'Organisation Unit dimension not found',
+      };
+    }
+    let filter ={};
+    if(query.filter){
+      if (!Array.isArray(query.filter)) {
+        let split = query.filter.split(':');
+        filter[split[0]] = split[1] + ':' + split[2];
+      } else {
+        query.filter.forEach((fil)=>{
+          let split = fil.split(':');
+          filter[split[0]] = split[1] +':' + split[2];
+        })
+      }
+    }
+    return await this.trainingAnalyticsService.getTrainingSessions(
       ou,
       pe,
       otherDimensions,

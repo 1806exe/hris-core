@@ -226,6 +226,7 @@ export class TrainingAnalyticsService {
       let periodquery = pe.map(p => {
         let whereCondition = getWhereConditions(p);
         let [dx, operator, operand] = p.split(':');
+        console.log('whereCondition:', dx, operator, operand);
         analytics.metaData.dimensions.pe.push(operand);
         if (operator == 'lt') {
           return `(data."${dx}" < pes.enddate AND pes.iso='${operand}')`;
@@ -241,6 +242,101 @@ export class TrainingAnalyticsService {
       let newRow = [];
       analytics.headers.forEach((header, index) => {
         newRow[index] = row[header.name];
+      });
+      return newRow;
+    });
+    query =
+      'SELECT ou.uid,ou.name FROM  organisationunit ou WHERE (' +
+      ou.map(o => "ou.uid = '" + o + "'").join(' OR ') +
+      ') ';
+    let organisationunits = await this.connetion.manager.query(query);
+    organisationunits.forEach(orgUnit => {
+      analytics.metaData.items[orgUnit.uid] = orgUnit.name;
+      analytics.metaData.dimensions.ou.push(orgUnit.uid);
+    });
+    return analytics;
+  }
+  async getTrainingSessions(ou, pe, otherDimensions, context: any) {
+    let analytics = {
+      headers: [
+        {
+            name: 'section',
+            column: 'section'
+        },{
+            name: 'unit',
+            column: 'unit'
+        },{
+            name: 'curriculum',
+            column: 'curriculum'
+        },{
+            name: 'region',
+            column: 'region'
+        },{
+            name: 'district',
+            column: 'district'
+        },{
+            name: 'venue',
+            column: 'venue'
+        },{
+            name: 'sponsor',
+            column: 'sponsor'
+        },{
+            name: 'organiser',
+            column: 'organiser'
+        },{
+            name: 'deliverymode',
+            column: 'deliverymode'
+        },{
+            name: 'startdate',
+            column: 'startdate'
+        },{
+            name: 'enddate',
+            column: 'enddate'
+        },{
+            name: 'participants',
+            column: 'participants'
+        }
+      ],
+      metaData: {
+        items: {
+          ou: { name: 'Organisation unit' },
+          pe: { name: 'Period' },
+        },
+        dimensions: { pe: [], ou: [] },
+      },
+      rows: [],
+      height: 0,
+      width: 0,
+    };
+    analytics.width = analytics.headers.length;
+    let curriculumnFilter = '';
+    let unitFilter = '';
+    let sectionFilter = '';
+    let organiserFilter = '';
+    let sponsorFilter = '';
+    let ouFilter = '';
+    let query = `
+    SELECT section.name section,unit.name unit,
+        curriculum.name curriculum,region.name region,
+        district.name district,
+        venuename venue,sponsor.name sponsor,organiser.name organiser,
+        ts.deliverymode,ts.startdate,ts.enddate,'0' participants 
+    FROM trainingsession ts
+        INNER JOIN organisationunit district ON(district.id=ts.organisationunit ${ouFilter})
+        INNER JOIN organisationunit region ON(district.parentid=region.id)
+        INNER JOIN trainingcurriculum curriculum ON(ts.curriculumid=curriculum.id ${curriculumnFilter})
+        INNER JOIN trainingunit unit ON(unit.id=curriculum.unitid ${unitFilter})
+        INNER JOIN trainingsections section ON(section.id=unit.sectionid ${sectionFilter})
+        INNER JOIN trainingsponsor sponsor ON(sponsor.id=ts.sponsor ${sponsorFilter})
+        INNER JOIN trainingsponsor organiser ON(organiser.id=ts.organiser ${organiserFilter})
+    `;
+    console.log(query);
+    let rows = await this.connetion.manager.query(query);
+    analytics.height = rows.length;
+    analytics.rows = rows.map(row => {
+      let newRow = [];
+      analytics.headers.forEach((header, index) => {
+        newRow[index] = row[header.column];
       });
       return newRow;
     });
