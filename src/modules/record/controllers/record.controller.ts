@@ -69,17 +69,29 @@ export class RecordsController extends BaseController<Record> {
   @Put('recordValues/:recordValue')
   @UseGuards(SessionGuard)
   async updateRecord(
-    @Param('recordValue') recordValue,
+    @Param() recordValue,
     @Body() createRecordDto,
     @Res() res,
   ): Promise<RecordValue> {
-    try {
-      await this.recordService.updateRecordValue(recordValue, createRecordDto);
-      return res.status(HttpStatus.OK).send('Record Value Updated');
-    } catch {
+
+    const recordvalue = await this.recordService.finOneRecordValue(
+      recordValue.recordValue,
+    );
+    if (recordvalue === undefined) {
       return res
-        .status(HttpStatus.NOT_MODIFIED)
-        .send('Recordvalues not Updated');
+        .status(HttpStatus.NOT_FOUND)
+        .send(
+          `Record value with ID ${recordValue.recordValue} is not available`,
+        );
+    }
+    if (recordvalue !== undefined) {
+      await this.recordService.updateRecordValue(
+        recordValue.recordValue,
+        createRecordDto,
+      );
+      return res
+        .status(HttpStatus.OK)
+        .send(`Record value with ID ${recordvalue.uid} Updated Successfully`);
     }
   }
   @Put(':record/formTransfer')

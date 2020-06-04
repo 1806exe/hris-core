@@ -3,20 +3,19 @@ import { Report } from '../entities/report.entity';
 import { Repository, Connection } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MaintenanceBaseService } from 'src/core/maintenance/services/base.service';
-import { BaseService } from 'src/core/services/base.service';
 
 @Injectable()
-export class ReportService extends BaseService<Report> {
+export class ReportService extends MaintenanceBaseService<Report> {
   constructor(
     @InjectRepository(Report)
-    reportRepository: Repository<Report>,
+    private reportRepository: Repository<Report>,
     private readonly connection: Connection,
   ) {
     super(reportRepository, Report);
   }
 
-  async envokeSQL(id) {
-    const sqlView = await this.findOneByUid(id);
+  async envokeSQL(id: string) {
+    const sqlView = await this.reportRepository.findOne({ where: { uid: id } });
     const results = {
       pager: {
         page: 1,
