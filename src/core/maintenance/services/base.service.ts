@@ -139,7 +139,7 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
       savedEntity,
       entityTableMapper,
     );
-    const transformedEntity = _.merge(savedEntity, objModel)
+    const transformedEntity = _.merge(savedEntity, objModel);
     return await this.modelRepository.save(transformedEntity);
   }
 
@@ -194,8 +194,17 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
    * @param id
    */
   async delete(id: string): Promise<DeleteResult> {
+    /**
+     *
+     */
     const condition: any = { id };
+    /**
+     *
+     */
     if (condition) {
+      /**
+       *
+       */
       return this.modelRepository.delete(condition);
     }
   }
