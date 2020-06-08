@@ -8,7 +8,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 import { UserRole } from '../../user-role/entities/user-role.entity';
-import { TrainingSession } from 'src/modules/training/entities/training-session.entity';
+import { TrainingSession } from '../../../training/entities/training-session.entity';
 @Entity('userroleaccess', { schema: 'public' })
 export class UserRoleAccess extends UserIdentification {
   static plural = 'userRoleAcceses';

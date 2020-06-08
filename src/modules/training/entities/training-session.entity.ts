@@ -13,8 +13,8 @@ import { TrainingCurriculum } from './training-curriculum.entity';
 import { TrainingSponsor } from './training-sponsor.entity';
 import { TrainingTopic } from './training-topic.entity';
 import { TrainingVenue } from './training-venue.entity';
-import { UserAccess } from 'src/modules/system/user-access/entities/user-access.entity';
-import { UserRoleAccess } from 'src/modules/system/user-role-access/entities/user-role-access.entity';
+import { UserAccess } from '../../system/user-access/entities/user-access.entity';
+import { UserRoleAccess } from '../../system/user-role-access/entities/user-role-access.entity';
 @Entity('trainingsession', { schema: 'public' })
 export class TrainingSession extends TransactionTimestamp {
   static plural = 'sessions';
