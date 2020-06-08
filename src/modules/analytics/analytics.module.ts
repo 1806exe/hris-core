@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AnalyticsController } from './controllers/analytics.controller';
 import { AnalyticsService } from './services/analytics.service';
 import { TaskModule } from '../system/task/task.module';
+import { TrainingAnalyticsService } from './services/training.analytics.service';
 
 
 @Module({
@@ -12,6 +13,6 @@ import { TaskModule } from '../system/task/task.module';
     TaskModule
   ],
   controllers: [AnalyticsController],
-  providers: [AnalyticsService],
+  providers: [AnalyticsService, TrainingAnalyticsService],
 })
 export class AnalyticsModule {}
