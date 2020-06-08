@@ -14,6 +14,7 @@ import { TrainingSponsor } from './training-sponsor.entity';
 import { TrainingTopic } from './training-topic.entity';
 import { TrainingVenue } from './training-venue.entity';
 import { UserAccess } from 'src/modules/system/user-access/entities/user-access.entity';
+import { UserRoleAccess } from 'src/modules/system/user-role-access/entities/user-role-access.entity';
 @Entity('trainingsession', { schema: 'public' })
 export class TrainingSession extends TransactionTimestamp {
   static plural = 'sessions';
@@ -124,4 +125,12 @@ export class TrainingSession extends TransactionTimestamp {
   })
   @JoinTable({ name: 'sessionuseraccess' })
   acess: UserAccess[];
+
+  @ManyToMany(
+    (type) => UserRoleAccess,
+    (userroleaccess) => userroleaccess.session,
+    { nullable: false, eager: true },
+  )
+  @JoinTable({ name: 'sessionuserroleaccess' })
+  userroleaccess: UserRoleAccess[];
 }
