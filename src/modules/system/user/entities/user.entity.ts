@@ -10,6 +10,7 @@ import {
   ManyToMany,
   OneToMany,
   OneToOne,
+  ManyToOne,
 } from 'typeorm';
 
 import { Form } from '../../../form/entities/form.entity';
@@ -335,9 +336,8 @@ export class User extends UserCoreProps {
   })
   report: Report[];
 
-  @ManyToMany(() => UserAccess, (access: UserAccess) => access.useraccess, {
+  @ManyToOne(() => UserAccess, (access: UserAccess) => access.useraccess, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'useraccessid', referencedColumnName: 'useraccessid' })
   access: UserAccess;
 }
