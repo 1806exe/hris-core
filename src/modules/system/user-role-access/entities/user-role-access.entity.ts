@@ -13,7 +13,7 @@ import { TrainingSession } from 'src/modules/training/entities/training-session.
 export class UserRoleAccess extends UserIdentification {
   static plural = 'userRoleAcceses';
   @PrimaryGeneratedColumn()
-  userroleaccessid: number;
+  id: number;
 
   @Column('json', {
     nullable: false,
