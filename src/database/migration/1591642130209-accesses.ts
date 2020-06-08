@@ -34,6 +34,7 @@ export class accesses1591642130209 implements MigrationInterface {
                 id bigint NOT NULL DEFAULT nextval('useraccess_id_seq'::regclass),
                 uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
                 useraccess json NOT NULL,
+                userid bigint NOT NULL,
                 CONSTRAINT "PK_useraccess" PRIMARY KEY (id),
                 CONSTRAINT "UQ_Useraccess" UNIQUE (uid),
                 CONSTRAINT "FK_userid" FOREIGN KEY ("userid")
