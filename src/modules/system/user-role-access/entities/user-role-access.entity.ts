@@ -9,6 +9,7 @@ import {
 import { UserRole } from '../../user-role/entities/user-role.entity';
 @Entity('userroleaccess', { schema: 'public' })
 export class UserRoleAccess extends UserIdentification {
+    static plural = 'userRoleAcceses';
   @PrimaryGeneratedColumn()
   userroleaccessid: number;
 
