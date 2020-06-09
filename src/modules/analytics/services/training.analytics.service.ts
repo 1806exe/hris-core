@@ -225,6 +225,7 @@ export class TrainingAnalyticsService {
     if (pe) {
       let periodquery = pe.map(p => {
         let whereCondition = getWhereConditions(p);
+        console.log(whereCondition);
         let [dx, operator, operand] = p.split(':');
         console.log('whereCondition:', dx, operator, operand);
         analytics.metaData.dimensions.pe.push(operand);
