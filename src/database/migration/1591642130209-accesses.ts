@@ -33,7 +33,7 @@ export class accesses1591642130209 implements MigrationInterface {
                 lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
                 id bigint NOT NULL DEFAULT nextval('useraccess_id_seq'::regclass),
                 uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
-                useraccess json NOT NULL,
+                access json NOT NULL,
                 userid bigint NOT NULL,
                 CONSTRAINT "PK_useraccess" PRIMARY KEY (id),
                 CONSTRAINT "UQ_Useraccess" UNIQUE (uid),
@@ -119,6 +119,21 @@ export class accesses1591642130209 implements MigrationInterface {
                 ON public.sessionuserroleaccess USING btree
                 ("trainingsessionId" ASC NULLS LAST)
                 TABLESPACE pg_default;
+        
+        ALTER TABLE "userrole" ADD COLUMN "accessId" bigint;
+        ALTER TABLE "user" ADD COLUMN "accessId" bigint;
+
+        ALTER TABLE sessionparticipant ADD COLUMN certified BOOLEAN;
+        ALTER TABLE sessionparticipant ADD COLUMN assessed BOOLEAN;
+        ALTER TABLE sessionparticipant ADD COLUMN certifiedby BIGINT;
+        ALTER TABLE sessionparticipant ADD COLUMN certificationdate TIMESTAMP;
+        ALTER TABLE sessionparticipant ADD COLUMN assessedby BIGINT;
+        ALTER TABLE sessionparticipant ADD COLUMN assessmentdate TIMESTAMP;
+        ALTER TABLE sessionparticipant ADD CONSTRAINT FK_CERTIFICATION_CERTIFICATION FOREIGN KEY (certifiedby) 
+        REFERENCES public."user"(id);
+        ALTER TABLE sessionparticipant ADD CONSTRAINT FK_CERTIFICATION_ASSESSMENT FOREIGN KEY (assessedby) 
+        REFERENCES public."user"(id);
+
         `);
   }
 
