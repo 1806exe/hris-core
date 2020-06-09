@@ -13,6 +13,8 @@ import { TrainingCurriculum } from './training-curriculum.entity';
 import { TrainingSponsor } from './training-sponsor.entity';
 import { TrainingTopic } from './training-topic.entity';
 import { TrainingVenue } from './training-venue.entity';
+import { UserAccess } from '../../system/user-access/entities/user-access.entity';
+import { UserRoleAccess } from '../../system/user-role-access/entities/user-role-access.entity';
 @Entity('trainingsession', { schema: 'public' })
 export class TrainingSession extends TransactionTimestamp {
   static plural = 'sessions';
@@ -116,4 +118,19 @@ export class TrainingSession extends TransactionTimestamp {
   )
   @JoinColumn({ name: 'venue' })
   venue: TrainingVenue[];
+
+  @ManyToMany((type) => UserAccess, (useraccess) => useraccess.session, {
+    nullable: false,
+    eager: true,
+  })
+  @JoinTable({ name: 'sessionuseraccess' })
+  acess: UserAccess[];
+
+  @ManyToMany(
+    (type) => UserRoleAccess,
+    (userroleaccess) => userroleaccess.session,
+    { nullable: false, eager: true },
+  )
+  @JoinTable({ name: 'sessionuserroleaccess' })
+  userroleaccess: UserRoleAccess[];
 }

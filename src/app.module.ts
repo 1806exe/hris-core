@@ -26,6 +26,8 @@ import { UserModule } from './modules/system/user/user.module';
 import { TrainingModule } from './modules/training/training.module';
 import { VisualizationModule } from './modules/visualization/visualization.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { UserRoleAccessModule } from './modules/system/user-role-access/user-role-access.module';
+import { UserAccessModule } from './modules/system/user-access/user-access.module';
 
 
 @Module({
@@ -49,6 +51,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     IndicatorModule,
     AnalyticsModule,
     SystemSettingModule,
+    UserRoleAccessModule,
+    UserAccessModule,
     ScheduleModule.forRoot()
   ],
 

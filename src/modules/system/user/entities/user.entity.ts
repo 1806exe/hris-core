@@ -10,6 +10,7 @@ import {
   ManyToMany,
   OneToMany,
   OneToOne,
+  ManyToOne,
 } from 'typeorm';
 
 import { Form } from '../../../form/entities/form.entity';
@@ -26,6 +27,7 @@ import { ReportTable } from '../../../visualization/report-table/entities/report
 import { Dashboard } from '../../../visualization/dashboard/entities/dashboard.entity';
 import { Report } from '../../../report/entities/report.entity';
 import { ReportService } from 'src/modules/report/services/report.service';
+import { UserAccess } from '../../user-access/entities/user-access.entity';
 
 @Entity('user', { schema: 'public' })
 export class User extends UserCoreProps {
@@ -121,7 +123,7 @@ export class User extends UserCoreProps {
   /**
    * Many To Many Relationship: User and UserRole Entities
    */
-  @ManyToMany(type => UserRole, userRole => userRole.users, {
+  @ManyToMany((type) => UserRole, (userRole) => userRole.users, {
     nullable: false,
     eager: true,
     cascade: true,
@@ -138,7 +140,7 @@ export class User extends UserCoreProps {
   /**
    * Many To Many Relationship: User and UserGroup Entities
    */
-  @ManyToMany(type => UserGroup, userGroup => userGroup.users, {
+  @ManyToMany((type) => UserGroup, (userGroup) => userGroup.users, {
     nullable: false,
     eager: true,
     cascade: true,
@@ -184,7 +186,7 @@ export class User extends UserCoreProps {
   /**
    * Many To Many Relationship: User and Message Entities
    */
-  @ManyToMany(type => Message, message => message.user, {
+  @ManyToMany((type) => Message, (message) => message.user, {
     nullable: false,
     eager: true,
     cascade: true,
@@ -200,8 +202,8 @@ export class User extends UserCoreProps {
    * One To Many Relationship: User and MessageMetadata Entities
    */
   @OneToMany(
-    type => MessageMetadata,
-    messageMetadata => messageMetadata.participant,
+    (type) => MessageMetadata,
+    (messageMetadata) => messageMetadata.participant,
     { onDelete: 'CASCADE' },
   )
   messageMetadatas: MessageMetadata[];
@@ -209,17 +211,21 @@ export class User extends UserCoreProps {
   /**
    * One To Many Relationship: User and MessageThread Entities
    */
-  @OneToMany(type => MessageThread, messageThread => messageThread.createdBy, {
-    onDelete: 'CASCADE',
-  })
+  @OneToMany(
+    (type) => MessageThread,
+    (messageThread) => messageThread.createdBy,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
   messageThreads: MessageThread[];
 
   /**
    * One To Many Relationship: User and MessageThreadMetadata Entities
    */
   @OneToMany(
-    type => MessageThreadMetadata,
-    messageThreadMetadata => messageThreadMetadata.participant,
+    (type) => MessageThreadMetadata,
+    (messageThreadMetadata) => messageThreadMetadata.participant,
     { onDelete: 'CASCADE' },
   )
   messageThreadMetadatas: MessageThreadMetadata[];
@@ -252,8 +258,8 @@ export class User extends UserCoreProps {
    * Many To Many Relationship: User and OrganizationUnit Entities
    */
   @ManyToMany(
-    type => OrganisationUnit,
-    organisationUnit => organisationUnit.users,
+    (type) => OrganisationUnit,
+    (organisationUnit) => organisationUnit.users,
     {
       nullable: false,
       cascade: true,
@@ -265,14 +271,17 @@ export class User extends UserCoreProps {
   @JoinTable({
     name: 'organisationunitmembers',
     joinColumn: { name: 'userid', referencedColumnName: 'id' },
-    inverseJoinColumn: { name:'organisationunitid', referencedColumnName: 'id' },
+    inverseJoinColumn: {
+      name: 'organisationunitid',
+      referencedColumnName: 'id',
+    },
   })
   organisationUnits: OrganisationUnit[];
 
   /**
    * One To One Relationship: User and UserSettings Entities
    */
-  @OneToOne(type => UserSettings, userSettings => userSettings.user, {
+  @OneToOne((type) => UserSettings, (userSettings) => userSettings.user, {
     eager: true,
     cascade: true,
     onUpdate: 'CASCADE',
@@ -321,12 +330,14 @@ export class User extends UserCoreProps {
     this.token = User.getBase64(this.username, this.password);
     this.enabled = true;
   }
-  
-  @OneToMany(
-    () => Report,
-    (report: Report) => report.user,
-    { onDelete: 'CASCADE' },
-  )
+
+  @OneToMany(() => Report, (report: Report) => report.user, {
+    onDelete: 'CASCADE',
+  })
   report: Report[];
 
+  @ManyToOne(() => UserAccess, (access: UserAccess) => access.useraccess, {
+    onDelete: 'CASCADE',
+  })
+  access: UserAccess;
 }

@@ -1,8 +1,17 @@
-import { Column, Entity, JoinColumn, ManyToMany, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  OneToOne,
+  ManyToOne,
+} from 'typeorm';
 import { App } from '../../../app/entities/apps.entity';
 import { UserAuthority } from '../../user-authority/entities/user-authority.entity';
 import { UserIdentification } from '../../user/entities/user-identification';
 import { User } from '../../user/entities/user.entity';
+import { UserAccess } from '../../user-access/entities/user-access.entity';
+import { UserRoleAccess } from '../../user-role-access/entities/user-role-access.entity';
 
 @Entity('userrole', { schema: 'public' })
 export class UserRole extends UserIdentification {
@@ -14,26 +23,30 @@ export class UserRole extends UserIdentification {
   @Column({ type: 'text', nullable: true })
   description: string | null;
 
-  @OneToOne(type => App, app => app.id, { eager: true,})
-  @JoinColumn({name:'landingpage'})
+  @OneToOne((type) => App, (app) => app.id, { eager: true })
+  @JoinColumn({ name: 'landingpage' })
   landingPage: App;
 
   /**
    * Many To Many Relationship: UserRole and User Entities
    */
-  @ManyToMany(type => User, user => user.userRoles, { nullable: false })
+  @ManyToMany((type) => User, (user) => user.userRoles, { nullable: false })
   users: User[];
 
   /**
    * Many To Many Relationship: UserAuthorities and UserRole Entities
    */
-  @ManyToMany(type => UserAuthority, userAuthority => userAuthority.userRoles, {
-    nullable: false,
-    eager: true,
-    cascade: true,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
+  @ManyToMany(
+    (type) => UserAuthority,
+    (userAuthority) => userAuthority.userRoles,
+    {
+      nullable: false,
+      eager: true,
+      cascade: true,
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
+    },
+  )
   userAuthorities: UserAuthority[];
 
   // /**
@@ -48,4 +61,12 @@ export class UserRole extends UserIdentification {
   //   inverseJoinColumn: { referencedColumnName: 'id' },
   // })
   // userGroups: UserGroup[];
+  @ManyToOne(
+    () => UserRoleAccess,
+    (access: UserRoleAccess) => access.userrole,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
+  access: UserRoleAccess;
 }
