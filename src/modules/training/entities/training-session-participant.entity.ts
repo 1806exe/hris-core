@@ -1,6 +1,7 @@
-import { Column, Entity, OneToMany, ManyToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, OneToMany, ManyToMany, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
 import { Record } from '../../../modules/record/entities/record.entity';
 import { TrainingSession } from './training-session.entity';
+import { User } from 'src/modules/system/user/entities/user.entity';
 
 @Entity('sessionparticipant', { schema: 'public' })
 export class SessionParticipant {
@@ -36,7 +37,7 @@ export class SessionParticipant {
     nullable: false,
     name: 'curriculumid',
   })
-  curriculumid: number;
+  curriculum: number;
 
   @Column('boolean', { nullable: false, name: 'certified' })
   certified: boolean;
@@ -58,6 +59,14 @@ export class SessionParticipant {
 
   @ManyToOne((type) => Record, (record) => record.participants, { eager: true })
   record: Record[];
+
+  @OneToOne(type => User, user => user.assesser, {eager: true})
+  @JoinColumn({ name: 'assessedby' })
+  assesser: User[]
+
+  @OneToOne(type => User, user => user.certifier, {eager: true})
+  @JoinColumn({ name: 'certifiedby' })
+  certifier: User[]
   static plural: any = 'participants';
 
   /*@ManyToOne(
