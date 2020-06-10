@@ -16,6 +16,7 @@ import { TrainingTopic } from '../entities/training-topic.entity';
 import { TrainingVenue } from '../entities/training-venue.entity';
 import { TrainingSponsor } from '../entities/training-sponsor.entity';
 import { OrganisationUnit } from 'src/modules/organisation-unit/entities/organisation-unit.entity';
+import { User } from 'src/modules/system/user/entities/user.entity';
 
 @Injectable()
 export class TrainingSessionService extends BaseService<TrainingSession> {
@@ -44,6 +45,8 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     private organisationunitRepository: Repository<OrganisationUnit>,
     @InjectRepository(TrainingTopic)
     private trainingTopicRepository: Repository<TrainingTopic>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {
     super(trainingSessionRepository, TrainingSession);
   }
@@ -306,7 +309,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     const { topic } = saveTopicsDTO;
     const session = (await this.trainingSessionRepository.findOne({ uid: uid }))
       .id;
-      console.log('sessionssss:::', session)
+    console.log('sessionssss:::', session);
     const topics = (
       await this.trainingTopicRepository.findOne({
         select: ['id'],
@@ -319,5 +322,53 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       .into('trainingsessiontopics')
       .values([{ trainingsessionId: session, trainingtopicId: topics }])
       .execute();
+  }
+
+  async findOneParticipant(uid: string) {
+    return await this.participantRepository.findOne({ uid: uid });
+  }
+  async updateParticipant(uid: string, updateParticipantDTO: any) {
+    const participant = await this.participantRepository.findOne({ uid: uid });
+    const {
+      curriculumid,
+      certified,
+      assessed,
+      certifiedby,
+      certificationdate,
+      assessedby,
+      assessmentdate,
+    } = updateParticipantDTO;
+    const curriculum = (
+      await this.trainingCurriculumRepository.findOne({ uid: curriculumid })
+    ).id;
+    const certifier = (await this.userRepository.findOne({ uid: certifiedby }))
+      .id;
+    const assesser = (await this.userRepository.findOne({ uid: assessedby }))
+      .id;
+    participant.assessed = assessed;
+    participant.certified = certified;
+    participant.assessedby = assesser;
+    participant.certifiedby = certifier;
+    participant.assessmentdate = assessmentdate;
+    participant.certificationdate = certificationdate;
+    participant.curriculumid = curriculum;
+
+    console.log(
+      'assessed::',
+      assessed,
+      'certified::',
+      certified,
+      'certifiedby::',
+      certifier,
+      'assessedby::',
+      assesser,
+      'date of cert::',
+      certificationdate,
+      'date of ass::',
+      assessmentdate,
+    );
+
+    await this.participantRepository.save(participant);
+    return this.participantRepository.findOne({ uid: participant.uid });
   }
 }

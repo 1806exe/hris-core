@@ -9,6 +9,7 @@ import {
   Post,
   Delete,
   Body,
+  Put,
 } from '@nestjs/common';
 import { BaseController } from '../../../core/controllers/base.contoller';
 
@@ -108,5 +109,29 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
   async saveTopics(@Param() Param, @Body() saveTopicsDTO: any, @Res() res) {
     await this.trainingSessionService.saveTopics(Param.session, saveTopicsDTO);
     return res.status(HttpStatus.OK).send('Topics Added Successfully');
+  }
+  @Put('participants/:participant')
+  @UseGuards(SessionGuard)
+  async updateParticipant(
+    @Param() Param,
+    @Body() updateParticipantDTO: any,
+    @Res() res,
+  ) {
+    const sessionparticipant = await this.trainingSessionService.findOneParticipant(
+      Param.participant,
+    );
+    console.log('Participant:::::', sessionparticipant);
+
+    if (sessionparticipant !== undefined) {
+      const participant = await this.trainingSessionService.updateParticipant(
+        Param.participant,
+        updateParticipantDTO,
+      );
+      return res
+        .status(HttpStatus.OK)
+        .send(sanitizeResponseObject(participant));
+    } else {
+      console.log('Not available');
+    }
   }
 }
