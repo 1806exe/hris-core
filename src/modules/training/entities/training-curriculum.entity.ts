@@ -7,12 +7,14 @@ import {
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 
 import { TrainingTopic } from './training-topic.entity';
 import { TrainingSection } from './training-section.entity';
 import { TrainingSession } from './training-session.entity';
 import { TrainingUnit } from './training-unit.entity';
+import { SessionParticipant } from './training-session-participant.entity';
 
 @Entity('trainingcurriculum', { schema: 'public' })
 export class TrainingCurriculum extends EntityCoreProps {
@@ -60,4 +62,7 @@ export class TrainingCurriculum extends EntityCoreProps {
   )
   // @JoinTable({ name: 'trainingcurriculumtopicmember' })
   trainingTopics: TrainingTopic[];
+
+  @OneToOne(type => SessionParticipant, participants => participants.curriculum, {eager: false})
+  participant: TrainingCurriculum[]
 }

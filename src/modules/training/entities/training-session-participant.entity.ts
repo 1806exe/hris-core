@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany, ManyToMany, ManyToOne, OneToOne, JoinColumn 
 import { Record } from '../../../modules/record/entities/record.entity';
 import { TrainingSession } from './training-session.entity';
 import { User } from 'src/modules/system/user/entities/user.entity';
+import { TrainingCurriculum } from './training-curriculum.entity';
 
 @Entity('sessionparticipant', { schema: 'public' })
 export class SessionParticipant {
@@ -35,7 +36,7 @@ export class SessionParticipant {
 
   @Column('integer', {
     nullable: false,
-    name: 'curriculumid',
+    name: 'curriculum',
   })
   curriculum: number;
 
@@ -67,6 +68,9 @@ export class SessionParticipant {
   @OneToOne(type => User, user => user.certifier, {eager: true})
   @JoinColumn({ name: 'certifiedby' })
   certifier: User[]
+  @OneToOne(type => TrainingCurriculum, curriculum => curriculum.participant, {eager: true})
+  @JoinColumn({ name: 'curriculum' })
+  curriculums: TrainingCurriculum[]
   static plural: any = 'participants';
 
   /*@ManyToOne(
