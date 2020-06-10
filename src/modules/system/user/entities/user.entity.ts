@@ -27,7 +27,7 @@ import { ReportTable } from '../../../visualization/report-table/entities/report
 import { Dashboard } from '../../../visualization/dashboard/entities/dashboard.entity';
 import { Report } from '../../../report/entities/report.entity';
 import { ReportService } from 'src/modules/report/services/report.service';
-import { UserAccess } from '../../user-access/entities/user-access.entity';
+import { UserAccess } from './user-access.entity';
 
 @Entity('user', { schema: 'public' })
 export class User extends UserCoreProps {
