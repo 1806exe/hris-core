@@ -351,24 +351,14 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     participant.certifiedby = certifier;
     participant.assessmentdate = assessmentdate;
     participant.certificationdate = certificationdate;
-    participant.curriculumid = curriculum;
-
-    console.log(
-      'assessed::',
-      assessed,
-      'certified::',
-      certified,
-      'certifiedby::',
-      certifier,
-      'assessedby::',
-      assesser,
-      'date of cert::',
-      certificationdate,
-      'date of ass::',
-      assessmentdate,
-    );
+    participant.curriculum = curriculum;
 
     await this.participantRepository.save(participant);
-    return this.participantRepository.findOne({ uid: participant.uid });
+    delete participant.recordId;
+    delete participant.assessedby;
+    delete participant.certifiedby;
+    delete participant.trainingsessionId;
+    delete participant.curriculum;
+    return participant;
   }
 }
