@@ -19,14 +19,10 @@ export class UserAccess extends UserIdentification {
     nullable: false,
     name: 'useraccess',
   })
-  useraccess: any;
+  access: any;
 
   @Column('integer', { nullable: false, name: 'userid' })
   userid: number;
-
-  @OneToMany(() => User, (user: User) => user.access, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'userid', referencedColumnName: 'id' })
-  user: User;
 
   @ManyToMany((type) => TrainingSession, (session) => session.access)
   session: TrainingSession;

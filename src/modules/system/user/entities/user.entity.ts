@@ -335,9 +335,4 @@ export class User extends UserCoreProps {
     onDelete: 'CASCADE',
   })
   report: Report[];
-
-  @ManyToOne(() => UserAccess, (access: UserAccess) => access.useraccess, {
-    onDelete: 'CASCADE',
-  })
-  access: UserAccess;
 }
