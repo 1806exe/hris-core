@@ -74,7 +74,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       participants: await this.recordRepository.find({
         relations: ['recordValues', 'recordValues.field'],
         where: {
-          id: In(participants.map(participant => participant.recordId)),
+          id: In(participants.map((participant) => participant.recordId)),
         },
       }),
     };
@@ -96,7 +96,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       facilitators: await this.recordRepository.find({
         relations: ['recordValues', 'recordValues.field'],
         where: {
-          id: In(facilitators.map(facilitator => facilitator.recordId)),
+          id: In(facilitators.map((facilitator) => facilitator.recordId)),
         },
       }),
     };
@@ -304,7 +304,9 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
   }
   async saveTopics(uid: string, saveTopicsDTO: any) {
     const { topic } = saveTopicsDTO;
-    const session = (await this.trainingSessionRepository.findOne({ uid })).id;
+    const session = (await this.trainingSessionRepository.findOne({ uid: uid }))
+      .id;
+      console.log('sessionssss:::', session)
     const topics = (
       await this.trainingTopicRepository.findOne({
         select: ['id'],
