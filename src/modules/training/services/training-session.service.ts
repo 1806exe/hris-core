@@ -17,6 +17,7 @@ import { TrainingVenue } from '../entities/training-venue.entity';
 import { TrainingSponsor } from '../entities/training-sponsor.entity';
 import { OrganisationUnit } from 'src/modules/organisation-unit/entities/organisation-unit.entity';
 import { User } from 'src/modules/system/user/entities/user.entity';
+import { join } from 'path';
 
 @Injectable()
 export class TrainingSessionService extends BaseService<TrainingSession> {
@@ -337,7 +338,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       assessedby,
       assessmentdate,
     } = updateParticipantDTO;
-  
+
     const certifier = (await this.userRepository.findOne({ uid: certifiedby }))
       .id;
     const assesser = (await this.userRepository.findOne({ uid: assessedby }))
@@ -349,12 +350,22 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     participant.assessmentdate = assessmentdate;
     participant.certificationdate = certificationdate;
 
-    console.log(await this.participantRepository.save(participant))
+    console.log(await this.participantRepository.save(participant));
     await this.participantRepository.save(participant);
-    delete participant.recordId;
-    delete participant.assessedby;
-    delete participant.certifiedby;
-    delete participant.trainingsessionId;
-    return participant;
+    const participants = await this.participantRepository.findOne({
+      where: { uid: participant.uid },
+      join: {
+        alias: 'sessionparticipant',
+        leftJoinAndSelect: {
+          assessedby: 'sessionparticipant.assesser',
+          certifiedby: 'sessionparticipant.certifier',
+        },
+      },
+    });
+    delete participants.recordId;
+    delete participants.assessedby;
+    delete participants.certifiedby;
+    delete participants.trainingsessionId;
+    return participants;
   }
 }

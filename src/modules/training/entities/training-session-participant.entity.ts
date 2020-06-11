@@ -1,4 +1,12 @@
-import { Column, Entity, OneToMany, ManyToMany, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  ManyToMany,
+  ManyToOne,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Record } from '../../../modules/record/entities/record.entity';
 import { TrainingSession } from './training-session.entity';
 import { User } from 'src/modules/system/user/entities/user.entity';
@@ -52,16 +60,16 @@ export class SessionParticipant {
   @Column('date', { nullable: false, name: 'assessmentdate' })
   assessmentdate: Date;
 
-  @ManyToOne((type) => Record, (record) => record.participants, { eager: true })
+  @ManyToOne((type) => Record, (record) => record.participants, {})
   record: Record[];
 
-  @OneToOne(type => User, user => user.assesser, {eager: true})
+  @OneToOne((type) => User, (user) => user.assesser, {})
   @JoinColumn({ name: 'assessedby' })
-  assesser: User[]
+  assesser: User[];
 
-  @OneToOne(type => User, user => user.certifier, {eager: true})
+  @OneToOne((type) => User, (user) => user.certifier, {})
   @JoinColumn({ name: 'certifiedby' })
-  certifier: User[]
+  certifier: User[];
 
   static plural: any = 'participants';
 
