@@ -330,7 +330,6 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
   async updateParticipant(uid: string, updateParticipantDTO: any) {
     const participant = await this.participantRepository.findOne({ uid: uid });
     const {
-      curriculumid,
       certified,
       assessed,
       certifiedby,
@@ -338,9 +337,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       assessedby,
       assessmentdate,
     } = updateParticipantDTO;
-    const curriculum = (
-      await this.trainingCurriculumRepository.findOne({ uid: curriculumid })
-    ).id;
+  
     const certifier = (await this.userRepository.findOne({ uid: certifiedby }))
       .id;
     const assesser = (await this.userRepository.findOne({ uid: assessedby }))
@@ -351,14 +348,13 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     participant.certifiedby = certifier;
     participant.assessmentdate = assessmentdate;
     participant.certificationdate = certificationdate;
-    participant.curriculum = curriculum;
 
+    console.log(await this.participantRepository.save(participant))
     await this.participantRepository.save(participant);
     delete participant.recordId;
     delete participant.assessedby;
     delete participant.certifiedby;
     delete participant.trainingsessionId;
-    delete participant.curriculum;
     return participant;
   }
 }

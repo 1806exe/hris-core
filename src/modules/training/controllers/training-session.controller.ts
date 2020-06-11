@@ -10,6 +10,7 @@ import {
   Delete,
   Body,
   Put,
+  NotFoundException,
 } from '@nestjs/common';
 import { BaseController } from '../../../core/controllers/base.contoller';
 
@@ -120,8 +121,6 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
     const sessionparticipant = await this.trainingSessionService.findOneParticipant(
       Param.participant,
     );
-    console.log('Participant:::::', sessionparticipant);
-
     if (sessionparticipant !== undefined) {
       const participant = await this.trainingSessionService.updateParticipant(
         Param.participant,
@@ -131,7 +130,7 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
         .status(HttpStatus.OK)
         .send(sanitizeResponseObject(participant));
     } else {
-      console.log('Not available');
+      throw new NotFoundException('Participant Not Available');
     }
   }
 }
