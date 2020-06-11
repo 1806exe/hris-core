@@ -34,12 +34,6 @@ export class SessionParticipant {
   })
   recordId: number;
 
-  @Column('integer', {
-    nullable: false,
-    name: 'curriculum',
-  })
-  curriculum: number;
-
   @Column('boolean', { nullable: false, name: 'certified' })
   certified: boolean;
 
@@ -68,9 +62,7 @@ export class SessionParticipant {
   @OneToOne(type => User, user => user.certifier, {eager: true})
   @JoinColumn({ name: 'certifiedby' })
   certifier: User[]
-  @OneToOne(type => TrainingCurriculum, curriculum => curriculum.participant, {eager: true})
-  @JoinColumn({ name: 'curriculum' })
-  curriculums: TrainingCurriculum[]
+
   static plural: any = 'participants';
 
   /*@ManyToOne(

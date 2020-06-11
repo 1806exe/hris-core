@@ -63,6 +63,4 @@ export class TrainingCurriculum extends EntityCoreProps {
   // @JoinTable({ name: 'trainingcurriculumtopicmember' })
   trainingTopics: TrainingTopic[];
 
-  @OneToOne(type => SessionParticipant, participants => participants.curriculum, {eager: false})
-  participant: TrainingCurriculum[]
 }

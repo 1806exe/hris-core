@@ -29,11 +29,6 @@ export class SessionFacilitator {
   })
   recordId: number;
 
-  @Column('integer', {
-    nullable: false,
-    name: 'curriculumid',
-  })
-  curriculumid: number;
 
   @ManyToOne(type => Record, record => record.facilitators, {eager: true})
   record: Record[]
