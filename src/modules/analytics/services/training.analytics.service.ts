@@ -222,7 +222,7 @@ export class TrainingAnalyticsService {
     query =
       `SELECT ${allowedColumns.map(column => 'data."' + column + '"')} FROM _resource_table_${formid} data
       INNER JOIN _organisationunitstructure ous ON(ous.uid = data.ou AND ${levelquery.join(' OR ')})`;
-    if (pe) {
+    /*if (pe) {
       let periodquery = pe.map(p => {
         let whereCondition = getWhereConditions(p);
         console.log(whereCondition);
@@ -235,7 +235,7 @@ export class TrainingAnalyticsService {
         return `(data."${dx}" BETWEEN pes.startdate AND pes.enddate AND pes.iso='${operand}')`;
       });
       query += ` INNER JOIN _periodstructure pes ON(${periodquery.join(' OR ')}) LIMIT 200000`;
-    }
+    }*/
     console.log(query);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
