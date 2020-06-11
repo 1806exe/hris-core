@@ -134,6 +134,89 @@ export class accesses1591642130209 implements MigrationInterface {
         ALTER TABLE sessionparticipant ADD CONSTRAINT FK_CERTIFICATION_ASSESSMENT FOREIGN KEY (assessedby) 
         REFERENCES public."user"(id);
 
+
+        ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS id;
+
+        ALTER TABLE public.formfieldmember ADD COLUMN id bigint;
+
+        ALTER TABLE public.formfieldmember ALTER COLUMN id SET DATA TYPE bigint;
+
+        DROP SEQUENCE IF EXISTS formfieldmember_id_seq;
+
+        CREATE SEQUENCE formfieldmember_id_seq start 1 increment 1;
+
+        ALTER TABLE public.formfieldmember ALTER COLUMN id SET DEFAULT nextval('formfieldmember_id_seq'::regclass);
+
+        UPDATE formfieldmember SET id = nextval('formfieldmember_id_seq');
+
+        UPDATE formfieldmember SET id = nextval('formfieldmember_id_seq');
+
+        ALTER TABLE public.formfieldmember ALTER COLUMN id SET NOT NULL;
+
+        ALTER TABLE formfieldmember DROP CONSTRAINT IF EXISTS hris_form_fieldmembers_pkey;
+
+        ALTER TABLE formfieldmember ADD CONSTRAINT hris_form_fieldmembers_pkey PRIMARY KEY (id);
+
+        ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS uid;
+
+        ALTER TABLE public.formfieldmember ADD COLUMN uid character varying(11);
+
+        DROP SEQUENCE IF EXISTS formfieldmembers_uuid_seq;
+
+        CREATE SEQUENCE formfieldmembers_uuid_seq START 100 increment 5;
+
+        DROP FUNCTION IF EXISTS generate_uuid(length int);
+
+        CREATE FUNCTION generate_uuid(length int)
+        RETURNS text AS $$
+        SELECT array_to_string(
+        ARRAY(
+            SELECT substring(
+                'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+                trunc(random()*62)::int+1,
+                1
+            )
+            FROM generate_series(1,length) AS gs(x)
+        )
+        , ''
+        )
+        $$ LANGUAGE SQL
+        RETURNS NULL ON NULL INPUT
+        VOLATILE LEAKPROOF;
+
+        DO $$
+        BEGIN
+        FOR counter IN 100..500 LOOP
+            UPDATE formfieldmember SET uid = left((nextval('formfieldmembers_uuid_seq') || (SELECT * FROM generate_uuid(8))), 11) WHERE uid IS NULL;
+            RAISE NOTICE 'UPDATE ROW NO: %', counter;
+        END LOOP;
+        END; $$;
+
+
+        ALTER TABLE public.formfieldmember ALTER COLUMN uid SET NOT NULL;
+
+        ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS description;
+
+        ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS title;
+
+        ALTER TABLE public.formfieldmember ADD COLUMN title character varying(255);
+
+        ALTER TABLE public.formfieldmember ADD COLUMN description text;
+
+        ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS lastupdatedby;
+
+        ALTER TABLE public.formfieldmember ADD COLUMN lastupdatedby character varying(11);
+
+        ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS publicaccess;
+
+        ALTER TABLE public.formfieldmember ADD COLUMN publicaccess character varying(11);
+
+        ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS externalaccess;
+
+        ALTER TABLE public.formfieldmember ADD COLUMN externalaccess boolean;
+
+        ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS created;
+
         `);
   }
 
