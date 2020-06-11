@@ -350,7 +350,6 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     participant.assessmentdate = assessmentdate;
     participant.certificationdate = certificationdate;
 
-    console.log(await this.participantRepository.save(participant));
     await this.participantRepository.save(participant);
     const participants = await this.participantRepository.findOne({
       where: { uid: participant.uid },

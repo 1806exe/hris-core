@@ -715,16 +715,6 @@ export class sequential1585499925311 implements MigrationInterface {
             DROP TABLE sessionfacilitator;
             ALTER TABLE participant RENAME TO sessionparticipant;
             ALTER TABLE facilitator RENAME TO sessionfacilitator;
-            ALTER TABLE sessionparticipant ADD COLUMN  curriculumid integer;
-            ALTER TABLE sessionfacilitator ADD COLUMN  curriculumid integer;  
-            ALTER TABLE sessionparticipant ADD CONSTRAINT "FK_constraint_curriculum" FOREIGN KEY (curriculumid)
-            REFERENCES public.trainingcurriculum (id) MATCH SIMPLE
-            ON UPDATE CASCADE
-            ON DELETE CASCADE;
-            ALTER TABLE sessionfacilitator ADD CONSTRAINT "FK_constraint_curriculums" FOREIGN KEY (curriculumid)
-            REFERENCES public.trainingcurriculum (id) MATCH SIMPLE
-            ON UPDATE CASCADE
-            ON DELETE CASCADE;
             DROP TABLE traininginstance;
             ALTER TABLE trainingsession RENAME COLUMN venue TO venuename;
             ALTER TABLE trainingsession ADD COLUMN venue BIGINT;
