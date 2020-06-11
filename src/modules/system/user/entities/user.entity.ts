@@ -27,7 +27,8 @@ import { ReportTable } from '../../../visualization/report-table/entities/report
 import { Dashboard } from '../../../visualization/dashboard/entities/dashboard.entity';
 import { Report } from '../../../report/entities/report.entity';
 import { ReportService } from 'src/modules/report/services/report.service';
-import { UserAccess } from '../../user-access/entities/user-access.entity';
+import { UserAccess } from './user-access.entity';
+import { SessionParticipant } from 'src/modules/training/entities/training-session-participant.entity';
 
 @Entity('user', { schema: 'public' })
 export class User extends UserCoreProps {
@@ -336,8 +337,9 @@ export class User extends UserCoreProps {
   })
   report: Report[];
 
-  @ManyToOne(() => UserAccess, (access: UserAccess) => access.useraccess, {
-    onDelete: 'CASCADE',
-  })
-  access: UserAccess;
+  @OneToOne(type => SessionParticipant, sessionparticipant => sessionparticipant.assesser)
+  assesser: SessionParticipant[]
+
+  @OneToOne(type => SessionParticipant, sessionparticipant => sessionparticipant.certifier)
+  certifier: SessionParticipant[]
 }

@@ -1,6 +1,8 @@
-import { Column, Entity, OneToMany, ManyToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, OneToMany, ManyToMany, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
 import { Record } from '../../../modules/record/entities/record.entity';
 import { TrainingSession } from './training-session.entity';
+import { User } from 'src/modules/system/user/entities/user.entity';
+import { TrainingCurriculum } from './training-curriculum.entity';
 
 @Entity('sessionparticipant', { schema: 'public' })
 export class SessionParticipant {
@@ -32,18 +34,35 @@ export class SessionParticipant {
   })
   recordId: number;
 
-  @Column('integer', {
-    nullable: false,
-    name: 'curriculumid',
-  })
-  curriculumid: number;
+  @Column('boolean', { nullable: false, name: 'certified' })
+  certified: boolean;
 
-  @ManyToOne(
-    type => Record,
-    record => record.participants,
-    { eager: true },
-  )
+  @Column('integer', { nullable: false, name: 'certifiedby' })
+  certifiedby: number;
+
+  @Column('date', { nullable: false, name: 'certificationdate' })
+  certificationdate: Date;
+
+  @Column('boolean', { nullable: false, name: 'assessed' })
+  assessed: boolean;
+
+  @Column('integer', { nullable: false, name: 'assessedby' })
+  assessedby: number;
+
+  @Column('date', { nullable: false, name: 'assessmentdate' })
+  assessmentdate: Date;
+
+  @ManyToOne((type) => Record, (record) => record.participants, { eager: true })
   record: Record[];
+
+  @OneToOne(type => User, user => user.assesser, {eager: true})
+  @JoinColumn({ name: 'assessedby' })
+  assesser: User[]
+
+  @OneToOne(type => User, user => user.certifier, {eager: true})
+  @JoinColumn({ name: 'certifiedby' })
+  certifier: User[]
+
   static plural: any = 'participants';
 
   /*@ManyToOne(

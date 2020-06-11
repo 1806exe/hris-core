@@ -16,6 +16,7 @@ import { TrainingTopic } from '../entities/training-topic.entity';
 import { TrainingVenue } from '../entities/training-venue.entity';
 import { TrainingSponsor } from '../entities/training-sponsor.entity';
 import { OrganisationUnit } from 'src/modules/organisation-unit/entities/organisation-unit.entity';
+import { User } from 'src/modules/system/user/entities/user.entity';
 
 @Injectable()
 export class TrainingSessionService extends BaseService<TrainingSession> {
@@ -44,6 +45,8 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     private organisationunitRepository: Repository<OrganisationUnit>,
     @InjectRepository(TrainingTopic)
     private trainingTopicRepository: Repository<TrainingTopic>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {
     super(trainingSessionRepository, TrainingSession);
   }
@@ -74,7 +77,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       participants: await this.recordRepository.find({
         relations: ['recordValues', 'recordValues.field'],
         where: {
-          id: In(participants.map(participant => participant.recordId)),
+          id: In(participants.map((participant) => participant.recordId)),
         },
       }),
     };
@@ -96,7 +99,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       facilitators: await this.recordRepository.find({
         relations: ['recordValues', 'recordValues.field'],
         where: {
-          id: In(facilitators.map(facilitator => facilitator.recordId)),
+          id: In(facilitators.map((facilitator) => facilitator.recordId)),
         },
       }),
     };
@@ -304,7 +307,9 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
   }
   async saveTopics(uid: string, saveTopicsDTO: any) {
     const { topic } = saveTopicsDTO;
-    const session = (await this.trainingSessionRepository.findOne({ uid })).id;
+    const session = (await this.trainingSessionRepository.findOne({ uid: uid }))
+      .id;
+    console.log('sessionssss:::', session);
     const topics = (
       await this.trainingTopicRepository.findOne({
         select: ['id'],
@@ -317,5 +322,43 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       .into('trainingsessiontopics')
       .values([{ trainingsessionId: session, trainingtopicId: topics }])
       .execute();
+  }
+
+  async findOneParticipant(uid: string) {
+    return await this.participantRepository.findOne({ uid: uid });
+  }
+  async updateParticipant(uid: string, updateParticipantDTO: any) {
+    const participant = await this.participantRepository.findOne({ uid: uid });
+    const {
+      curriculumid,
+      certified,
+      assessed,
+      certifiedby,
+      certificationdate,
+      assessedby,
+      assessmentdate,
+    } = updateParticipantDTO;
+    const curriculum = (
+      await this.trainingCurriculumRepository.findOne({ uid: curriculumid })
+    ).id;
+    const certifier = (await this.userRepository.findOne({ uid: certifiedby }))
+      .id;
+    const assesser = (await this.userRepository.findOne({ uid: assessedby }))
+      .id;
+    participant.assessed = assessed;
+    participant.certified = certified;
+    participant.assessedby = assesser;
+    participant.certifiedby = certifier;
+    participant.assessmentdate = assessmentdate;
+    participant.certificationdate = certificationdate;
+    participant.curriculum = curriculum;
+
+    await this.participantRepository.save(participant);
+    delete participant.recordId;
+    delete participant.assessedby;
+    delete participant.certifiedby;
+    delete participant.trainingsessionId;
+    delete participant.curriculum;
+    return participant;
   }
 }

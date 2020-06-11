@@ -36,8 +36,8 @@ export class Form extends EntityCoreProps {
   title: string | null;
 
   @OneToMany(
-    type => FormFieldMember,
-    formFieldMember => formFieldMember.form,
+    (type) => FormFieldMember,
+    (formFieldMember) => formFieldMember.form,
     {
       onDelete: 'CASCADE',
     },
@@ -45,43 +45,32 @@ export class Form extends EntityCoreProps {
   formFieldMembers: FormFieldMember[];
 
   @OneToMany(
-    type => FormVisibleField,
-    formVisibleField => formVisibleField.form,
+    (type) => FormVisibleField,
+    (formVisibleField) => formVisibleField.form,
     { onDelete: 'CASCADE' },
   )
   formVisibleFields: FormVisibleField[];
 
-  @OneToMany(
-    type => FormSection,
-    formSection => formSection.form,
-    {
-      onDelete: 'CASCADE',
-    },
-  )
+  @OneToMany((type) => FormSection, (formSection) => formSection.form, {
+    onDelete: 'CASCADE',
+  })
   formSections: FormSection[];
 
   @OneToMany(
-    type => OrganisationUnitCompleteness,
-    organisationUnitCompleteness => organisationUnitCompleteness.form,
+    (type) => OrganisationUnitCompleteness,
+    (organisationUnitCompleteness) => organisationUnitCompleteness.form,
   )
   organisationUnitCompletenesss: OrganisationUnitCompleteness[];
 
-  @OneToMany(
-    type => Record,
-    record => record.form,
-    {
-      onDelete: 'CASCADE',
-    },
-  )
+  @OneToMany((type) => Record, (record) => record.form, {
+    onDelete: 'CASCADE',
+  })
   records: Record[];
 
-  @ManyToMany(
-    type => Field,
-    field => field.forms,
-    {
-      nullable: false,
-    },
-  )
+  @ManyToMany((type) => Field, (field) => field.forms, {
+    nullable: false,
+    eager: true,
+  })
   @JoinTable({ name: 'formuniquerecordfields' })
   fields: Field[];
 
@@ -91,9 +80,6 @@ export class Form extends EntityCoreProps {
   // )
   // users: User[];
 
-  @OneToMany(
-    () => Indicator,
-    (indicator: Indicator) => indicator.form,
-  )
+  @OneToMany(() => Indicator, (indicator: Indicator) => indicator.form)
   indicators: Indicator[];
 }

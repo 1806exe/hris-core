@@ -33,6 +33,7 @@ import { SessionFacilitator } from './entities/training-session-facilitatory.ent
 import { Record } from '../record/entities/record.entity';
 import { RecordValue } from '../record/entities/record-value.entity';
 import { OrganisationUnit } from '../organisation-unit/entities/organisation-unit.entity';
+import { User } from '../system/user/entities/user.entity';
 
 @Module({
   imports: [
@@ -51,7 +52,8 @@ import { OrganisationUnit } from '../organisation-unit/entities/organisation-uni
       SessionFacilitator,
       Record,
       RecordValue,
-      OrganisationUnit
+      OrganisationUnit,
+      User,
     ]),
   ],
   controllers: [
@@ -63,7 +65,7 @@ import { OrganisationUnit } from '../organisation-unit/entities/organisation-uni
     TrainingTrainerController,
     TrainingUnitController,
     TrainingVenueController,
-    TrainingController
+    TrainingController,
   ],
   providers: [
     TrainingCurriculumService,
@@ -74,7 +76,7 @@ import { OrganisationUnit } from '../organisation-unit/entities/organisation-uni
     TrainingTrainerService,
     TrainingUnitService,
     TrainingVenueService,
-    TrainingService
+    TrainingService,
   ],
 })
 export class TrainingModule {}

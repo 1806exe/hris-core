@@ -10,8 +10,8 @@ import { App } from '../../../app/entities/apps.entity';
 import { UserAuthority } from '../../user-authority/entities/user-authority.entity';
 import { UserIdentification } from '../../user/entities/user-identification';
 import { User } from '../../user/entities/user.entity';
-import { UserAccess } from '../../user-access/entities/user-access.entity';
-import { UserRoleAccess } from '../../user-role-access/entities/user-role-access.entity';
+import { UserAccess } from '../../user/entities/user-access.entity';
+import { UserRoleAccess } from './user-role-access.entity';
 
 @Entity('userrole', { schema: 'public' })
 export class UserRole extends UserIdentification {
@@ -61,12 +61,4 @@ export class UserRole extends UserIdentification {
   //   inverseJoinColumn: { referencedColumnName: 'id' },
   // })
   // userGroups: UserGroup[];
-  @ManyToOne(
-    () => UserRoleAccess,
-    (access: UserRoleAccess) => access.userrole,
-    {
-      onDelete: 'CASCADE',
-    },
-  )
-  access: UserRoleAccess;
 }
