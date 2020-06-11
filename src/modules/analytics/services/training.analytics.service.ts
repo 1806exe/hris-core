@@ -222,9 +222,10 @@ export class TrainingAnalyticsService {
     query =
       `SELECT ${allowedColumns.map(column => 'data."' + column + '"')} FROM _resource_table_${formid} data
       INNER JOIN _organisationunitstructure ous ON(ous.uid = data.ou AND ${levelquery.join(' OR ')})`;
-    if (pe) {
+    /*if (pe) {
       let periodquery = pe.map(p => {
         let whereCondition = getWhereConditions(p);
+        console.log(whereCondition);
         let [dx, operator, operand] = p.split(':');
         console.log('whereCondition:', dx, operator, operand);
         analytics.metaData.dimensions.pe.push(operand);
@@ -234,7 +235,7 @@ export class TrainingAnalyticsService {
         return `(data."${dx}" BETWEEN pes.startdate AND pes.enddate AND pes.iso='${operand}')`;
       });
       query += ` INNER JOIN _periodstructure pes ON(${periodquery.join(' OR ')}) LIMIT 200000`;
-    }
+    }*/
     console.log(query);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
@@ -315,12 +316,31 @@ export class TrainingAnalyticsService {
     let organiserFilter = '';
     let sponsorFilter = '';
     let ouFilter = '';
+    if(ou){
+      let query = 'SELECT level FROM organisationunitlevel';
+      let orglevels = await this.connetion.manager.query(query);
+      let levelquery = orglevels.map(
+        orglevel =>
+          'ous.uidlevel' + orglevel.level + " IN ('" + ou.join("','") + "')",
+      );
+    }
+    let periodFilter = '';
+    if (pe) {
+      console.log('PE');
+      console.log(pe);
+      let rows = await this.connetion.manager.query(`SELECT * FROM _periodstructure WHERE iso IN ('${pe.join("','")}')`);
+      console.log(rows);
+      periodFilter = `WHERE (${rows.map((row)=>{
+        return `ts.startdate BETWEEN '${row.startdate.toISOString()}' AND '${row.enddate.toISOString()}' 
+        OR ts.enddate BETWEEN '${row.startdate.toISOString()}' AND '${row.enddate.toISOString()}'`;
+      }).join(' OR ')} )`;
+    }
     let query = `
     SELECT section.name section,unit.name unit,
         curriculum.name curriculum,region.name region,
         district.name district,
         venuename venue,sponsor.name sponsor,organiser.name organiser,
-        ts.deliverymode,ts.startdate,ts.enddate,'0' participants 
+        ts.deliverymode,ts.startdate,ts.enddate,COUNT(sp) participants 
     FROM trainingsession ts
         INNER JOIN organisationunit district ON(district.id=ts.organisationunit ${ouFilter})
         INNER JOIN organisationunit region ON(district.parentid=region.id)
@@ -329,6 +349,10 @@ export class TrainingAnalyticsService {
         INNER JOIN trainingsections section ON(section.id=unit.sectionid ${sectionFilter})
         INNER JOIN trainingsponsor sponsor ON(sponsor.id=ts.sponsor ${sponsorFilter})
         INNER JOIN trainingsponsor organiser ON(organiser.id=ts.organiser ${organiserFilter})
+        LEFT JOIN sessionparticipant sp ON(sp."trainingsessionId" = ts.id)
+        ${periodFilter}
+        GROUP BY section.name,unit.name,curriculum.name,region.name,district.name,
+        venuename,sponsor.name,organiser.name,ts.deliverymode,ts.startdate,ts.enddate
     `;
     console.log(query);
     let rows = await this.connetion.manager.query(query);
