@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Record } from '../../../modules/record/entities/record.entity';
 import { TrainingSession } from './training-session.entity';
-import { User } from 'src/modules/system/user/entities/user.entity';
+import { User } from '../../system/user/entities/user.entity';
 import { TrainingCurriculum } from './training-curriculum.entity';
 
 @Entity('sessionparticipant', { schema: 'public' })
