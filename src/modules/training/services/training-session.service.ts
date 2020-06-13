@@ -310,7 +310,6 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     const { topic } = saveTopicsDTO;
     const session = (await this.trainingSessionRepository.findOne({ uid: uid }))
       .id;
-    console.log('sessionssss:::', session);
     const topics = (
       await this.trainingTopicRepository.findOne({
         select: ['id'],
