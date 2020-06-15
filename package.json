@@ -37,7 +37,7 @@
     "@nestjs/websockets": "7.1.3",
     "@tsed/di": "^5.57.2",
     "@tsed/common": "^5.57.6",
-    "@tsed/di": "^5.57.5",
+    "@tsed/di": "^5.57.6",
     "@tsed/core": "5.57.5",
     "@tsed/typeorm": "^5.57.5",
     "@types/pg": "^7.14.2",
