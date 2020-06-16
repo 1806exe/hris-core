@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   generateOUFilterQuery,
   getISOOrgUnits,
 } from 'src/core/helpers/ou.helper';
 import { getISOPeriods } from 'src/core/helpers/pe.helper';
-import { Analytics } from 'src/core/interfaces/analytics.interface';
+import { Analytics } from 'src/modules/analytics/interfaces/analytics.interface';
 import { getWhereConditions } from 'src/core/utilities';
 import { IndicatorService } from 'src/modules/indicator/services/indicator.service';
 import { OrganisationUnitLevelService } from 'src/modules/organisation-unit/services/organisation-unit-level.service';
 import { Connection } from 'typeorm';
+import { getAnalyticsHeaders } from '../helpers/get-analytics-headers.helper';
+import { OrganisationUnitService } from 'src/modules/organisation-unit/services/organisation-unit.service';
 
 declare module namespace {}
 
@@ -18,6 +20,7 @@ export class AnalyticsService {
     private connetion: Connection,
     private indicatorService: IndicatorService,
     private orgUnitLevelService: OrganisationUnitLevelService,
+    private orgUnitService: OrganisationUnitService,
   ) {}
   sampleAnalytics = {
     wo7ITisRXeE: {
@@ -383,40 +386,7 @@ export class AnalyticsService {
         : this.sampleAnalytics['any'];
     } else {
       let analytics: Analytics = {
-        headers: [
-          {
-            name: 'dx',
-            column: 'Data',
-            valueType: 'TEXT',
-            type: 'java.lang.String',
-            hidden: false,
-            meta: true,
-          },
-          {
-            name: 'ou',
-            column: 'Organisation unit',
-            valueType: 'TEXT',
-            type: 'java.lang.String',
-            hidden: false,
-            meta: true,
-          },
-          {
-            name: 'pe',
-            column: 'Period',
-            valueType: 'TEXT',
-            type: 'java.lang.String',
-            hidden: false,
-            meta: true,
-          },
-          {
-            name: 'value',
-            column: 'Value',
-            valueType: 'NUMBER',
-            type: 'java.lang.Double',
-            hidden: false,
-            meta: false,
-          },
-        ],
+        headers: getAnalyticsHeaders(),
         metaData: { items: {}, dimensions: { dx: [], pe: [], ou: [], co: [] } },
         rows: [],
       };
@@ -424,14 +394,16 @@ export class AnalyticsService {
       // Get organisation unit levels
       const orgUnitLevels = await this.orgUnitLevelService.findAll();
 
-      let queries = [];
-
       // Get indicators for use in computation
       const indicators = await this.indicatorService.findIn({ uid: dx });
 
+      // Attached indicator information in analytics payload
+
+      let queries = [];
+
       // Pass through each indicator to generate its data
-      for (let indicator of indicators) {
-        // Push indicator information in analytics metadat payload
+      for (const indicator of indicators) {
+        // Push indicator information in analytics metadata payload
         analytics.metaData.dimensions.dx.push(indicator.uid);
         analytics.metaData.items[indicator.uid] = {
           name: indicator.name,
@@ -442,9 +414,13 @@ export class AnalyticsService {
         filter = indicator.filter
           .split('${start_of_reporting_period}')
           .join('pe.startdate');
+
         filter = filter.split('${end_of_reporting_period}').join('pe.enddate');
+
         filter = filter.split('${').join('data."');
+
         filter = filter.split('}').join('"');
+
         if (filter.trim() !== '') {
           filter = ` AND (${filter}) `;
         }
@@ -455,26 +431,29 @@ export class AnalyticsService {
             `SELECT '${
               indicator.uid
             }' as dx,'${orgUnit}' as ou,pe.iso as pe,COUNT(*) as value FROM _resource_table_${
-              indicator.form
-            } data
-        INNER JOIN _organisationunitstructure ous ON(data.ou=ous.uid) 
-        INNER JOIN _periodstructure pe ON((${getISOPeriods(pe)
-          .map((p) => `pe.iso='${p}'`)
-          .join(' OR ')}) ${filter} ) 
-        WHERE ${generateOUFilterQuery('ous', ou, orgUnitLevels, context.user)} 
-        GROUP BY pe.iso`,
+              indicator.form.uid
+            } data INNER JOIN _organisationunitstructure ous ON(data.ou=ous.uid) INNER JOIN _periodstructure pe ON((${getISOPeriods(
+              pe,
+            )
+              .map((p) => `pe.iso='${p}'`)
+              .join(' OR ')}) ${filter} ) WHERE ${generateOUFilterQuery(
+              'ous',
+              ou,
+              orgUnitLevels,
+              context.user,
+            )} GROUP BY pe.iso`,
           );
         }
       }
 
       // Find fields based on supplied indicators
-      let fields = await this.getFields(dx);
-      for (let field of fields) {
+      const fields = await this.getFields(dx);
+      for (const field of fields) {
         analytics.metaData.dimensions.dx.push(field.optionuid);
         analytics.metaData.items[field.optionuid] = {
           name: field.option,
         };
-        for (let orgUnit of getISOOrgUnits(ou, context.user)) {
+        for (const orgUnit of getISOOrgUnits(ou, context.user)) {
           queries.push(
             `SELECT '${
               field.optionuid
@@ -500,7 +479,11 @@ export class AnalyticsService {
 
       // update period in analytics metadata
       analytics.metaData.dimensions.pe = getISOPeriods(pe);
-      let result = await this.connetion.manager.query(queries.join(' UNION '));
+
+      // Get analytics results
+      const result = await this.connetion.manager.query(
+        queries.join(' UNION '),
+      );
 
       // Attach result as analytics rows
       analytics.rows = result.map((data) => {
@@ -511,12 +494,11 @@ export class AnalyticsService {
       });
 
       // Find organisation units to attach in analytics payload
-      query = `SELECT *  FROM organisationunit WHERE uid IN('${analytics.metaData.dimensions.ou.join(
-        "','",
-      )}')`;
+      const orgUnits = await this.orgUnitService.findIn({
+        uid: analytics.metaData.dimensions.ou,
+      });
 
-      // Attach organisation unit uids in analytics metadata
-      (await this.connetion.manager.query(query)).forEach((orgUnit) => {
+      orgUnits.forEach((orgUnit) => {
         analytics.metaData.items[orgUnit.uid] = {
           name: orgUnit.name,
         };
