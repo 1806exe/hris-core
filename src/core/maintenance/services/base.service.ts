@@ -34,6 +34,11 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
     return await this.modelRepository.find();
   }
 
+  // TODO: Find best way to merge all find operations in single method so dynamic filters can be used for all
+  async findIn(inConditions: { [attributeName: string]: any[] }) {
+    return await this.modelRepository.find(inConditions);
+  }
+
   /**
    *
    * @param where
