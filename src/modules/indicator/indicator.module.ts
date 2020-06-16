@@ -8,15 +8,10 @@ import { Indicator } from './entities/indicator.entity';
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'basic', session: true }),
-    TypeOrmModule.forFeature([
-      Indicator
-    ]),
+    TypeOrmModule.forFeature([Indicator]),
   ],
-  controllers: [
-    IndicatorController,
-  ],
-  providers: [
-    IndicatorService,
-  ],
+  controllers: [IndicatorController],
+  providers: [IndicatorService],
+  exports: [IndicatorService],
 })
 export class IndicatorModule {}

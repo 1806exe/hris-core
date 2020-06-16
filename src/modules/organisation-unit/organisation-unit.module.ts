@@ -43,5 +43,6 @@ import { OrganisationUnitLevelService } from './services/organisation-unit-level
     OrganisationUnitCompletenessService,
     OrganisationUnitLevelService,
   ],
+  exports: [OrganisationUnitLevelService],
 })
 export class OrganisatinUnitModule {}

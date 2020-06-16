@@ -59,8 +59,8 @@ export class ChartService extends BaseService<Chart> {
           dimension: 'dx',
           items: [
             {
-              uid: 'wo7ITisRXeE',
-              dimensionItem: 'wo7ITisRXeE',
+              uid: 'uLhsWqITzfk6p',
+              dimensionItem: 'uLhsWqITzfk6p',
               displayName: 'Employment',
               dimensionItemType: 'INDICATOR',
             },
@@ -75,7 +75,7 @@ export class ChartService extends BaseService<Chart> {
       dataDimensionItems: [
         {
           dataDimensionItemType: 'INDICATOR',
-          indicator: { uid: 'wo7ITisRXeE' },
+          indicator: { uid: 'uLhsWqITzfk6p' },
         },
       ],
       categoryOptionGroupSetDimensions: [],
@@ -400,8 +400,8 @@ export class ChartService extends BaseService<Chart> {
           ],
         },
       ],
-    }
-  }
+    },
+  };
   async findOneByUid(uid: string): Promise<any> {
     if (!this.data[uid]) {
       console.log('UID:', uid);

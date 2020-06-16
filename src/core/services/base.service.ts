@@ -41,6 +41,10 @@ export class BaseService<T extends HRISBaseEntity> {
     return await this.modelRepository.find({ where });
   }
 
+  // TODO: Find best way to merge all find operations in single method so dynamic filters can be used for all
+  async findIn(inConditions: { [attributeName: string]: any[] }) {
+    return await this.modelRepository.find(inConditions);
+  }
   async findAndCount(fields, filter, size, page): Promise<[T[], number]> {
     const metaData = this.modelRepository.manager.connection.getMetadata(
       this.Model,
@@ -94,21 +98,21 @@ export class BaseService<T extends HRISBaseEntity> {
       this.Model,
     );
     const savedEntity = model.save();
-    Object.keys(data).forEach(key => {
+    Object.keys(data).forEach((key) => {
       if (
         metaData.relations
-          .map(item => {
+          .map((item) => {
             return item.propertyName;
           })
           .indexOf(key) > -1
       ) {
         metaData.relations
-          .filter(item => {
+          .filter((item) => {
             return item.propertyName === key;
           })
-          .forEach(item => {
+          .forEach((item) => {
             if (item.relationType === 'one-to-many') {
-              data[key].forEach(child => {
+              data[key].forEach((child) => {
                 savedEntity[key].push(this.saveEntity(child, item.target));
               });
             }
@@ -134,7 +138,7 @@ export class BaseService<T extends HRISBaseEntity> {
     // var metaData = this.modelRepository.manager.connection.getMetadata(this.model);
     // var savedEntity = entity;
     // model = {...model, ...entity};
-    Object.keys(entity).forEach(key => {
+    Object.keys(entity).forEach((key) => {
       model[key] = entity[key];
     });
 
@@ -172,7 +176,7 @@ export class BaseService<T extends HRISBaseEntity> {
    * @param id
    */
   async delete(id: string): Promise<any> {
-    const condition: any = { uid:id };
+    const condition: any = { uid: id };
     if (id) {
       return this.modelRepository.delete(condition);
     }
@@ -231,8 +235,9 @@ export class BaseService<T extends HRISBaseEntity> {
         ),
       );
       entity.id = id;
-      return _.flatten(_.filter(relationUIDs, uid => uid === 0 || Boolean(uid)))
-        .length >= 1
+      return _.flatten(
+        _.filter(relationUIDs, (uid) => uid === 0 || Boolean(uid)),
+      ).length >= 1
         ? entity
         : entity;
     }
