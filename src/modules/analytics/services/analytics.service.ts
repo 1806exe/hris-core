@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   generateOUFilterQuery,
   getISOOrgUnits,
@@ -403,7 +403,7 @@ export class AnalyticsService {
 
       // Pass through each indicator to generate its data
       for (const indicator of indicators) {
-        // Push indicator information in analytics metadat payload
+        // Push indicator information in analytics metadata payload
         analytics.metaData.dimensions.dx.push(indicator.uid);
         analytics.metaData.items[indicator.uid] = {
           name: indicator.name,
@@ -431,14 +431,17 @@ export class AnalyticsService {
             `SELECT '${
               indicator.uid
             }' as dx,'${orgUnit}' as ou,pe.iso as pe,COUNT(*) as value FROM _resource_table_${
-              indicator.form
-            } data
-        INNER JOIN _organisationunitstructure ous ON(data.ou=ous.uid) 
-        INNER JOIN _periodstructure pe ON((${getISOPeriods(pe)
-          .map((p) => `pe.iso='${p}'`)
-          .join(' OR ')}) ${filter} ) 
-        WHERE ${generateOUFilterQuery('ous', ou, orgUnitLevels, context.user)} 
-        GROUP BY pe.iso`,
+              indicator.form.uid
+            } data INNER JOIN _organisationunitstructure ous ON(data.ou=ous.uid) INNER JOIN _periodstructure pe ON((${getISOPeriods(
+              pe,
+            )
+              .map((p) => `pe.iso='${p}'`)
+              .join(' OR ')}) ${filter} ) WHERE ${generateOUFilterQuery(
+              'ous',
+              ou,
+              orgUnitLevels,
+              context.user,
+            )} GROUP BY pe.iso`,
           );
         }
       }

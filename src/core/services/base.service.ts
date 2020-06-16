@@ -4,6 +4,7 @@ import {
   Repository,
   UpdateResult,
   FindConditions,
+  In,
 } from 'typeorm';
 
 import { getWhereConditions } from '../utilities';
@@ -42,8 +43,31 @@ export class BaseService<T extends HRISBaseEntity> {
   }
 
   // TODO: Find best way to merge all find operations in single method so dynamic filters can be used for all
-  async findIn(inConditions: { [attributeName: string]: any[] }) {
-    return await this.modelRepository.find(inConditions);
+  async findIn(inConditions: { [attributeName: string]: string[] }) {
+    const sanitizedConditions = _.flatten(
+      _.keys(inConditions).map((conditionKey) => {
+        return (inConditions[conditionKey] || []).map((conditionValue) => {
+          return { [conditionKey]: conditionValue };
+        });
+      }),
+    );
+
+    const metaData = this.modelRepository.manager.connection.getMetadata(
+      this.Model,
+    );
+
+    const relations = metaData.relations
+      .map((relation) => {
+        return relation.relationType === 'many-to-one'
+          ? relation.propertyName
+          : undefined;
+      })
+      .filter((propertyName) => propertyName);
+
+    return await this.modelRepository.find({
+      where: sanitizedConditions,
+      relations,
+    });
   }
   async findAndCount(fields, filter, size, page): Promise<[T[], number]> {
     const metaData = this.modelRepository.manager.connection.getMetadata(
