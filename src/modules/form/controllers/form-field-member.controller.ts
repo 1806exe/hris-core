@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { FormFieldMember } from '../entities/form-field-member.entity';
-import { BaseController } from 'src/core/controllers/base.contoller';
 import { FormFieldMemberService } from '../services/form-field-member.service';
+import { MaintenanceBaseController } from 'src/core/maintenance/controllers/base.contoller';
 
 @Controller('api/' + FormFieldMember.plural)
-export class FormFieldMemberController extends BaseController<FormFieldMember> {
+export class FormFieldMemberController extends MaintenanceBaseController<FormFieldMember> {
     constructor(service: FormFieldMemberService) {
         super(service, FormFieldMember);
     }
