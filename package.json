@@ -38,7 +38,7 @@
     "@tsed/common": "^5.54.3",
     "@tsed/core": "5.54.3",
     "@tsed/di": "^5.57.7",
-    "@tsed/typeorm": "^5.54.3",
+    "@tsed/typeorm": "^5.57.7",
     "@types/pg": "^7.14.2",
     "apollo-server-express": "^2.14.4",
     "axios": "^0.19.2",
