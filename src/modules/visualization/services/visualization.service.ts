@@ -2,16 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/core/services/base.service';
 import { Repository } from 'typeorm';
-import { Chart } from '../entities/chart.entity';
+import { Visualization } from '../entities/visualization.entity';
 
 @Injectable()
-export class ChartService extends BaseService<Chart> {
-  constructor(
-    @InjectRepository(Chart)
-    chartRepository: Repository<Chart>,
-  ) {
-    super(chartRepository, Chart);
-  }
+export class VisualizationService extends BaseService<Visualization> {
   data = {
     MTWXrZKjPRa: {
       lastUpdated: '2019-02-09T20:13:45.425',
@@ -402,10 +396,10 @@ export class ChartService extends BaseService<Chart> {
       ],
     },
   };
-  async findOneByUid(uid: string): Promise<any> {
-    if (!this.data[uid]) {
-      console.log('UID:', uid);
-    }
-    return this.data[uid];
+  constructor(
+    @InjectRepository(Visualization)
+    repository: Repository<Visualization>,
+  ) {
+    super(repository, Visualization);
   }
 }

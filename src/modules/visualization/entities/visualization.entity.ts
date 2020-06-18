@@ -1,12 +1,12 @@
+import { EntityCoreProps } from '../../../core/entities/entity-core-props';
+import { User } from '../../system/user/entities/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { EntityCoreProps } from '../../../../core/entities/entity-core-props';
-import { User } from '../../../system/user/entities/user.entity';
-import { DashboardItemChart } from '../../dashboard-item/entities/dashboard-item-chart.entity';
-import { ChartDimension } from './chart-dimension.entity';
+import { DashboardItem } from './dashboard-item.entity';
+import { VisualizationDimension } from './visualization-dimension.entity';
 
-@Entity('chart', { schema: 'public' })
-export class Chart extends EntityCoreProps {
-  static plural = 'charts';
+@Entity('visualization', { schema: 'public' })
+export class Visualization extends EntityCoreProps {
+  static plural = 'visualizations';
 
   @Column('character varying', {
     nullable: true,
@@ -195,31 +195,167 @@ export class Chart extends EntityCoreProps {
   @Column('boolean', { name: 'favorite' })
   favorite: boolean;
 
-  @Column('integer', { name: 'toplimit' })
-  toplimit: number;
-
   @Column('jsonb', { name: 'parentgraphmap' })
   parentgraphmap: any;
 
   @Column('jsonb', { name: 'access' })
   access: any;
 
-  @ManyToOne(
-    () => User,
-    (user: User) => user.charts,
-  )
+  @Column('character varying', {
+    nullable: true,
+    length: 255,
+    name: 'measurecriteria',
+  })
+  measureCriteria: string | null;
+
+  @Column('boolean', {
+    nullable: true,
+    name: 'regression',
+  })
+  regression: boolean | null;
+
+  @Column('boolean', {
+    nullable: true,
+    name: 'cumulative',
+  })
+  cumulative: boolean | null;
+
+  @Column('integer', {
+    nullable: true,
+    name: 'toplimit',
+  })
+  topLimit: number | null;
+
+  @Column('boolean', {
+    nullable: true,
+    name: 'rowtotals',
+  })
+  rowTotals: boolean | null;
+
+  @Column('boolean', {
+    nullable: true,
+    name: 'coltotals',
+  })
+  colTotals: boolean | null;
+
+  @Column('boolean', {
+    nullable: true,
+    name: 'rowsubtotals',
+  })
+  rowSubTotals: boolean | null;
+
+  @Column('boolean', {
+    nullable: true,
+    name: 'colsubtotals',
+  })
+  colSubTotals: boolean | null;
+
+  @Column('boolean', {
+    nullable: true,
+    name: 'hideemptyrows',
+  })
+  hideEmptyRows: boolean | null;
+
+  @Column('boolean', {
+    nullable: true,
+    name: 'hideemptycolumns',
+  })
+  hideEmptyColumns: boolean | null;
+
+  @Column('character varying', {
+    nullable: true,
+    length: 40,
+    name: 'digitgroupseparator',
+  })
+  digitGroupSeparator: string | null;
+
+  @Column('character varying', {
+    nullable: true,
+    length: 40,
+    name: 'displaydensity',
+  })
+  displayDensity: string | null;
+
+  @Column('character varying', {
+    nullable: true,
+    length: 40,
+    name: 'fontsize',
+  })
+  fontSize: string | null;
+
+  @Column('character varying', {
+    nullable: true,
+    length: 40,
+    name: 'legenddisplaystyle',
+  })
+  legendDisplayStyle: string | null;
+
+  @Column('character varying', {
+    nullable: true,
+    length: 40,
+    name: 'numbertype',
+  })
+  numberType: string | null;
+
+  @Column('boolean', {
+    nullable: true,
+    name: 'showhierarchy',
+  })
+  showHierarchy: boolean | null;
+
+  @Column('boolean', {
+    nullable: true,
+    name: 'showdimensionlabels',
+  })
+  showDimensionLabels: boolean | null;
+
+  @Column('boolean', {
+    nullable: true,
+    name: 'skiprounding',
+  })
+  skipRounding: boolean | null;
+
+  @Column('double precision', {
+    nullable: true,
+    name: 'longitude',
+  })
+  longitude: number | null;
+
+  @Column('double precision', {
+    nullable: true,
+    name: 'latitude',
+  })
+  latitude: number | null;
+
+  @Column('integer', {
+    nullable: true,
+    name: 'zoom',
+  })
+  zoom: number | null;
+
+  @Column('character varying', {
+    nullable: true,
+    length: 255,
+    name: 'basemap',
+  })
+  baseMap: string | null;
+
+  @ManyToOne(() => User, (user: User) => user.visualizations)
   @JoinColumn({ name: 'userid' })
   user: User | null;
 
   @OneToMany(
-    () => ChartDimension,
-    (chartDimension: ChartDimension) => chartDimension.chart, {eager: true}
+    () => DashboardItem,
+    (dashboardItem: DashboardItem) => dashboardItem.visualization,
+    { cascade: false },
   )
-  chartDimensions: ChartDimension[];
+  dashboardItems: DashboardItem[];
 
   @OneToMany(
-    () => DashboardItemChart,
-    (dashboardItemChart: DashboardItemChart) => dashboardItemChart.chart, {eager: true}
+    () => VisualizationDimension,
+    (visualizationDimension: VisualizationDimension) =>
+      visualizationDimension.visualization,
+    { eager: true },
   )
-  dashboardItemCharts: DashboardItemChart[];
+  dimensions: VisualizationDimension[];
 }

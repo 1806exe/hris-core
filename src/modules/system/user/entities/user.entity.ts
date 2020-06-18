@@ -1,6 +1,3 @@
-import { UserCoreProps } from '../../../../core/entities/user-core-props.entity';
-import { OrganisationUnit } from '../../../../modules/organisation-unit/entities/organisation-unit.entity';
-
 import {
   BeforeInsert,
   Column,
@@ -10,25 +7,20 @@ import {
   ManyToMany,
   OneToMany,
   OneToOne,
-  ManyToOne,
 } from 'typeorm';
-
-import { Form } from '../../../form/entities/form.entity';
+import { UserCoreProps } from '../../../../core/entities/user-core-props.entity';
+import { OrganisationUnit } from '../../../../modules/organisation-unit/entities/organisation-unit.entity';
 import { MessageMetadata } from '../../../message/entities/message-metadata.entity';
 import { MessageThreadMetadata } from '../../../message/entities/message-thread-metadata.entity';
 import { MessageThread } from '../../../message/entities/message-thread.entity';
 import { Message } from '../../../message/entities/message.entity';
+import { Report } from '../../../report/entities/report.entity';
+import { SessionParticipant } from '../../../training/entities/training-session-participant.entity';
 import { UserGroup } from '../../user-group/entities/user-group.entity';
 import { UserRole } from '../../user-role/entities/user-role.entity';
 import { UserSettings } from './user-settings.entity';
-import { Chart } from '../../../visualization/chart/entities/chart.entity';
-import { Map } from '../../../visualization/map/entities/map.entity';
-import { ReportTable } from '../../../visualization/report-table/entities/report-table.entity';
-import { Dashboard } from '../../../visualization/dashboard/entities/dashboard.entity';
-import { Report } from '../../../report/entities/report.entity';
-import { ReportService } from 'src/modules/report/services/report.service';
-import { UserAccess } from './user-access.entity';
-import { SessionParticipant } from '../../../training/entities/training-session-participant.entity';
+import { Dashboard } from '../../../visualization/entities/dashboard.entity';
+import { Visualization } from '../../../visualization/entities/visualization.entity';
 
 @Entity('user', { schema: 'public' })
 export class User extends UserCoreProps {
@@ -294,14 +286,11 @@ export class User extends UserCoreProps {
   @OneToMany(() => Dashboard, (dashboard: Dashboard) => dashboard.user)
   dashboards: Dashboard[];
 
-  @OneToMany(() => Chart, (chart: Chart) => chart.user)
-  charts: Chart[];
-
-  @OneToMany(() => Map, (map: Map) => map.user)
-  maps: Map[];
-
-  @OneToMany(() => ReportTable, (reportTable: ReportTable) => reportTable.user)
-  reportTable: ReportTable[];
+  @OneToMany(
+    () => Visualization,
+    (visualization: Visualization) => visualization.user,
+  )
+  visualizations: Visualization[];
 
   public static async authenticateUser(user: {
     username: string;
@@ -337,9 +326,15 @@ export class User extends UserCoreProps {
   })
   report: Report[];
 
-  @OneToOne(type => SessionParticipant, sessionparticipant => sessionparticipant.assesser)
-  assesser: SessionParticipant[]
+  @OneToOne(
+    (type) => SessionParticipant,
+    (sessionparticipant) => sessionparticipant.assesser,
+  )
+  assesser: SessionParticipant[];
 
-  @OneToOne(type => SessionParticipant, sessionparticipant => sessionparticipant.certifier)
-  certifier: SessionParticipant[]
+  @OneToOne(
+    (type) => SessionParticipant,
+    (sessionparticipant) => sessionparticipant.certifier,
+  )
+  certifier: SessionParticipant[];
 }
