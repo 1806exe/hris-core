@@ -29,7 +29,7 @@ export class VisualizationDimension extends TransactionTimestamp {
   @Column({
     type: 'varchar',
     name: 'layout',
-    length: 5,
+    length: 10,
     nullable: false,
   })
   layout: string;

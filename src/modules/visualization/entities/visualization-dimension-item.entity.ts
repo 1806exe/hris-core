@@ -15,7 +15,7 @@ export class VisualizationDimensionItem extends TransactionTimestamp {
 
   @Column({
     type: 'char',
-    length: 11,
+    length: 13,
     name: 'dimensionitem',
     nullable: false,
   })

@@ -1,11 +1,38 @@
-import { EntityCoreProps } from '../../../core/entities/entity-core-props';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { TransactionTimestamp } from '../../../core/entities/transaction-timestamp.entity';
 import { Dashboard } from './dashboard.entity';
 import { Visualization } from './visualization.entity';
 
 @Entity('dashboarditem', { schema: 'public' })
-export class DashboardItem extends EntityCoreProps {
+export class DashboardItem extends TransactionTimestamp {
   static plural = 'dashboardItems';
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ type: 'char', length: 11, unique: true })
+  uid: string;
+
+  @Column({
+    type: 'char',
+    nullable: true,
+    length: 8,
+    name: 'publicaccess',
+  })
+  publicAccess: string | null;
+
+  @Column({
+    type: 'boolean',
+    nullable: true,
+    name: 'externalaccess',
+  })
+  externalAccess: boolean | null;
+
   @Column({
     type: 'varchar',
     nullable: true,

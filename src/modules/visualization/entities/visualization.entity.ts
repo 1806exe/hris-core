@@ -29,20 +29,6 @@ export class Visualization extends EntityCoreProps {
   })
   type: string;
 
-  @Column('character varying', {
-    nullable: true,
-    length: 255,
-    name: 'series',
-  })
-  series: string | null;
-
-  @Column('character varying', {
-    nullable: true,
-    length: 255,
-    name: 'category',
-  })
-  category: string | null;
-
   @Column('boolean', {
     nullable: true,
     name: 'hidelegend',
@@ -188,18 +174,6 @@ export class Visualization extends EntityCoreProps {
     name: 'sortorder',
   })
   sortOrder: number | null;
-
-  @Column('boolean', { name: 'subscribed' })
-  subscribed: boolean;
-
-  @Column('boolean', { name: 'favorite' })
-  favorite: boolean;
-
-  @Column('jsonb', { name: 'parentgraphmap' })
-  parentgraphmap: any;
-
-  @Column('jsonb', { name: 'access' })
-  access: any;
 
   @Column('character varying', {
     nullable: true,
