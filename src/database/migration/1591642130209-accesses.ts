@@ -217,6 +217,25 @@ export class accesses1591642130209 implements MigrationInterface {
 
         ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS created;
 
+
+        INSERT INTO public.reportgroupmembers(
+            "reportgroupId", "reportId")
+            VALUES (1,13),
+           (1,14),
+          (2,1),
+          (2,2),
+          (2,3),
+          (2,4),
+         (3,5),
+         (4,6),
+         (4,7),
+         (4,8),
+         (4,9),
+        (4,10),
+        (4,11),
+        (4,12);
+
+
         `);
   }
 
