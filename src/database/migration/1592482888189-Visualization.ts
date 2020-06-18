@@ -142,6 +142,7 @@ export class Visualization1592482888189 implements MigrationInterface {
         created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
         lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
         id integer NOT NULL DEFAULT nextval('visualizationdimensionitem_id_seq'::regclass),
+        uid character(13) COLLATE pg_catalog."default",
         dimensionitem character(13) COLLATE pg_catalog."default" NOT NULL,
         dimensionitemtype character varying(50) COLLATE pg_catalog."default" NOT NULL,
         visualizationdimensionid integer,

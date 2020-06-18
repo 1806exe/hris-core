@@ -75,7 +75,6 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
       this.Model,
     );
 
-    console.log(getRelations(fields, metaData));
     return await this.modelRepository.findAndCount({
       select: getSelections(fields, metaData),
       relations: getRelations(fields, metaData),
