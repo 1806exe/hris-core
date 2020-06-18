@@ -1,19 +1,35 @@
+/**
+ *
+ */
 import { EntityCoreProps } from '../../../core/entities/entity-core-props';
 import { OrganisationUnitCompleteness } from '../../../modules/organisation-unit/entities/organisation-unit-completeness.entity';
-import { User } from '../../../modules/system/user/entities/user.entity';
-import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 
+/**
+ *
+ */
 import { Record } from '../../record/entities/record.entity';
-import { Field } from './field.entity';
 import { FormFieldMember } from './form-field-member.entity';
 import { FormSection } from './form-section.entity';
 import { FormVisibleField } from './form-visible-fields.entity';
 import { Indicator } from '../../indicator/entities/indicator.entity';
 
+/**
+ *
+ */
 @Entity('form', { schema: 'public' })
+/**
+ *
+ */
 export class Form extends EntityCoreProps {
+  /**
+   *
+   */
   static plural = 'forms';
 
+  /**
+   *
+   */
   @Column('integer', {
     nullable: false,
     primary: true,
@@ -21,13 +37,19 @@ export class Form extends EntityCoreProps {
   })
   id: number;
 
+  /**
+   *
+   */
   @Column('text', {
     nullable: true,
     name: 'hypertext',
   })
   hyperText: string | null;
 
-  @Column('character varying', {
+  /**
+   *
+   */
+  @Column('varchar', {
     nullable: true,
     length: 64,
     default: () => 'NULL::character varying',
@@ -35,15 +57,24 @@ export class Form extends EntityCoreProps {
   })
   title: string | null;
 
+  /**
+   *
+   */
   @OneToMany(
     (type) => FormFieldMember,
     (formFieldMember) => formFieldMember.form,
     {
+      eager: true,
+      cascade: true,
       onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
     },
   )
   formFieldMembers: FormFieldMember[];
 
+  /**
+   *
+   */
   @OneToMany(
     (type) => FormVisibleField,
     (formVisibleField) => formVisibleField.form,
@@ -51,28 +82,40 @@ export class Form extends EntityCoreProps {
   )
   formVisibleFields: FormVisibleField[];
 
+  /**
+   *
+   */
   @OneToMany((type) => FormSection, (formSection) => formSection.form, {
     onDelete: 'CASCADE',
   })
   formSections: FormSection[];
 
+  /**
+   *
+   */
   @OneToMany(
     (type) => OrganisationUnitCompleteness,
     (organisationUnitCompleteness) => organisationUnitCompleteness.form,
   )
   organisationUnitCompletenesss: OrganisationUnitCompleteness[];
 
+  /**
+   *
+   */
   @OneToMany((type) => Record, (record) => record.form, {
     onDelete: 'CASCADE',
   })
   records: Record[];
 
-  @ManyToMany((type) => Field, (field) => field.forms, {
-    nullable: false,
-    eager: true,
-  })
-  @JoinTable({ name: 'formuniquerecordfields' })
-  fields: Field[];
+  // @ManyToMany(
+  //   type => Field,
+  //   field => field.forms,
+  //   {
+  //     nullable: false,
+  //   },
+  // )
+  // @JoinTable({ name: 'formuniquerecordfields' })
+  // fields: Field[];
 
   // @ManyToMany(
   //   type => User,
@@ -80,6 +123,9 @@ export class Form extends EntityCoreProps {
   // )
   // users: User[];
 
+  /**
+   *
+   */
   @OneToMany(() => Indicator, (indicator: Indicator) => indicator.form)
   indicators: Indicator[];
 }

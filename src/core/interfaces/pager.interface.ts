@@ -1,6 +1,6 @@
 export interface Pager {
   pageSize: number;
-  page: number;
+  page: string;
   pageCount: number;
   total: number;
   nextPage: string;

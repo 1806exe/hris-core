@@ -15,9 +15,7 @@ import { FieldOptionGroup } from './field-option-group.entity';
 import { FieldOptionMerge } from './field-option-merge.entity';
 import { FieldOption } from './field-option.entity';
 import { FieldRelation } from './field-relation.entity';
-import { FormFieldMember } from './form-field-member.entity';
 import { FormVisibleField } from './form-visible-fields.entity';
-import { Form } from './form.entity';
 import { FormSectionFieldMember } from './formsection-fieldmembers.entity';
 import { EntityCoreProps } from '../../../core/entities/entity-core-props';
 import { RecordValue } from '../../record/entities/record-value.entity';
@@ -160,12 +158,12 @@ export class Field extends EntityCoreProps {
   )
   fieldOptionMerges: FieldOptionMerge[];
 
-  @OneToMany(
-    type => FormFieldMember,
-    formFieldMember => formFieldMember.field,
-    { onDelete: 'CASCADE' },
-  )
-  formFieldMembers: FormFieldMember[];
+  // @OneToMany(
+  //   type => FormFieldMember,
+  //   formFieldMember => formFieldMember.field,
+  //   { onDelete: 'CASCADE' },
+  // )
+  // formFieldMembers: FormFieldMember[];
 
   @OneToMany(
     type => FormVisibleField,
@@ -181,11 +179,11 @@ export class Field extends EntityCoreProps {
   )
   formSectionFieldMembers: FormSectionFieldMember[];
 
-  @ManyToMany(
-    type => Form,
-    form => form.fields,
-  )
-  forms: Form[];
+  // @ManyToMany(
+  //   type => Form,
+  //   form => form.fields,
+  // )
+  // forms: Form[];
 
   @OneToOne(
     type => RecordValue,
