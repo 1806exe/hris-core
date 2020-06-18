@@ -3,7 +3,7 @@ import {
   generateOUFilterQuery,
   getISOOrgUnits,
 } from 'src/core/helpers/ou.helper';
-import { getISOPeriods } from 'src/core/helpers/pe.helper';
+import { getISOPeriods, getPeriodDetails } from 'src/core/helpers/pe.helper';
 import { Analytics } from 'src/modules/analytics/interfaces/analytics.interface';
 import { getWhereConditions } from 'src/core/utilities';
 import { IndicatorService } from 'src/modules/indicator/services/indicator.service';
@@ -479,6 +479,9 @@ export class AnalyticsService {
 
       // update period in analytics metadata
       analytics.metaData.dimensions.pe = getISOPeriods(pe);
+      analytics.metaData.dimensions.pe.forEach((pe) => {
+        analytics.metaData.items[pe] = getPeriodDetails(pe);
+      });
 
       // Get analytics results
       const result = await this.connetion.manager.query(
