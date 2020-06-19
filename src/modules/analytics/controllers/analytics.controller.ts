@@ -19,8 +19,7 @@ export class AnalyticsController {
     let ou = [];
     let dx = [];
     let otherDimensions = {};
-    query.dimension.forEach(dimension => {
-      console.log('dimension:', dimension);
+    query.dimension.forEach((dimension) => {
       let split = dimension.split(':');
       if (split[0] === 'pe') {
         pe = pe.concat(split[1].split(';'));
@@ -30,12 +29,12 @@ export class AnalyticsController {
         dx = dx.concat(split[1].split(';'));
       }
     });
-    if(query.filter){
-      if(!Array.isArray(query.filter)){
+    if (query.filter) {
+      if (!Array.isArray(query.filter)) {
         query.filter = [query.filter];
       }
-      console.log("query.filter:", query.filter);
-      query.filter.forEach(dimension => {
+
+      query.filter.forEach((dimension) => {
         let split = dimension.split(':');
         if (split[0] === 'pe') {
           pe = pe.concat(split[1].split(';'));
@@ -46,8 +45,9 @@ export class AnalyticsController {
         }
       });
     }
+
     return this.analyticsService.fetchAnalytics(dx, pe, ou, {
-      user: user,
+      user,
     });
   }
   @Get('records/:formid')
@@ -74,7 +74,7 @@ export class AnalyticsController {
     if (query.pe && !Array.isArray(query.pe)) {
       pe = query.pe.split(';');
     }
-    query.dimension.forEach(dimension => {
+    query.dimension.forEach((dimension) => {
       let split = dimension.split(':');
       if (split[0] === 'ou') {
         ou = split[1].split(';');
@@ -127,7 +127,7 @@ export class AnalyticsController {
     if (query.pe && !Array.isArray(query.pe)) {
       pe = query.pe.split(';');
     }
-    query.dimension.forEach(dimension => {
+    query.dimension.forEach((dimension) => {
       let split = dimension.split(':');
       if (split[0] === 'ou') {
         ou = split[1].split(';');
@@ -153,8 +153,8 @@ export class AnalyticsController {
       pe,
       otherDimensions,
       {
-        user: user
-      }
+        user: user,
+      },
     );
   }
 
@@ -185,11 +185,12 @@ export class AnalyticsController {
       pe = query.pe.split(';');
     }*/
     console.log('Here2');
-    query.dimension.forEach(dimension => {
+    query.dimension.forEach((dimension) => {
       let split = dimension.split(':');
       if (split[0] === 'ou') {
         ou = split[1].split(';');
-      }if (split[0] === 'pe') {
+      }
+      if (split[0] === 'pe') {
         pe = split[1].split(';');
       } else {
         otherDimensions[split[0]] = split[1];
@@ -233,12 +234,12 @@ export class AnalyticsController {
     if (!Array.isArray(query.pe)) {
       pe = query.pe.split(';');
     }
-    query.dimension.forEach(dimension => {
+    query.dimension.forEach((dimension) => {
       let split = dimension.split(':');
       if (split[0] === 'ou') {
         ou = split[1].split(';');
       } else {
-        otherDimensions[split[0]] = split[1] +':' + split[2];
+        otherDimensions[split[0]] = split[1] + ':' + split[2];
       }
     });
     console.log(otherDimensions);
@@ -254,16 +255,16 @@ export class AnalyticsController {
         message: 'Organisation Unit dimension not found',
       };
     }
-    let filter ={};
-    if(query.filter){
+    let filter = {};
+    if (query.filter) {
       if (!Array.isArray(query.filter)) {
         let split = query.filter.split(':');
         filter[split[0]] = split[1] + ':' + split[2];
       } else {
-        query.filter.forEach((fil)=>{
+        query.filter.forEach((fil) => {
           let split = fil.split(':');
-          filter[split[0]] = split[1] +':' + split[2];
-        })
+          filter[split[0]] = split[1] + ':' + split[2];
+        });
       }
     }
     return await this.trainingAnalyticsService.getTrainingCoverageRecords(
@@ -271,8 +272,8 @@ export class AnalyticsController {
       pe,
       otherDimensions,
       {
-        user: user
-      }
+        user: user,
+      },
     );
   }
 
@@ -300,12 +301,12 @@ export class AnalyticsController {
     if (!Array.isArray(query.pe)) {
       pe = query.pe.split(';');
     }
-    query.dimension.forEach(dimension => {
+    query.dimension.forEach((dimension) => {
       let split = dimension.split(':');
       if (split[0] === 'ou') {
         ou = split[1].split(';');
       } else {
-        otherDimensions[split[0]] = split[1] +':' + split[2];
+        otherDimensions[split[0]] = split[1] + ':' + split[2];
       }
     });
     console.log(otherDimensions);
@@ -321,16 +322,16 @@ export class AnalyticsController {
         message: 'Organisation Unit dimension not found',
       };
     }
-    let filter ={};
-    if(query.filter){
+    let filter = {};
+    if (query.filter) {
       if (!Array.isArray(query.filter)) {
         let split = query.filter.split(':');
         filter[split[0]] = split[1] + ':' + split[2];
       } else {
-        query.filter.forEach((fil)=>{
+        query.filter.forEach((fil) => {
           let split = fil.split(':');
-          filter[split[0]] = split[1] +':' + split[2];
-        })
+          filter[split[0]] = split[1] + ':' + split[2];
+        });
       }
     }
     return await this.trainingAnalyticsService.getTrainingSessions(
@@ -338,8 +339,8 @@ export class AnalyticsController {
       pe,
       otherDimensions,
       {
-        user: user
-      }
+        user: user,
+      },
     );
   }
 }

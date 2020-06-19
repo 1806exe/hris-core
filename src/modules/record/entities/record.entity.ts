@@ -26,18 +26,17 @@ export class Record extends TransactionUser {
   uid: string;
 
   @ManyToOne(
-    type => OrganisationUnit,
-    organisationUnit => organisationUnit.records,
+    (type) => OrganisationUnit,
+    (organisationUnit) => organisationUnit.records,
     { nullable: false, onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'organisationunitid' })
   organisationUnit: OrganisationUnit | null;
 
-  @ManyToOne(
-    type => Form,
-    form => form.records,
-    { nullable: false, onDelete: 'CASCADE' },
-  )
+  @ManyToOne((type) => Form, (form) => form.records, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'formid' })
   form: Form | null;
 
@@ -56,21 +55,21 @@ export class Record extends TransactionUser {
   recordValues: RecordValue[];
 
   @ManyToMany(
-    type => TrainingSession,
-    trainingSession => trainingSession.topics,
+    (type) => TrainingSession,
+    (trainingSession) => trainingSession.topics,
   )
   trainingSessions: TrainingSession[];
 
   @OneToMany(
-    type => SessionParticipant,
-    participants => participants.recordId,
+    (type) => SessionParticipant,
+    (participants) => participants.recordId,
   )
   @JoinColumn({ name: 'recordId' })
   participants: SessionParticipant[];
 
   @OneToMany(
-    type => SessionFacilitator,
-    sessionfacilitator => sessionfacilitator.recordId,
+    (type) => SessionFacilitator,
+    (sessionfacilitator) => sessionfacilitator.recordId,
   )
   @JoinColumn({ name: 'recordId' })
   facilitators: SessionFacilitator[];

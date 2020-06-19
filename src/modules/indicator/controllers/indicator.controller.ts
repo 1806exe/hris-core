@@ -5,7 +5,7 @@ import { IndicatorService } from '../services/indicator.service';
 
 @Controller('api/' + Indicator.plural)
 export class IndicatorController extends BaseController<Indicator> {
-    constructor(service: IndicatorService) {
-        super(service, Indicator);
-    }
+  constructor(service: IndicatorService) {
+    super(service, Indicator);
+  }
 }

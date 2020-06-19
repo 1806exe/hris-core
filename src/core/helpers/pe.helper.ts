@@ -1,4 +1,5 @@
 export function getISOPeriods(periods) {
+    //TODO handle all relative periods
     let returnPeriods = [];
     periods.forEach((period) => {
         if (period === 'LAST_10_YEARS') {
@@ -22,4 +23,30 @@ export function getISOPeriods(periods) {
         }
     })
     return returnPeriods;
+}
+const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+export function getPeriodDetails(pe) {
+    //TODO Capture all types of periods
+    if(pe.length == 6){
+        return {
+            name: monthNames[parseInt(pe.substr(4)) - 1] + " " +pe.substr(0,4)
+        }
+    }else{
+        return {
+            name: pe
+        };
+    }
 }
