@@ -16,6 +16,7 @@ import { getWhereConditions } from 'src/core/utilities';
 import { entityTableMapper } from 'src/core/resolvers/database-table.resolver';
 import { UIDToIDTransformation } from '@icodebible/utils/resolvers/uid-to-id';
 import { ObjectPayloadUpdater } from '@icodebible/utils/resolvers/updater';
+import { GetResponseSanitizer } from '@icodebible/utils/resolvers/id-to-uid';
 
 // class Factory {
 //   create<T>(type: (new () => T)): T {
@@ -30,8 +31,18 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
     private readonly Model,
   ) {}
 
+  /**
+   *
+   */
   async findAll(): Promise<T[]> {
-    return await this.modelRepository.find();
+    /**
+     *
+     */
+    return await GetResponseSanitizer(
+      this.modelRepository,
+      await this.modelRepository.find(),
+      entityTableMapper,
+    );
   }
 
   // TODO: Find best way to merge all find operations in single method so dynamic filters can be used for all
@@ -70,19 +81,37 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
     return await this.modelRepository.find({ where });
   }
 
+  /**
+   *
+   * @param fields
+   * @param filter
+   * @param size
+   * @param page
+   */
   async findAndCount(fields, filter, size, page): Promise<[T[], number]> {
     const metaData = this.modelRepository.manager.connection.getMetadata(
       this.Model,
     );
 
-    console.log(getRelations(fields, metaData));
-    return await this.modelRepository.findAndCount({
+    const [response, totalCount] = await this.modelRepository.findAndCount({
       select: getSelections(fields, metaData),
       relations: getRelations(fields, metaData),
       where: getWhereConditions(filter),
       take: size,
       skip: page * size,
     });
+
+    /**
+     *
+     */
+    return await [
+      await GetResponseSanitizer(
+        this.modelRepository,
+        response,
+        entityTableMapper,
+      ),
+      totalCount,
+    ];
   }
 
   /**
@@ -223,8 +252,17 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
    * @param id
    */
   async delete(id: string): Promise<DeleteResult> {
+    /**
+     *
+     */
     const condition: any = { id };
+    /**
+     *
+     */
     if (condition) {
+      /**
+       *
+       */
       return this.modelRepository.delete(condition);
     }
   }

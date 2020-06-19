@@ -1,62 +1,101 @@
+/**
+ *
+ */
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-
+/**
+ *
+ */
 import { Field } from './field.entity';
 import { Form } from './form.entity';
-import { HRISBaseEntity } from '../../../core/entities/base-entity';
-
+import { EntityMembersCoreProps } from 'src/core/entities/entity-members-core-props';
+/**
+ *
+ */
 @Entity('formfieldmember', { schema: 'public' })
-export class FormFieldMember extends HRISBaseEntity {
+/**
+ *
+ */
+export class FormFieldMember extends EntityMembersCoreProps {
+  /**
+   *
+   */
   static plural = 'formFieldMembers';
 
-  @ManyToOne(
-    type => Form,
-    form => form.formFieldMembers,
-    {
-      primary: true,
-      nullable: false,
-      onDelete: 'CASCADE',
-    },
-  )
-  @JoinColumn({ name: 'formid' })
-  form: Form | null;
+  /**
+   *
+   */
+  @Column()
+  fieldid: string;
 
-  @ManyToOne(
-    type => Field,
-    field => field.formFieldMembers,
-    {
-      primary: true,
-      nullable: false,
-      eager: true,
-      onDelete: 'CASCADE',
-    },
-  )
-  @JoinColumn({ name: 'fieldid' })
-  field: Field | null;
+  /**
+   *
+   */
+  @Column()
+  formid: string;
 
+  /**
+   *
+   */
   @Column({
     type: 'integer',
-    nullable: false,
     name: 'sort',
+    nullable: false,
   })
   sort: number;
 
-  @Column({ type: 'boolean', nullable: false, name: 'compulsory' })
-  compulsory: boolean;
-
+  /**
+   *
+   */
   @Column({
     type: 'boolean',
-    nullable: false,
     name: 'ispinned',
+    nullable: true,
   })
   isPinned: boolean;
 
+  /**
+   *
+   */
   @Column({
     type: 'boolean',
-    nullable: false,
+    name: 'showinlist',
+    nullable: true,
+  })
+  showInList: boolean;
+
+  /**
+   *
+   */
+  @Column({
+    type: 'boolean',
     name: 'showinprofile',
+    nullable: true,
   })
   showInProfile: boolean;
 
-  @Column({ type: 'boolean', nullable: true, name: 'showinlist' })
-  showInList: boolean | null;
+  /**
+   *
+   */
+  @Column({
+    type: 'boolean',
+    name: 'compulsory',
+    nullable: true,
+  })
+  compulsory: boolean;
+
+  /**
+   *
+   */
+  @ManyToOne((type) => Form)
+  @JoinColumn({ name: 'formid' })
+  form: Form | null;
+
+  /**
+   *
+   */
+  @ManyToOne((type) => Field, {
+    eager: true,
+  })
+  @JoinColumn({ name: 'fieldid' })
+  field: Field;
 }

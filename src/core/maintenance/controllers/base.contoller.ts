@@ -21,7 +21,13 @@ import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
 import { ObjectPropsResolver } from '@icodebible/utils/resolvers';
 import { MaintenanceBaseService } from '../services/base.service';
 import { PayloadConfig } from 'src/core/config/payload.config';
-import { getSuccessResponse, genericFailureResponse, entityExistResponse, postSuccessResponse, deleteSuccessResponse } from 'src/core/helpers/maintenance-response.helper';
+import {
+  getSuccessResponse,
+  genericFailureResponse,
+  entityExistResponse,
+  postSuccessResponse,
+  deleteSuccessResponse,
+} from 'src/core/helpers/maintenance-response.helper';
 
 export class MaintenanceBaseController<T extends HRISBaseEntity> {
   /**
@@ -48,29 +54,27 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
       };
     } else if (_.has(query, 'name')) {
       const foundName = await this.maintenanceBaseService.findOneByName(
-        query.name,
+        query?.name,
       );
       return { [this.Model.plural]: foundName };
     }
-
-    const pagerDetails: any = getPagerDetails(query);
+    const pagerDetails: Pager = getPagerDetails(query);
 
     const [entityRes, totalCount]: [
       T[],
       number,
     ] = await this.maintenanceBaseService.findAndCount(
-      query.fields,
-      query.filter,
-      pagerDetails.pageSize,
-      pagerDetails.page - 1,
+      query?.fields,
+      query?.filter,
+      pagerDetails?.pageSize,
+      +pagerDetails?.page - 1,
     );
-
     return {
       pager: {
         ...pagerDetails,
-        pageCount: entityRes.length,
+        pageCount: entityRes?.length,
         total: totalCount,
-        nextPage: `/api/${this.Model.plural}?page=${parseInt(pagerDetails.page) + 1}`,
+        nextPage: `/api/${this.Model.plural}?page=${pagerDetails?.page + 1}`,
       },
       [this.Model.plural]: _.map(entityRes, sanitizeResponseObject),
     };
