@@ -21,6 +21,7 @@ import { UserRole } from '../../user-role/entities/user-role.entity';
 import { UserSettings } from './user-settings.entity';
 import { Dashboard } from '../../../visualization/entities/dashboard.entity';
 import { Visualization } from '../../../visualization/entities/visualization.entity';
+import { Record } from 'src/modules/record/entities/record.entity';
 
 @Entity('user', { schema: 'public' })
 export class User extends UserCoreProps {
@@ -327,14 +328,14 @@ export class User extends UserCoreProps {
   report: Report[];
 
   @OneToOne(
-    (type) => SessionParticipant,
-    (sessionparticipant) => sessionparticipant.assesser,
+    (type) => Record,
+    (record) => record.assesser,
   )
-  assesser: SessionParticipant[];
+  assesser: Record[];
 
   @OneToOne(
-    (type) => SessionParticipant,
-    (sessionparticipant) => sessionparticipant.certifier,
+    (type) => Record,
+    (record) => record.certifier,
   )
-  certifier: SessionParticipant[];
+  certifier: Record[];
 }

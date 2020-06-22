@@ -6,6 +6,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  OneToOne,
 } from 'typeorm';
 import { TransactionUser } from '../../../core/entities/transaction-user.entity';
 import { OrganisationUnit } from '../../../modules/organisation-unit/entities/organisation-unit.entity';
@@ -14,6 +15,7 @@ import { Form } from '../../form/entities/form.entity';
 import { RecordValue } from './record-value.entity';
 import { SessionParticipant } from '../../../modules/training/entities/training-session-participant.entity';
 import { SessionFacilitator } from '../../../modules/training/entities/training-session-facilitatory.entity';
+import { User } from '../../system/user/entities/user.entity';
 
 @Entity('record', { schema: 'public' })
 export class Record extends TransactionUser {
@@ -46,6 +48,34 @@ export class Record extends TransactionUser {
     name: 'instance',
   })
   instance: string;
+
+
+  @Column('boolean', { nullable: false, name: 'certified' })
+  certified: boolean;
+
+  @Column('integer', { nullable: false, name: 'certifiedby' })
+  certifiedby: number;
+
+  @Column('date', { nullable: false, name: 'certificationdate' })
+  certificationdate: Date;
+
+  @Column('boolean', { nullable: false, name: 'assessed' })
+  assessed: boolean;
+
+  @Column('integer', { nullable: false, name: 'assessedby' })
+  assessedby: number;
+
+  @Column('date', { nullable: false, name: 'assessmentdate' })
+  assessmentdate: Date;
+
+
+  @OneToOne((type) => User, (user) => user.assesser)
+  @JoinColumn({ name: 'assessedby' })
+  assesser: User[];
+
+  @OneToOne((type) => User, (user) => user.certifier)
+  @JoinColumn({ name: 'certifiedby' })
+  certifier: User[];
 
   @OneToMany(
     () => RecordValue,
