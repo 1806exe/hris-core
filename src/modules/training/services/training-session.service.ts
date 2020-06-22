@@ -325,10 +325,10 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
   }
 
   async findOneParticipant(uid: string) {
-    return await this.participantRepository.findOne({ uid: uid });
+    return await this.recordRepository.findOne({ uid: uid });
   }
   async updateParticipant(uid: string, updateParticipantDTO: any) {
-    const participant = await this.participantRepository.findOne({ uid: uid });
+    const participant = await this.recordRepository.findOne({ uid: uid });
     const {
       certified,
       assessed,
@@ -349,21 +349,20 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     participant.assessmentdate = assessmentdate;
     participant.certificationdate = certificationdate;
 
-    await this.participantRepository.save(participant);
-    const participants = await this.participantRepository.findOne({
+    await this.recordRepository.save(participant);
+    // return this.findOneParticipant(participant.uid);
+    const participants = await this.recordRepository.findOne({
       where: { uid: participant.uid },
       join: {
-        alias: 'sessionparticipant',
+        alias: 'record',
         leftJoinAndSelect: {
-          assessedby: 'sessionparticipant.assesser',
-          certifiedby: 'sessionparticipant.certifier',
+          assessedby: 'record.assesser',
+          certifiedby: 'record.certifier',
         },
-      },
-    });
-    delete participants.recordId;
-    delete participants.assessedby;
-    delete participants.certifiedby;
-    delete participants.trainingsessionId;
-    return participants;
+    },
+      });
+      delete participants.assessedby;
+      delete participants.certifiedby;
+      return participants;
+    }
   }
-}

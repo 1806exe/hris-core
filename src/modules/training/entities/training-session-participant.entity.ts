@@ -42,36 +42,10 @@ export class SessionParticipant {
   })
   recordId: number;
 
-  @Column('boolean', { nullable: false, name: 'certified' })
-  certified: boolean;
-
-  @Column('integer', { nullable: false, name: 'certifiedby' })
-  certifiedby: number;
-
-  @Column('date', { nullable: false, name: 'certificationdate' })
-  certificationdate: Date;
-
-  @Column('boolean', { nullable: false, name: 'assessed' })
-  assessed: boolean;
-
-  @Column('integer', { nullable: false, name: 'assessedby' })
-  assessedby: number;
-
-  @Column('date', { nullable: false, name: 'assessmentdate' })
-  assessmentdate: Date;
 
   @ManyToOne((type) => Record, (record) => record.participants, {})
   record: Record[];
 
-  @OneToOne((type) => User, (user) => user.assesser, {})
-  @JoinColumn({ name: 'assessedby' })
-  assesser: User[];
-
-  @OneToOne((type) => User, (user) => user.certifier, {})
-  @JoinColumn({ name: 'certifiedby' })
-  certifier: User[];
-
-  static plural: any = 'participants';
 
   /*@ManyToOne(
     type => TrainingSession,
