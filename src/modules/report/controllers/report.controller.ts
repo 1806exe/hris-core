@@ -5,7 +5,7 @@ import { Report } from '../entities/report.entity';
 import { SessionGuard } from '../../../modules/system/user/guards/session.guard';
 import { ApiResult } from 'src/core/interfaces';
 import { getSuccessResponse } from 'src/core/helpers/response.helper';
-import { MaintenanceBaseController } from 'src/core/maintenance/controllers/base.contoller';
+import { MaintenanceBaseController } from 'src/core/maintenance/controllers/base.controller';
 
 @Controller('api/' + Report.plural)
 export class ReportController extends MaintenanceBaseController<Report> {

@@ -17,8 +17,8 @@ export class VisualizationDimensionItem extends TransactionTimestamp {
   uid: string;
 
   @Column({
-    type: 'char',
-    length: 13,
+    type: 'varchar',
+    length: 50,
     name: 'dimensionitem',
     nullable: false,
   })

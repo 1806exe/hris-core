@@ -21,7 +21,13 @@ import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
 import { ObjectPropsResolver } from '@icodebible/utils/resolvers';
 import { MaintenanceBaseService } from '../services/base.service';
 import { PayloadConfig } from 'src/core/config/payload.config';
-import { getSuccessResponse, genericFailureResponse, entityExistResponse, postSuccessResponse, deleteSuccessResponse } from 'src/core/helpers/maintenance-response.helper';
+import {
+  getSuccessResponse,
+  genericFailureResponse,
+  entityExistResponse,
+  postSuccessResponse,
+  deleteSuccessResponse,
+} from 'src/core/helpers/maintenance-response.helper';
 
 export class MaintenanceBaseController<T extends HRISBaseEntity> {
   /**
@@ -70,7 +76,9 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
         ...pagerDetails,
         pageCount: entityRes.length,
         total: totalCount,
-        nextPage: `/api/${this.Model.plural}?page=${parseInt(pagerDetails.page) + 1}`,
+        nextPage: `/api/${this.Model.plural}?page=${
+          parseInt(pagerDetails.page) + 1
+        }`,
       },
       [this.Model.plural]: _.map(entityRes, sanitizeResponseObject),
     };
@@ -150,6 +158,7 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
         createEntityDto,
         PayloadConfig,
       );
+
       const isIDExist = await this.maintenanceBaseService.findOneByUid(
         procCreateEntityDTO,
       );
