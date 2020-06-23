@@ -97,12 +97,6 @@ export class TrainingSession extends TransactionTimestamp {
   })
   deliverymode: string | null;
 
-  @Column('boolean', {
-    nullable: false,
-    name: 'access',
-  })
-  access: boolean;
-
   @ManyToMany(
     () => TrainingTopic,
     (TrainingMethod: TrainingTopic) => TrainingMethod.trainingSessions,
@@ -124,7 +118,7 @@ export class TrainingSession extends TransactionTimestamp {
     eager: true,
   })
   @JoinTable({ name: 'sessionuseraccess' })
-  acess: UserAccess[];
+  access: UserAccess[];
 
   @ManyToMany(
     (type) => UserRoleAccess,

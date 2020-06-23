@@ -49,12 +49,8 @@ export class Record extends TransactionUser {
   })
   instance: string;
 
-
   @Column('boolean', { nullable: false, name: 'certified' })
   certified: boolean;
-
-  @Column('integer', { nullable: false, name: 'certifiedby' })
-  certifiedby: number;
 
   @Column('date', { nullable: false, name: 'certificationdate' })
   certificationdate: Date;
@@ -62,18 +58,14 @@ export class Record extends TransactionUser {
   @Column('boolean', { nullable: false, name: 'assessed' })
   assessed: boolean;
 
-  @Column('integer', { nullable: false, name: 'assessedby' })
-  assessedby: number;
-
   @Column('date', { nullable: false, name: 'assessmentdate' })
   assessmentdate: Date;
 
-
-  @OneToOne((type) => User, (user) => user.assesser)
+  @OneToOne((type) => User, (user) => user.assesser, { eager: true })
   @JoinColumn({ name: 'assessedby' })
   assesser: User[];
 
-  @OneToOne((type) => User, (user) => user.certifier)
+  @OneToOne((type) => User, (user) => user.certifier, { eager: true })
   @JoinColumn({ name: 'certifiedby' })
   certifier: User[];
 
