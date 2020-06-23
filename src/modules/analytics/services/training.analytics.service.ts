@@ -751,13 +751,20 @@ export class TrainingAnalyticsService {
         })
         .join(' OR ')} )`;
     }
-    let query = `
+    let query = 'SELECT level FROM organisationunitlevel';
+    let orglevels = await this.connetion.manager.query(query);
+    let levelquery = orglevels.map(
+      orglevel =>
+        'ous.uidlevel' + orglevel.level + " IN ('" + ou.join("','") + "')",
+    );
+    query = `
     SELECT section.name section,unit.name unit,
         curriculum.name curriculum,region.name region,
         district.name district,
         venuename venue,sponsor.name sponsor,organiser.name organiser,
         ts.deliverymode,ts.startdate,ts.enddate,COUNT(sp) participants 
     FROM trainingsession ts
+    INNER JOIN _organisationunitstructure ous ON(ous.organisationunitid = ts.organisationunit AND (${levelquery.join(' OR ')}))
         INNER JOIN organisationunit district ON(district.id=ts.organisationunit ${ouFilter})
         INNER JOIN organisationunit region ON(district.parentid=region.id)
         INNER JOIN trainingcurriculum curriculum ON(ts.curriculumid=curriculum.id ${curriculumnFilter})
