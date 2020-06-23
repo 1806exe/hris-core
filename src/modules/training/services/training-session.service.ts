@@ -338,31 +338,72 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       assessmentdate,
     } = updateParticipantDTO;
 
-    const certifier = (await this.userRepository.findOne({ uid: certifiedby }))
-      .id;
-    const assesser = (await this.userRepository.findOne({ uid: assessedby }))
-      .id;
-    participant.assessed = assessed;
-    participant.certified = certified;
-    participant.assessedby = assesser;
-    participant.certifiedby = certifier;
-    participant.assessmentdate = assessmentdate;
-    participant.certificationdate = certificationdate;
+    if (assessedby !== undefined && certifiedby === undefined) {
+      const assesser = await this.userRepository.manager.query(
+        `SELECT ID FROM "user" WHERE uid='${assessedby}'`,
+      );
+      participant.assessed = assessed;
+      participant.assesser = assesser[0].id;
+      participant.assessmentdate = assessmentdate;
 
-    await this.recordRepository.save(participant);
-    // return this.findOneParticipant(participant.uid);
-    const participants = await this.recordRepository.findOne({
-      where: { uid: participant.uid },
-      join: {
-        alias: 'record',
-        leftJoinAndSelect: {
-          assessedby: 'record.assesser',
-          certifiedby: 'record.certifier',
+      await this.recordRepository.save(participant);
+      const participants = await this.recordRepository.findOne({
+        where: { uid: participant.uid },
+        join: {
+          alias: 'record',
+          leftJoinAndSelect: {
+            assessedby: 'record.assesser',
+          },
         },
-    },
       });
-      delete participants.assessedby;
-      delete participants.certifiedby;
+      return participants;
+    }
+    if (certifiedby !== undefined && assessedby === undefined) {
+      const certifier = await this.userRepository.manager.query(
+        `SELECT ID FROM "user" WHERE uid='${certifiedby}'`,
+      );
+      participant.certified = certified;
+      participant.certifier = certifier[0].id;
+      participant.certificationdate = certificationdate;
+
+      await this.recordRepository.save(participant);
+      const participants = await this.recordRepository.findOne({
+        where: { uid: participant.uid },
+        join: {
+          alias: 'record',
+          leftJoinAndSelect: {
+            certifiedby: 'record.certifier',
+          },
+        },
+      });
+      return participants;
+    }
+    if (assessedby !== 0 && certifiedby !== 0) {
+      const certifier = await this.userRepository.manager.query(
+        `SELECT ID FROM "user" WHERE uid='${certifiedby}'`,
+      );
+      const assesser = await this.userRepository.manager.query(
+        `SELECT ID FROM "user" WHERE uid='${assessedby}'`,
+      );
+      participant.assessed = assessed;
+      participant.certified = certified;
+      participant.assesser = assesser[0].id;
+      participant.certificationdate = certifier[0].id;
+      participant.assessmentdate = assessmentdate;
+      participant.certificationdate = certificationdate;
+
+      await this.recordRepository.save(participant);
+      const participants = await this.recordRepository.findOne({
+        where: { uid: participant.uid },
+        join: {
+          alias: 'record',
+          leftJoinAndSelect: {
+            assessedby: 'record.assesser',
+            certifiedby: 'record.certifier',
+          },
+        },
+      });
       return participants;
     }
   }
+}
