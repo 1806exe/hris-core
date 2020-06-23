@@ -431,12 +431,6 @@ export class TrainingAnalyticsService {
           trainingFilter += `) `;
         }
       }
-      console.log('otherDimensions:', otherDimensions);
-      console.log(
-        Object.keys(otherDimensions).filter((dim) =>
-          ['sections', 'units', 'topics', 'curriculums'].indexOf(dim),
-        ).length,
-      );
       if (
         Object.keys(otherDimensions).filter((dim) =>
           ['sections', 'units', 'topics', 'curriculums'].indexOf(dim),
@@ -529,7 +523,6 @@ export class TrainingAnalyticsService {
     analytics.headers.push({
       name: 'providers',
     });
-    console.log(query);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
     analytics.rows = rows.map((row) => {
@@ -564,7 +557,6 @@ export class TrainingAnalyticsService {
     return filter;
   }
   async getTrainingAnalyticsRecords(formid, ou, pe, otherDimensions) {
-    console.log(otherDimensions);
     let analytics = {
       headers: [],
       metaData: {
@@ -620,9 +612,9 @@ export class TrainingAnalyticsService {
     query = `SELECT ${allowedColumns.map(
       (column) => 'data."' + column + '"',
     )} FROM _resource_table_${formid} data
-      INNER JOIN _organisationunitstructure ous ON(ous.uid = data.ou AND ${levelquery.join(
+      INNER JOIN _organisationunitstructure ous ON(ous.uid = data.ou AND (${levelquery.join(
         ' OR ',
-      )})`;
+      )}))`;
     /*if (pe) {
       let periodquery = pe.map(p => {
         let whereCondition = getWhereConditions(p);
@@ -738,12 +730,9 @@ export class TrainingAnalyticsService {
     }
     let periodFilter = '';
     if (pe) {
-      console.log('PE');
-      console.log(pe);
       let rows = await this.connetion.manager.query(
         `SELECT * FROM _periodstructure WHERE iso IN ('${pe.join("','")}')`,
       );
-      console.log(rows);
       periodFilter = `WHERE (${rows
         .map((row) => {
           return `ts.startdate BETWEEN '${row.startdate.toISOString()}' AND '${row.enddate.toISOString()}' 
@@ -777,7 +766,6 @@ export class TrainingAnalyticsService {
         GROUP BY section.name,unit.name,curriculum.name,region.name,district.name,
         venuename,sponsor.name,organiser.name,ts.deliverymode,ts.startdate,ts.enddate
     `;
-    console.log(query);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
     analytics.rows = rows.map((row) => {
