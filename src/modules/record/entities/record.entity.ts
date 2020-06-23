@@ -6,6 +6,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  OneToOne,
 } from 'typeorm';
 import { TransactionUser } from '../../../core/entities/transaction-user.entity';
 import { OrganisationUnit } from '../../../modules/organisation-unit/entities/organisation-unit.entity';
@@ -14,6 +15,7 @@ import { Form } from '../../form/entities/form.entity';
 import { RecordValue } from './record-value.entity';
 import { SessionParticipant } from '../../../modules/training/entities/training-session-participant.entity';
 import { SessionFacilitator } from '../../../modules/training/entities/training-session-facilitatory.entity';
+import { User } from '../../system/user/entities/user.entity';
 
 @Entity('record', { schema: 'public' })
 export class Record extends TransactionUser {
@@ -26,18 +28,17 @@ export class Record extends TransactionUser {
   uid: string;
 
   @ManyToOne(
-    type => OrganisationUnit,
-    organisationUnit => organisationUnit.records,
+    (type) => OrganisationUnit,
+    (organisationUnit) => organisationUnit.records,
     { nullable: false, onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'organisationunitid' })
   organisationUnit: OrganisationUnit | null;
 
-  @ManyToOne(
-    type => Form,
-    form => form.records,
-    { nullable: false, onDelete: 'CASCADE' },
-  )
+  @ManyToOne((type) => Form, (form) => form.records, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'formid' })
   form: Form | null;
 
@@ -48,6 +49,34 @@ export class Record extends TransactionUser {
   })
   instance: string;
 
+
+  @Column('boolean', { nullable: false, name: 'certified' })
+  certified: boolean;
+
+  @Column('integer', { nullable: false, name: 'certifiedby' })
+  certifiedby: number;
+
+  @Column('date', { nullable: false, name: 'certificationdate' })
+  certificationdate: Date;
+
+  @Column('boolean', { nullable: false, name: 'assessed' })
+  assessed: boolean;
+
+  @Column('integer', { nullable: false, name: 'assessedby' })
+  assessedby: number;
+
+  @Column('date', { nullable: false, name: 'assessmentdate' })
+  assessmentdate: Date;
+
+
+  @OneToOne((type) => User, (user) => user.assesser)
+  @JoinColumn({ name: 'assessedby' })
+  assesser: User[];
+
+  @OneToOne((type) => User, (user) => user.certifier)
+  @JoinColumn({ name: 'certifiedby' })
+  certifier: User[];
+
   @OneToMany(
     () => RecordValue,
     (recordvalue: RecordValue) => recordvalue.record,
@@ -56,21 +85,21 @@ export class Record extends TransactionUser {
   recordValues: RecordValue[];
 
   @ManyToMany(
-    type => TrainingSession,
-    trainingSession => trainingSession.topics,
+    (type) => TrainingSession,
+    (trainingSession) => trainingSession.topics,
   )
   trainingSessions: TrainingSession[];
 
   @OneToMany(
-    type => SessionParticipant,
-    participants => participants.recordId,
+    (type) => SessionParticipant,
+    (participants) => participants.recordId,
   )
   @JoinColumn({ name: 'recordId' })
   participants: SessionParticipant[];
 
   @OneToMany(
-    type => SessionFacilitator,
-    sessionfacilitator => sessionfacilitator.recordId,
+    (type) => SessionFacilitator,
+    (sessionfacilitator) => sessionfacilitator.recordId,
   )
   @JoinColumn({ name: 'recordId' })
   facilitators: SessionFacilitator[];

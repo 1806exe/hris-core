@@ -123,15 +123,15 @@ export class accesses1591642130209 implements MigrationInterface {
         ALTER TABLE "userrole" ADD COLUMN "accessId" bigint;
         ALTER TABLE "user" ADD COLUMN "accessId" bigint;
 
-        ALTER TABLE sessionparticipant ADD COLUMN certified BOOLEAN;
-        ALTER TABLE sessionparticipant ADD COLUMN assessed BOOLEAN;
-        ALTER TABLE sessionparticipant ADD COLUMN certifiedby BIGINT;
-        ALTER TABLE sessionparticipant ADD COLUMN certificationdate TIMESTAMP;
-        ALTER TABLE sessionparticipant ADD COLUMN assessedby BIGINT;
-        ALTER TABLE sessionparticipant ADD COLUMN assessmentdate TIMESTAMP;
-        ALTER TABLE sessionparticipant ADD CONSTRAINT FK_CERTIFICATION_CERTIFICATION FOREIGN KEY (certifiedby) 
+        ALTER TABLE record ADD COLUMN certified BOOLEAN;
+        ALTER TABLE record ADD COLUMN assessed BOOLEAN;
+        ALTER TABLE record ADD COLUMN certifiedby BIGINT;
+        ALTER TABLE record ADD COLUMN certificationdate TIMESTAMP;
+        ALTER TABLE record ADD COLUMN assessedby BIGINT;
+        ALTER TABLE record ADD COLUMN assessmentdate TIMESTAMP;
+        ALTER TABLE record ADD CONSTRAINT FK_CERTIFICATION_CERTIFICATION FOREIGN KEY (certifiedby) 
         REFERENCES public."user"(id);
-        ALTER TABLE sessionparticipant ADD CONSTRAINT FK_CERTIFICATION_ASSESSMENT FOREIGN KEY (assessedby) 
+        ALTER TABLE record ADD CONSTRAINT FK_CERTIFICATION_ASSESSMENT FOREIGN KEY (assessedby) 
         REFERENCES public."user"(id);
 
 
@@ -216,6 +216,25 @@ export class accesses1591642130209 implements MigrationInterface {
         ALTER TABLE public.formfieldmember ADD COLUMN externalaccess boolean;
 
         ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS created;
+
+
+        INSERT INTO public.reportgroupmembers(
+            "reportgroupId", "reportId")
+            VALUES (1,13),
+           (1,14),
+          (2,1),
+          (2,2),
+          (2,3),
+          (2,4),
+         (3,5),
+         (4,6),
+         (4,7),
+         (4,8),
+         (4,9),
+        (4,10),
+        (4,11),
+        (4,12);
+
 
         `);
   }

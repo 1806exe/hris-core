@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
-
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { HttpErrorFilter } from './core/filters/http-error.filter';
@@ -25,14 +25,13 @@ import { UserRoleModule } from './modules/system/user-role/user-role.module';
 import { UserModule } from './modules/system/user/user.module';
 import { TrainingModule } from './modules/training/training.module';
 import { VisualizationModule } from './modules/visualization/visualization.module';
-import { ScheduleModule } from '@nestjs/schedule';
-
 
 @Module({
   imports: [
     AppsModule,
     Repository,
     TypeOrmModule.forRoot(getDataBaseConfiguration()),
+    ScheduleModule.forRoot(),
     OrganisatinUnitModule,
     FormModule,
     UserModule,
@@ -49,7 +48,6 @@ import { ScheduleModule } from '@nestjs/schedule';
     IndicatorModule,
     AnalyticsModule,
     SystemSettingModule,
-    ScheduleModule.forRoot()
   ],
 
   controllers: [AppController],

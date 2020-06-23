@@ -6,12 +6,10 @@ import { BaseService } from 'src/core/services/base.service';
 
 @Injectable()
 export class IndicatorService extends BaseService<Indicator> {
-    constructor(
-        @InjectRepository(Indicator)
-        repository: Repository<Indicator>,
-    ) {
-        super(repository, Indicator);
-    }
+  constructor(
+    @InjectRepository(Indicator)
+    repository: Repository<Indicator>,
+  ) {
+    super(repository, Indicator);
+  }
 }
-
-

@@ -7,7 +7,7 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
  */
 import { Field } from './field.entity';
 import { Form } from './form.entity';
-import { EntityMembersCoreProps } from 'src/core/entities/entity-members-core-props';
+import { EntityMembersCoreProps } from '../../../core/entities/entity-members-core-props';
 /**
  *
  */

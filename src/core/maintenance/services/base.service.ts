@@ -45,6 +45,34 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
     );
   }
 
+  // TODO: Find best way to merge all find operations in single method so dynamic filters can be used for all
+  async findIn(inConditions: { [attributeName: string]: string[] }) {
+    const sanitizedConditions = _.flatten(
+      _.keys(inConditions).map((conditionKey) => {
+        return (inConditions[conditionKey] || []).map((conditionValue) => {
+          return { [conditionKey]: conditionValue };
+        });
+      }),
+    );
+
+    const metaData = this.modelRepository.manager.connection.getMetadata(
+      this.Model,
+    );
+
+    const relations = metaData.relations
+      .map((relation) => {
+        return relation.relationType === 'many-to-one'
+          ? relation.propertyName
+          : undefined;
+      })
+      .filter((propertyName) => propertyName);
+
+    return await this.modelRepository.find({
+      where: sanitizedConditions,
+      relations,
+    });
+  }
+
   /**
    *
    * @param where
@@ -65,9 +93,6 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
       this.Model,
     );
 
-    /**
-     *
-     */
     const [response, totalCount] = await this.modelRepository.findAndCount({
       select: getSelections(fields, metaData),
       relations: getRelations(fields, metaData),

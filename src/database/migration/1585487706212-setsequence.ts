@@ -42,125 +42,125 @@ export class sequential1585499925311 implements MigrationInterface {
       `ALTER SEQUENCE usergroup_id_seq RESTART WITH ${nextusergroup}`,
     );
 
-    const reporttable_id_seq = await queryRunner.query(
-      `SELECT id FROM reporttable ORDER BY id DESC LIMIT 1`,
-    );
-    const nextreporttable = reporttable_id_seq[0]
-      ? parseInt(reporttable_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE reporttable_id_seq RESTART WITH ${nextreporttable}`,
-    );
+    // const reporttable_id_seq = await queryRunner.query(
+    //   `SELECT id FROM reporttable ORDER BY id DESC LIMIT 1`,
+    // );
+    // const nextreporttable = reporttable_id_seq[0]
+    //   ? parseInt(reporttable_id_seq[0].id) + parseInt('1')
+    //   : parseInt('1');
+    // await queryRunner.query(
+    //   `ALTER SEQUENCE reporttable_id_seq RESTART WITH ${nextreporttable}`,
+    // );
 
-    const reporttabledimension_id_seq = await queryRunner.query(
-      `SELECT id FROM reporttabledimension ORDER BY id DESC LIMIT 1`,
-    );
-    const nextreporttabledimension = reporttabledimension_id_seq[0]
-      ? parseInt(reporttabledimension_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE reporttabledimension_id_seq RESTART WITH ${nextreporttabledimension}`,
-    );
+    // const reporttabledimension_id_seq = await queryRunner.query(
+    //   `SELECT id FROM reporttabledimension ORDER BY id DESC LIMIT 1`,
+    // );
+    // const nextreporttabledimension = reporttabledimension_id_seq[0]
+    //   ? parseInt(reporttabledimension_id_seq[0].id) + parseInt('1')
+    //   : parseInt('1');
+    // await queryRunner.query(
+    //   `ALTER SEQUENCE reporttabledimension_id_seq RESTART WITH ${nextreporttabledimension}`,
+    // );
 
-    const reporttabledimensionitem_id_seq = await queryRunner.query(
-      `SELECT id FROM reporttabledimensionitem ORDER BY id DESC LIMIT 1`,
-    );
-    const nextreporttabledimensionitem = reporttabledimensionitem_id_seq[0]
-      ? parseInt(reporttabledimensionitem_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE reporttabledimensionitem_id_seq RESTART WITH ${nextreporttabledimensionitem}`,
-    );
+    // const reporttabledimensionitem_id_seq = await queryRunner.query(
+    //   `SELECT id FROM reporttabledimensionitem ORDER BY id DESC LIMIT 1`,
+    // );
+    // const nextreporttabledimensionitem = reporttabledimensionitem_id_seq[0]
+    //   ? parseInt(reporttabledimensionitem_id_seq[0].id) + parseInt('1')
+    //   : parseInt('1');
+    // await queryRunner.query(
+    //   `ALTER SEQUENCE reporttabledimensionitem_id_seq RESTART WITH ${nextreporttabledimensionitem}`,
+    // );
 
-    const chart_id_seq = await queryRunner.query(
-      `SELECT id FROM chart ORDER BY id DESC LIMIT 1`,
-    );
-    const nextchart = chart_id_seq[0]
-      ? parseInt(chart_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE chart_id_seq RESTART WITH ${nextchart}`,
-    );
+    // const chart_id_seq = await queryRunner.query(
+    //   `SELECT id FROM chart ORDER BY id DESC LIMIT 1`,
+    // );
+    // const nextchart = chart_id_seq[0]
+    //   ? parseInt(chart_id_seq[0].id) + parseInt('1')
+    //   : parseInt('1');
+    // await queryRunner.query(
+    //   `ALTER SEQUENCE chart_id_seq RESTART WITH ${nextchart}`,
+    // );
 
-    const chartdimension_id_seq = await queryRunner.query(
-      `SELECT id FROM chartdimension ORDER BY id DESC LIMIT 1`,
-    );
-    const nextchartdimension = chartdimension_id_seq[0]
-      ? parseInt(chartdimension_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE chartdimension_id_seq RESTART WITH ${nextchartdimension}`,
-    );
+    // const chartdimension_id_seq = await queryRunner.query(
+    //   `SELECT id FROM chartdimension ORDER BY id DESC LIMIT 1`,
+    // );
+    // const nextchartdimension = chartdimension_id_seq[0]
+    //   ? parseInt(chartdimension_id_seq[0].id) + parseInt('1')
+    //   : parseInt('1');
+    // await queryRunner.query(
+    //   `ALTER SEQUENCE chartdimension_id_seq RESTART WITH ${nextchartdimension}`,
+    // );
 
-    const chartdimensionitem_id_seq = await queryRunner.query(
-      `SELECT id FROM chartdimensionitem ORDER BY id DESC LIMIT 1`,
-    );
-    const nextchartdimensionitem = chartdimensionitem_id_seq[0]
-      ? parseInt(chartdimensionitem_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE chartdimensionitem_id_seq RESTART WITH ${nextchartdimensionitem}`,
-    );
+    // const chartdimensionitem_id_seq = await queryRunner.query(
+    //   `SELECT id FROM chartdimensionitem ORDER BY id DESC LIMIT 1`,
+    // );
+    // const nextchartdimensionitem = chartdimensionitem_id_seq[0]
+    //   ? parseInt(chartdimensionitem_id_seq[0].id) + parseInt('1')
+    //   : parseInt('1');
+    // await queryRunner.query(
+    //   `ALTER SEQUENCE chartdimensionitem_id_seq RESTART WITH ${nextchartdimensionitem}`,
+    // );
 
-    const map_id_seq = await queryRunner.query(
-      `SELECT id FROM map ORDER BY id DESC LIMIT 1`,
-    );
-    const nextmap = map_id_seq[0]
-      ? parseInt(map_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE map_id_seq RESTART WITH ${nextmap}`,
-    );
+    // const map_id_seq = await queryRunner.query(
+    //   `SELECT id FROM map ORDER BY id DESC LIMIT 1`,
+    // );
+    // const nextmap = map_id_seq[0]
+    //   ? parseInt(map_id_seq[0].id) + parseInt('1')
+    //   : parseInt('1');
+    // await queryRunner.query(
+    //   `ALTER SEQUENCE map_id_seq RESTART WITH ${nextmap}`,
+    // );
 
-    const mapview_id_seq = await queryRunner.query(
-      `SELECT id FROM mapview ORDER BY id DESC LIMIT 1`,
-    );
-    const nextmapview = mapview_id_seq[0]
-      ? parseInt(mapview_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE mapview_id_seq RESTART WITH ${nextmapview}`,
-    );
+    // const mapview_id_seq = await queryRunner.query(
+    //   `SELECT id FROM mapview ORDER BY id DESC LIMIT 1`,
+    // );
+    // const nextmapview = mapview_id_seq[0]
+    //   ? parseInt(mapview_id_seq[0].id) + parseInt('1')
+    //   : parseInt('1');
+    // await queryRunner.query(
+    //   `ALTER SEQUENCE mapview_id_seq RESTART WITH ${nextmapview}`,
+    // );
 
-    const mapviewdimension_id_seq = await queryRunner.query(
-      `SELECT id FROM mapviewdimension ORDER BY id DESC LIMIT 1`,
-    );
-    const nextmapviewdimension = mapviewdimension_id_seq[0]
-      ? parseInt(mapviewdimension_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE mapviewdimension_id_seq RESTART WITH ${nextmapviewdimension}`,
-    );
+    // const mapviewdimension_id_seq = await queryRunner.query(
+    //   `SELECT id FROM mapviewdimension ORDER BY id DESC LIMIT 1`,
+    // );
+    // const nextmapviewdimension = mapviewdimension_id_seq[0]
+    //   ? parseInt(mapviewdimension_id_seq[0].id) + parseInt('1')
+    //   : parseInt('1');
+    // await queryRunner.query(
+    //   `ALTER SEQUENCE mapviewdimension_id_seq RESTART WITH ${nextmapviewdimension}`,
+    // );
 
-    const mapviewdimensionitem_id_seq = await queryRunner.query(
-      `SELECT id FROM mapviewdimensionitem ORDER BY id DESC LIMIT 1`,
-    );
-    const nextmapviewdimensionitem = mapviewdimensionitem_id_seq[0]
-      ? parseInt(mapviewdimensionitem_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE mapviewdimensionitem_id_seq RESTART WITH ${nextmapviewdimensionitem}`,
-    );
+    // const mapviewdimensionitem_id_seq = await queryRunner.query(
+    //   `SELECT id FROM mapviewdimensionitem ORDER BY id DESC LIMIT 1`,
+    // );
+    // const nextmapviewdimensionitem = mapviewdimensionitem_id_seq[0]
+    //   ? parseInt(mapviewdimensionitem_id_seq[0].id) + parseInt('1')
+    //   : parseInt('1');
+    // await queryRunner.query(
+    //   `ALTER SEQUENCE mapviewdimensionitem_id_seq RESTART WITH ${nextmapviewdimensionitem}`,
+    // );
 
-    const dashboard_id_seq = await queryRunner.query(
-      `SELECT id FROM dashboard ORDER BY id DESC LIMIT 1`,
-    );
-    const nextdashboard = dashboard_id_seq[0]
-      ? parseInt(dashboard_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE dashboard_id_seq RESTART WITH ${nextdashboard}`,
-    );
+    // const dashboard_id_seq = await queryRunner.query(
+    //   `SELECT id FROM dashboard ORDER BY id DESC LIMIT 1`,
+    // );
+    // const nextdashboard = dashboard_id_seq[0]
+    //   ? parseInt(dashboard_id_seq[0].id) + parseInt('1')
+    //   : parseInt('1');
+    // await queryRunner.query(
+    //   `ALTER SEQUENCE dashboard_id_seq RESTART WITH ${nextdashboard}`,
+    // );
 
-    const dashboarditem_id_seq = await queryRunner.query(
-      `SELECT id FROM dashboarditem ORDER BY id DESC LIMIT 1`,
-    );
-    const nextdashboarditem = dashboarditem_id_seq[0]
-      ? parseInt(dashboarditem_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE dashboarditem_id_seq RESTART WITH ${nextdashboarditem}`,
-    );
+    // const dashboarditem_id_seq = await queryRunner.query(
+    //   `SELECT id FROM dashboarditem ORDER BY id DESC LIMIT 1`,
+    // );
+    // const nextdashboarditem = dashboarditem_id_seq[0]
+    //   ? parseInt(dashboarditem_id_seq[0].id) + parseInt('1')
+    //   : parseInt('1');
+    // await queryRunner.query(
+    //   `ALTER SEQUENCE dashboarditem_id_seq RESTART WITH ${nextdashboarditem}`,
+    // );
 
     const report_id_seq = await queryRunner.query(
       `SELECT id FROM report ORDER BY id DESC LIMIT 1`,
