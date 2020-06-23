@@ -16,7 +16,7 @@ export class Dashboard extends EntityCoreProps {
   @Column({
     type: 'varchar',
     length: 256,
-    nullable: false,
+    nullable: true,
     name: 'displayname',
   })
   displayName: string | null;
