@@ -205,68 +205,31 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     } = createSessionDTO;
 
     const session = new TrainingSession();
-    // const sections = await this.trainingSectionRepository.find({
-    //   select: ['id'],
-    //   where: [{ uid: section }],
-    // });
-
     const sections = await this.trainingSectionRepository.manager.query(
       `SELECT id FROM trainingsections WHERE uid='${section}'`,
     );
 
     const sectionid = sections[0].id;
-
-    // const units = await this.trainingUnitRepository.find({
-    //   select: ['id'],
-    //   where: [{ uid: unit }],
-    // });
     const units = await this.trainingUnitRepository.manager.query(
       `SELECT id FROM trainingunit WHERE uid='${unit}'`,
     );
     const unitid = units[0].id;
-    // const organisationunits = await this.organisationunitRepository.find({
-    //   select: ['id'],
-    //   where: [{ uid: orgunit }],
-    // });
     const organisationunits = await this.organisationunitRepository.manager.query(
       `SELECT id FROM organisationunit WHERE uid='${orgunit}'`,
     );
     const organisationunitid = organisationunits[0].id;
-
-    // const curriculums = await this.trainingCurriculumRepository.find({
-    //   select: ['id'],
-    //   where: [{ uid: curriculum }],
-    // });
-
     const curriculums = await this.trainingCurriculumRepository.manager.query(
       `SELECT id FROM trainingcurriculum WHERE uid='${curriculum}'`,
     );
-
     const curriculumid = curriculums[0].id;
-
-    // const sponsors = await this.trainingSponsorRepository.find({
-    //   select: ['id'],
-    //   where: [{ uid: sponsor }],
-    // });
     const sponsors = await this.trainingSponsorRepository.manager.query(
       `SELECT id FROM trainingsponsor WHERE uid='${sponsor}'`,
     );
-
     const sponsorid = sponsors[0].id;
-
-    // const venues = await this.trainingVenueRepository.find({
-    //   select: ['id'],
-    //   where: [{ uid: venue }],
-    // });
     const venues = await this.trainingVenueRepository.manager.query(
       ` SELECT id FROM trainingvenue WHERE uid='${venue}'`,
     );
     const venueid = venues[0].id;
-
-    // const orgnizers = await this.trainingSponsorRepository.find({
-    //   select: ['id'],
-    //   where: [{ uid: organiser }],
-    // });
 
     const organizers = await this.trainingSponsorRepository.manager.query(
       `SELECT id FROM trainingsponsor WHERE uid='${organiser}'`,
@@ -285,25 +248,6 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     session.startdate = startDate;
     session.enddate = endDate;
     await this.trainingSessionRepository.save(session);
-    // const sessionid = (
-    //   await this.trainingSessionRepository.findOne({ uid: session.uid })
-    // ).id;
-    // const topicsfound = (await this.trainingTopicRepository.findOne({
-    //   select: ['id'],
-    //   where: [{ uid: topic }],
-    // })).id;
-
-    // const topicsfound = await this.trainingTopicRepository.find({
-    //   where: [{ uid: In(topics.map(topic => topic.id)) }],
-    // });
-    // await getConnection()
-    // .createQueryBuilder()
-    // .insert()
-    // .into('trainingsessiontopics')
-    // .values([
-    //     { trainingsessionId: session, trainingtopicId: topicsfound },
-    //  ])
-    // .execute();
     return this.trainingSessionRepository.findOne({ uid: session.uid });
   }
   async saveTopics(uid: string, saveTopicsDTO: any) {
@@ -378,7 +322,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       });
       return participants;
     }
-    if (assessedby !== 0 && certifiedby !== 0) {
+    if (assessedby !== undefined && certifiedby !== undefined) {
       const certifier = await this.userRepository.manager.query(
         `SELECT ID FROM "user" WHERE uid='${certifiedby}'`,
       );
