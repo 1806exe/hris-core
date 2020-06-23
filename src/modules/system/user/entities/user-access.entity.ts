@@ -17,7 +17,7 @@ export class UserAccess extends UserIdentification {
 
   @Column('json', {
     nullable: false,
-    name: 'useraccess',
+    name: 'access',
   })
   access: any;
 
