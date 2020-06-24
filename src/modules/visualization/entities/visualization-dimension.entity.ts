@@ -15,7 +15,7 @@ export class VisualizationDimension extends TransactionTimestamp {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'char', length: 11, unique: true })
+  @Column({ type: 'char', length: 13, unique: true })
   uid: string;
 
   @Column({
