@@ -733,12 +733,14 @@ export class TrainingAnalyticsService {
       let rows = await this.connetion.manager.query(
         `SELECT * FROM _periodstructure WHERE iso IN ('${pe.join("','")}')`,
       );
-      periodFilter = `WHERE (${rows
-        .map((row) => {
-          return `ts.startdate BETWEEN '${row.startdate.toISOString()}' AND '${row.enddate.toISOString()}' 
-        OR ts.enddate BETWEEN '${row.startdate.toISOString()}' AND '${row.enddate.toISOString()}'`;
-        })
-        .join(' OR ')} )`;
+      if(rows.length > 0){
+        periodFilter = `WHERE (${rows
+          .map((row) => {
+            return `ts.startdate BETWEEN '${row.startdate.toISOString()}' AND '${row.enddate.toISOString()}' 
+          OR ts.enddate BETWEEN '${row.startdate.toISOString()}' AND '${row.enddate.toISOString()}'`;
+          })
+          .join(' OR ')} )`;
+      }
     }
     let query = 'SELECT level FROM organisationunitlevel';
     let orglevels = await this.connetion.manager.query(query);
@@ -766,6 +768,7 @@ export class TrainingAnalyticsService {
         GROUP BY section.name,unit.name,curriculum.name,region.name,district.name,
         venuename,sponsor.name,organiser.name,ts.deliverymode,ts.startdate,ts.enddate
     `;
+    console.log(query);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
     analytics.rows = rows.map((row) => {
