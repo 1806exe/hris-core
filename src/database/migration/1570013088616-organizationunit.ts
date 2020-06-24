@@ -18,6 +18,7 @@ export class organizationunit1570013088616 implements MigrationInterface {
         await queryRunner.query('ALTER TABLE "organisationunit" ADD COLUMN IF NOT EXISTS "featuretype" text');
         await queryRunner.query('ALTER TABLE "organisationunit" ADD COLUMN IF NOT EXISTS "address" text');
         await queryRunner.query('ALTER TABLE "organisationunit" ADD COLUMN IF NOT EXISTS "email" text');
+        await queryRunner.query('ALTER TABLE "organisationunit" ADD COLUMN IF NOT EXISTS "level" integer');
         await queryRunner.query('ALTER TABLE "organisationunit" ADD COLUMN IF NOT EXISTS "contactperson" text');
         await queryRunner.query('ALTER TABLE "organisationunit" ADD COLUMN IF NOT EXISTS "description" text');
         await queryRunner.query('ALTER TABLE "organisationunit" ADD COLUMN IF NOT EXISTS "code" character varying(25)');
