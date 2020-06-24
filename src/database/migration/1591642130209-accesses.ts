@@ -236,7 +236,10 @@ export class accesses1591642130209 implements MigrationInterface {
         (4,10),
         (4,11),
         (4,12);
-
+        
+        UPDATE trainingsession s SET venue = v.id
+        FROM  trainingvenue v
+        WHERE s.venuename = v.name
 
         `);
   }
