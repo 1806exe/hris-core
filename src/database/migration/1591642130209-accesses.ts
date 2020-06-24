@@ -215,7 +215,9 @@ export class accesses1591642130209 implements MigrationInterface {
 
         ALTER TABLE public.formfieldmember ADD COLUMN externalaccess boolean;
 
-        ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS created;
+        ALTER TABLE public.formfieldmember ADD COLUMN IF NOT EXISTS created TIMESTAMP;
+        ALTER TABLE public.formfieldmember ADD COLUMN IF NOT EXISTS lastupdated TIMESTAMP;
+
 
 
         INSERT INTO public.reportgroupmembers(
