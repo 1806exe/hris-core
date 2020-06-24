@@ -13,9 +13,12 @@ export class VisualizationDimensionItem extends TransactionTimestamp {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ type: 'char', length: 13, unique: true })
+  uid: string;
+
   @Column({
-    type: 'char',
-    length: 13,
+    type: 'varchar',
+    length: 50,
     name: 'dimensionitem',
     nullable: false,
   })
