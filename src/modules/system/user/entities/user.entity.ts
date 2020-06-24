@@ -21,7 +21,7 @@ import { UserRole } from '../../user-role/entities/user-role.entity';
 import { UserSettings } from './user-settings.entity';
 import { Dashboard } from '../../../visualization/entities/dashboard.entity';
 import { Visualization } from '../../../visualization/entities/visualization.entity';
-import { Record } from 'src/modules/record/entities/record.entity';
+import { Record } from '../../../record/entities/record.entity';
 
 @Entity('user', { schema: 'public' })
 export class User extends UserCoreProps {
