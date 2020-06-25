@@ -1,6 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { generateUid } from '../../core/helpers/makeuid';
-import { getUid } from '@iapps/utils';
 
 // import * as uid from 'uid'
 // import getUid from '@iapps/utils'
