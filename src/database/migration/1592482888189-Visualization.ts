@@ -140,15 +140,10 @@ export class Visualization1592482888189 implements MigrationInterface {
     CREATE TABLE IF NOT EXISTS public.visualizationdimensionitem
     (
         created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+        uid character(13) COLLATE pg_catalog."default" NOT NULL,
         lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
-<<<<<<< HEAD
-        id integer NOT NULL DEFAULT nextval('visualizationdimensionitem_id_seq'::regclass),
-        uid character(13) COLLATE pg_catalog."default",
-        dimensionitem character varying (50) COLLATE pg_catalog."default" NOT NULL,
-=======
         id bigint NOT NULL DEFAULT nextval('visualizationdimensionitem_id_seq'::regclass),
         dimensionitem character(13) COLLATE pg_catalog."default" NOT NULL,
->>>>>>> c25f4f690a10dd492b7ac6e601f1b08e3b4da2c7
         dimensionitemtype character varying(50) COLLATE pg_catalog."default" NOT NULL,
         visualizationdimensionid bigint,
         CONSTRAINT "PK_9a3b68597616e6d1bb115b389f2" PRIMARY KEY (id),
