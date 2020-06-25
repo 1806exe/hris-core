@@ -124,7 +124,7 @@ export class report1570103156996 implements MigrationInterface {
               TABLESPACE pg_default;
       `);
 
-      await queryRunner.query(`INSERT INTO report(uid, name,  uri, parameters, type, code)
+      await queryRunner.query(`INSERT INTO report(uid, name,  uri, parameters, type, html)
         VALUES (uid(), 'Completeness Report', '/reports/organisationunit/completeness/generate/redirect', '{"ou":true,"pe":false}', 'html', '<table
           class="records_list dataTable table table-striped table-bordered table-hover no-footer"
           cellpadding="0"
@@ -336,7 +336,7 @@ export class report1570103156996 implements MigrationInterface {
         
         `);
 
-      await queryRunner.query(`INSERT INTO report(uid, name, uri, parameters, type, code)
+      await queryRunner.query(`INSERT INTO report(uid, name, uri, parameters, type, html)
         VALUES (uid(), 'Orgunit By Groupset', '/reports/organisationunit/groupset/organisationunitgroup', '{"ou":true,"pe":false}', 'html', '<table
         class="records_list dataTable table table-striped table-bordered table-hover no-footer"
         cellpadding="0"
@@ -455,7 +455,7 @@ export class report1570103156996 implements MigrationInterface {
 	)  
         `);
 
-      await queryRunner.query(`INSERT INTO report(uid, name, uri, parameters, type, code)
+      await queryRunner.query(`INSERT INTO report(uid, name, uri, parameters, type, html)
         VALUES (uid(), 'Orgunit By Groupset', '/reports/organisationunit/groupset/organisationunitgroup', '{"ou":true,"pe":false}', 'html', '<table
         class="records_list dataTable table table-striped table-bordered table-hover no-footer"
         cellpadding="0"
@@ -574,7 +574,7 @@ export class report1570103156996 implements MigrationInterface {
 	)  
         `);
 
-      await queryRunner.query(`INSERT INTO report(uid, name, uri, parameters, type, code)
+      await queryRunner.query(`INSERT INTO report(uid, name, uri, parameters, type, html)
       VALUES (uid(), 'Orgunit By Levels ', '/reports/organisationunit/levels/', '{"ou":true,"pe":false}', 'html', '<table
       class="records_list dataTable table table-striped table-bordered table-hover"
       cellpadding="0"
@@ -803,7 +803,7 @@ export class report1570103156996 implements MigrationInterface {
   )  
         `);
 
-      await queryRunner.query(`INSERT INTO report(uid, name, uri, parameters, type, code)
+      await queryRunner.query(`INSERT INTO report(uid, name, uri, parameters, type, html)
 
       VALUES (uid(), 'Records Report ', '/reports/employeerecords/', '{"ou":true,"pe":false}', 'html', '<table
       class="records_list dataTable table table-striped table-bordered table-hover no-footer"
