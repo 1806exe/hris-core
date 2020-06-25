@@ -32,6 +32,9 @@ export class report1570103156996 implements MigrationInterface {
         'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "uri" text',
       );
       await queryRunner.query(
+        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "html" text',
+      );
+      await queryRunner.query(
         'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "userid" integer',
       );
       await queryRunner.query(
