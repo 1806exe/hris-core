@@ -92,11 +92,23 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
     const metaData = this.modelRepository.manager.connection.getMetadata(
       this.Model,
     );
+console.log('Metadata', metaData)
+    let join: any = {};
 
+    // TODO: Find best way to join any recursive relation
+    if (metaData.tableName === 'organisationunit') {
+      join = {
+        alias: 'organisationunit',
+        leftJoinAndSelect: {
+          profile: 'organisationunit.parent',
+        },
+      };
+    }
     const [response, totalCount] = await this.modelRepository.findAndCount({
       select: getSelections(fields, metaData),
       relations: getRelations(fields, metaData),
       where: getWhereConditions(filter),
+      join,
       take: size,
       skip: page * size,
     });
@@ -104,7 +116,8 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
     /**
      *
      */
-    return await [
+
+    return [
       await GetResponseSanitizer(
         this.modelRepository,
         response,
