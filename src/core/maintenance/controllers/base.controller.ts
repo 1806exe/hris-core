@@ -74,7 +74,9 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
         ...pagerDetails,
         pageCount: entityRes?.length,
         total: totalCount,
-        nextPage: `/api/${this.Model.plural}?page=${pagerDetails?.page + 1}`,
+        nextPage: `/api/${this.Model.plural}?page=${
+          parseInt(pagerDetails.page) + parseInt('1')
+        }`,
       },
       [this.Model.plural]: _.map(entityRes, sanitizeResponseObject),
     };
