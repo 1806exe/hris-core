@@ -92,7 +92,6 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
     const metaData = this.modelRepository.manager.connection.getMetadata(
       this.Model,
     );
-console.log('Metadata', metaData)
     let join: any = {};
 
     // TODO: Find best way to join any recursive relation
