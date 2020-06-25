@@ -17,7 +17,6 @@ import { TrainingVenue } from '../entities/training-venue.entity';
 import { TrainingSponsor } from '../entities/training-sponsor.entity';
 import { OrganisationUnit } from 'src/modules/organisation-unit/entities/organisation-unit.entity';
 import { User } from 'src/modules/system/user/entities/user.entity';
-import { join } from 'path';
 
 @Injectable()
 export class TrainingSessionService extends BaseService<TrainingSession> {
@@ -349,5 +348,38 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       });
       return participants;
     }
+  }
+  async sessionSharing(uid: String, sessionsharingDTO) {
+    const session = (
+      await this.trainingSessionRepository.findOne({ where: { uid: uid } })
+    ).id;
+    const { user } = sessionsharingDTO;
+    const userId = (await this.userRepository.findOne({ where: { uid: user } }))
+      .id;
+
+    const useraccess = await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into('useraccess')
+      .values([
+        {
+          userid: userId,
+          access: { read: true, write: false },
+          uid: generateUid(),
+        },
+      ])
+      .execute();
+
+    await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into('sessionuseraccess')
+      .values([
+        {
+          trainingsessionId: session,
+          useraccessId: useraccess.identifiers[0].id,
+        },
+      ])
+      .execute();
   }
 }
