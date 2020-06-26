@@ -7,7 +7,7 @@ export class TrainingSessionAccess extends UserIdentification {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varying character', {
+  @Column('character varying', {
     nullable: false,
     name: 'access',
   })
