@@ -2,15 +2,15 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   generateOUFilterQuery,
   getISOOrgUnits,
-} from 'src/core/helpers/ou.helper';
-import { getISOPeriods, getPeriodDetails } from 'src/core/helpers/pe.helper';
-import { Analytics } from 'src/modules/analytics/interfaces/analytics.interface';
-import { getWhereConditions } from 'src/core/utilities';
-import { IndicatorService } from 'src/modules/indicator/services/indicator.service';
-import { OrganisationUnitLevelService } from 'src/modules/organisation-unit/services/organisation-unit-level.service';
+} from '../../../core/helpers/ou.helper';
+import { getISOPeriods, getPeriodDetails } from '../../../core/helpers/pe.helper';
+import { Analytics } from '../../../modules/analytics/interfaces/analytics.interface';
+import { getWhereConditions } from '../../../core/utilities';
+import { IndicatorService } from '../../../modules/indicator/services/indicator.service';
+import { OrganisationUnitLevelService } from '../../../modules/organisation-unit/services/organisation-unit-level.service';
 import { Connection } from 'typeorm';
 import { getAnalyticsHeaders } from '../helpers/get-analytics-headers.helper';
-import { OrganisationUnitService } from 'src/modules/organisation-unit/services/organisation-unit.service';
+import { OrganisationUnitService } from '../../../modules/organisation-unit/services/organisation-unit.service';
 
 declare module namespace {}
 

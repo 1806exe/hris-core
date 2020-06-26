@@ -12,22 +12,22 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as _ from 'lodash';
-import { HRISBaseEntity } from 'src/core/entities/base-entity';
-import { ApiResult, Pager } from 'src/core/interfaces';
-import { DeleteResponse } from 'src/core/interfaces/response/delete.interface';
-import { getPagerDetails } from 'src/core/utilities';
-import { sanitizeResponseObject } from 'src/core/utilities/sanitize-response-object';
-import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
+import { HRISBaseEntity } from '../../../core/entities/base-entity';
+import { ApiResult, Pager } from '../../../core/interfaces';
+import { DeleteResponse } from '../../../core/interfaces/response/delete.interface';
+import { getPagerDetails } from '../../../core/utilities';
+import { sanitizeResponseObject } from '../../../core/utilities/sanitize-response-object';
+import { SessionGuard } from '../../../modules/system/user/guards/session.guard';
 import { ObjectPropsResolver } from '@icodebible/utils/resolvers';
 import { MaintenanceBaseService } from '../services/base.service';
-import { PayloadConfig } from 'src/core/config/payload.config';
+import { PayloadConfig } from '../../../core/config/payload.config';
 import {
   getSuccessResponse,
   genericFailureResponse,
   entityExistResponse,
   postSuccessResponse,
   deleteSuccessResponse,
-} from 'src/core/helpers/maintenance-response.helper';
+} from '../../../core/helpers/maintenance-response.helper';
 
 export class MaintenanceBaseController<T extends HRISBaseEntity> {
   /**

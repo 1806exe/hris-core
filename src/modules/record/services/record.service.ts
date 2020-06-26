@@ -1,14 +1,14 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { generateUid } from 'src/core/helpers/makeuid';
-import { getWhereConditions } from 'src/core/utilities';
+import { generateUid } from '../../../core/helpers/makeuid';
+import { getWhereConditions } from '../../../core/utilities';
 import {
   getRelations,
   getSelections,
-} from 'src/core/utilities/get-fields.utility';
-import { Field } from 'src/modules/form/entities/field.entity';
-import { Form } from 'src/modules/form/entities/form.entity';
-import { OrganisationUnit } from 'src/modules/organisation-unit/entities/organisation-unit.entity';
+} from '../../../core/utilities/get-fields.utility';
+import { Field } from '../../../modules/form/entities/field.entity';
+import { Form } from '../../../modules/form/entities/form.entity';
+import { OrganisationUnit } from '../../../modules/organisation-unit/entities/organisation-unit.entity';
 import { Repository } from 'typeorm';
 import { BaseService } from '../../../core/services/base.service';
 import { RecordValue } from '../entities/record-value.entity';

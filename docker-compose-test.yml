@@ -1,0 +1,55 @@
+version: '3.2'
+
+services:
+  postgres-database:
+    build: 
+      context: .
+      dockerfile: Dockerfile-postgres
+    image: hris/postgres:1.0.0
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    restart: always
+    volumes:
+      - ./files/db/postgresql:/var/lib/postgresql
+    networks: 
+      - backend
+  nginx:
+    build: 
+      context: .
+      dockerfile: Dockerfile-nginx
+    image: nginx/hris-nginx:1.0.0
+    ports:
+      - "5000:3000"
+    restart: always
+    networks: 
+      - backend
+  api:
+    build: .
+    image: hisptz/hris-api:1.0.0
+    command: npm run start:dev
+    volumes:
+      - type: bind
+        source: ./
+        target: /home/app/
+    depends_on: 
+      - postgres-database
+    networks: 
+      - backend
+  test:
+    build: .
+    image: hisptz/hris-api:1.0.0
+    command: npm run system-test
+    volumes:
+      - type: bind
+        source: ./
+        target: /home/app/
+    depends_on: 
+      - postgres-database
+    networks: 
+      - backend
+networks:
+  backend:
+    driver: "bridge"

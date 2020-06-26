@@ -3,10 +3,10 @@ import { Request, Response } from 'express';
 import { ReportService } from '../services/report.service';
 import { Report } from '../entities/report.entity';
 import { SessionGuard } from '../../../modules/system/user/guards/session.guard';
-import { ApiResult } from 'src/core/interfaces';
-import { getSuccessResponse } from 'src/core/helpers/response.helper';
-import { MaintenanceBaseController } from 'src/core/maintenance/controllers/base.contoller';
-import { BaseController } from 'src/core/controllers/base.contoller';
+import { ApiResult } from '../../../core/interfaces';
+import { getSuccessResponse } from '../../../core/helpers/response.helper';
+import { MaintenanceBaseController } from '../../../core/maintenance/controllers/base.contoller';
+import { BaseController } from '../../../core/controllers/base.contoller';
 
 @Controller('api/' + Report.plural)
 export class ReportController extends BaseController<Report> {

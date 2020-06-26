@@ -1,13 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { getWhereConditions } from 'src/core/utilities';
 import { Connection } from 'typeorm';
-import { resultNotFoundResponse } from 'src/core/helpers/response.helper';
-import { Analytics } from 'src/modules/analytics/interfaces/analytics.interface';
 import {
   generateOUFilterQuery,
   getISOOrgUnits,
-} from 'src/core/helpers/ou.helper';
-import { getISOPeriods } from 'src/core/helpers/pe.helper';
+} from '../../../core/helpers/ou.helper';
 
 @Injectable()
 export class TrainingAnalyticsService {

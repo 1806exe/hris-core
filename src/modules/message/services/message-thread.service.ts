@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BaseService } from 'src/core/services/base.service';
+import { BaseService } from '../../../core/services/base.service';
 import { MessageThread } from '../entities/message-thread.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

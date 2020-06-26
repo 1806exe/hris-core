@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { OrganisationUnitLevel } from '../entities/organisation-unit-level.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { MaintenanceBaseService } from 'src/core/maintenance/services/base.service';
+import { MaintenanceBaseService } from '../../../core/maintenance/services/base.service';
 
 @Injectable()
 export class OrganisationUnitLevelService extends MaintenanceBaseService<

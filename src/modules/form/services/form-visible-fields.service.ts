@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { FormVisibleField } from '../entities/form-visible-fields.entity';
-import { BaseService } from 'src/core/services/base.service';
+import { BaseService } from '../../../core/services/base.service';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 

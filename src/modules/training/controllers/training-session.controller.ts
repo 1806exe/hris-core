@@ -16,10 +16,10 @@ import { BaseController } from '../../../core/controllers/base.contoller';
 
 import { TrainingSessionService } from '../services/training-session.service';
 import { TrainingSession } from '../entities/training-session.entity';
-import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
-import { sanitizeResponseObject } from 'src/core/utilities/sanitize-response-object';
+import { SessionGuard } from '../../../modules/system/user/guards/session.guard';
+import { sanitizeResponseObject } from '../../../core/utilities/sanitize-response-object';
 import { SessionParticipant } from '../entities/training-session-participant.entity';
-import { getPagerDetails } from 'src/core/utilities';
+import { getPagerDetails } from '../../../core/utilities';
 import * as _ from 'lodash';
 
 @Controller('api/training/' + TrainingSession.plural)

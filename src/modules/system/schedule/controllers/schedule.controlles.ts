@@ -1,15 +1,15 @@
 import { Controller, Res, Req, Body, Logger, Post } from '@nestjs/common';
 import { ScheduleService } from '../services/schedule.service';
-import { BaseController } from 'src/core/controllers/base.contoller';
+import { BaseController } from '../../../../core/controllers/base.contoller';
 import { Schedule } from '../entities/schedule.entity';
 import { Request, Response } from 'express';
 import {
   entityExistResponse,
   postSuccessResponse,
   genericFailureResponse,
-} from 'src/core/helpers/response.helper';
+} from '../../../../core/helpers/response.helper';
 import { ApiInternalServerErrorResponse } from '@nestjs/swagger';
-import { ApiResult } from 'src/core/interfaces';
+import { ApiResult } from '../../../../core/interfaces';
 
 @Controller('api/' + Schedule.plural)
 export class ScheduleController extends BaseController<Schedule> {

@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as _ from 'lodash';
-import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
+import { SessionGuard } from '../../modules/system/user/guards/session.guard';
 
 import { HRISBaseEntity } from '../entities/base-entity';
 import {

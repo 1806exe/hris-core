@@ -1,5 +1,5 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { BaseService } from 'src/core/services/base.service';
+import { BaseService } from '../../../../core/services/base.service';
 import { Repository, Connection } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Schedule } from '../entities/schedule.entity';

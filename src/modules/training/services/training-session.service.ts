@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BaseService } from 'src/core/services/base.service';
-import { RecordValue } from 'src/modules/record/entities/record-value.entity';
+import { BaseService } from '../../../core/services/base.service';
+import { RecordValue } from '../../../modules/record/entities/record-value.entity';
 import { In, Repository, getConnection } from 'typeorm';
 import { generateUid } from '../../../core/helpers/makeuid';
 import { Record } from '../../../modules/record/entities/record.entity';
@@ -15,8 +15,8 @@ import { TrainingCurriculum } from '../entities/training-curriculum.entity';
 import { TrainingTopic } from '../entities/training-topic.entity';
 import { TrainingVenue } from '../entities/training-venue.entity';
 import { TrainingSponsor } from '../entities/training-sponsor.entity';
-import { OrganisationUnit } from 'src/modules/organisation-unit/entities/organisation-unit.entity';
-import { User } from 'src/modules/system/user/entities/user.entity';
+import { OrganisationUnit } from '../../../modules/organisation-unit/entities/organisation-unit.entity';
+import { User } from '../../../modules/system/user/entities/user.entity';
 import { join } from 'path';
 
 @Injectable()
