@@ -204,7 +204,6 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
   async create(entity: any): Promise<any> {
     const model = new this.Model();
     const savedEntity = _.merge(model, entity);
-    console.log(savedEntity);
     const objModel = await UIDToIDTransformation(
       this.modelRepository,
       savedEntity,

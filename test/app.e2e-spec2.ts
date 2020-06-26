@@ -8,6 +8,7 @@ import { UserModule } from '../src/modules/system/user/user.module';
 import { UserService } from '../src/modules/system/user/services/user.service';
 import { getBasicAuthanticationString } from '../src/core/helpers/basic-auth-token';
 import { passwordHash } from '../src/core/utilities/password-utilities';
+import { setUpServer, addAuthentication } from './set-up-e2e';
 let database: any = {
   type: 'postgres',
   host: 'localhost',
@@ -18,15 +19,33 @@ let database: any = {
   entities: ['./**/*.entity.ts'],
   synchronize: true,
 };
-const addAuthentication = (req)=>{
-  return req.set('Authorization', `Basic ${getBasicAuthanticationString('test','HRHIS2020')}`);
-}
-describe('HRHIS API (e2e)', () => {
+describe('HRHIS User API (e2e)', () => {
   let app: INestApplication;
+  beforeAll(async () => {
+    app = await setUpServer();
+  });
 
-  const authRequest = ()=>{
-    return addAuthentication(request(app.getHttpServer()));
-  }
+  test(`Testing Authentication /api/users (GET)`, () => {
+    return request(global['app'].getHttpServer())
+      .get(`/api/users`)
+      .expect(403)
+      .expect('{"statusCode":403,"message":"Forbidden resource","error":"Forbidden"}');
+  });
+  test(`Get Current User (GET)`, () => {
+    return addAuthentication(request(global['app'].getHttpServer())
+      .get(`/api/me`))
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.username).toEqual('test');
+        expect(res.body.firstName).toEqual('Anonymous');
+        expect(res.body.surname).toEqual('Anonymous');
+        expect(res.body.email).toEqual('anonymous@example.com');
+        expect(res.body.enabled).toEqual(true);
+      });
+  });;
+});
+/*describe('HRHIS API (e2e)', () => {
+  let app: INestApplication;
   beforeAll(async () => {
     const { Client } = require('pg')
     const client = new Client({
@@ -63,12 +82,8 @@ describe('HRHIS API (e2e)', () => {
     let user:any = { "password":"HRHIS2020", "username": "test", "firstName": "Anonymous", "middleName": null, "surname": "Anonymous", "email": "anonymous@example.com", "phoneNumber": null, "jobTitle": null, "expiryDate": null, "deletedDate": null, "enabled": true, "userRoles": [], "userGroups": [], "messages": [], "organisationUnits": [], "userSettings": null };
     await userService.create(user);
   });
-
-  /*it(`/api/ (GET)`, () => {
-    return passwordHash('password');
-  });*/
   ['organisationUnits','users'].forEach((apiEndPoint)=>{
-    it(`/api/${apiEndPoint} (GET)`, () => {
+    it(`Testing Authentication /api/${apiEndPoint} (GET)`, () => {
       return request(app.getHttpServer())
         .get(`/api/${apiEndPoint}`)
         .expect(403)
@@ -88,7 +103,7 @@ describe('HRHIS API (e2e)', () => {
         expect(res.body.enabled).toEqual(true);
       });
   });
-  it(`Adding User (POST)`, () => {
+  it(`Adding Organisation (POST)`, () => {
     return addAuthentication(request(app.getHttpServer())
       .post(`/api/organisationUnits`))
       .send({
@@ -96,12 +111,21 @@ describe('HRHIS API (e2e)', () => {
         "code": "MOHCDGEC",
         "name": "Ministry Of Health",
         "description": "Ministry of Health and Social welfare",
-        "dhisuid": "m0frOspS7JY",
+        //"dhisuid": "m0frOspS7JY",
         "shortName": "MOHCDGEC",
         "active": true,
         "level": 1
       })
-      .expect(200)
-      .expect('{"statusCode":403,"message":"Forbidden resource","error":"Forbidden"}');
+      //.expect(200)
+      .expect(
+        (res)=>{
+          console.log('Results:',res.body);
+          expect(res.body.code).toEqual('MOHCDGEC');
+          expect(res.body.name).toEqual('Ministry Of Health');
+          expect(res.body.level).toEqual(1);
+          expect(res.body.shortName).toEqual('MOHCDGEC');
+          expect(res.body.active).toEqual(true);
+        }
+      );
   });
-});
+});*/
