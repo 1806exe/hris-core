@@ -5,127 +5,100 @@ export class report1570103156996 implements MigrationInterface {
     let Report = await queryRunner.getTable('hris_report');
 
     if (Report) {
-      await queryRunner.query('ALTER TABLE "hris_report" RENAME TO "report"');
-      await queryRunner.query(
-        'ALTER TABLE "report" RENAME COLUMN "datecreated" TO "created"',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "lastupdated" timestamp without time zone',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "name" character varying(256)',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "parameters" jsonb',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "createdby" text',
-      );
-
-      await queryRunner.query(
-        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "type" character varying(256)',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "uri" text',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "html" text',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "userid" integer',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "lastupdatedby" character varying',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "publicaccess" character varying(8)',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "externalaccess" boolean',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "code" text',
-      );
-      await queryRunner.query(
-        'ALTER TABLE "report" ADD COLUMN IF NOT EXISTS "description" text',
-      );
-  
-      await queryRunner.query('UPDATE "report" SET uid=uid()');
-      await queryRunner.query(' ALTER TABLE "report" OWNER TO "postgres"');
-      await queryRunner.query(
-        'CREATE SEQUENCE report_id_seq AS BIGINT OWNED BY report.id',
-      );
-      await queryRunner.query(
-        `ALTER TABLE report ALTER COLUMN  id SET DEFAULT nextval('report_id_seq')`,
-      );
-      await queryRunner.query(
-        'ALTER TABLE report ALTER COLUMN created SET DEFAULT LOCALTIMESTAMP',
-      );
-
       await queryRunner.query(`
-            CREATE TABLE public."reportgroup"
-            (
-                created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
-                lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
-                id integer NOT NULL,
-                uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
-                code character varying(25) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
-                name character varying(256) COLLATE pg_catalog."default" NOT NULL,
-                description text COLLATE pg_catalog."default",
-                lastupdatedby character varying COLLATE pg_catalog."default",
-                publicaccess character varying(8) COLLATE pg_catalog."default",
-                externalaccess boolean,
-                CONSTRAINT "PK_f82c48f7f4d897a53a2f2255e7f" PRIMARY KEY (id)
-            )
+DROP TABLE hris_report;
+create sequence "report_id_seq";
+create sequence "reportgroup_id_seq";
 
-            TABLESPACE pg_default;
+CREATE TABLE public.report
+(
+    created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+    lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+    id bigint NOT NULL DEFAULT nextval('report_id_seq'::regclass),
+    uid character(13) COLLATE pg_catalog."default" NOT NULL,
+    code character varying COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    name character varying(256) COLLATE pg_catalog."default" ,
+    description text COLLATE pg_catalog."default",
+    lastupdatedby character varying COLLATE pg_catalog."default",
+    publicaccess character(8) COLLATE pg_catalog."default",
+    externalaccess boolean,
+    uri character varying(255) COLLATE pg_catalog."default",
+    parameters json ,
+    userid bigint,
+    type character varying(255) COLLATE pg_catalog."default" ,
+    createdby character varying(255) COLLATE pg_catalog."default" ,
+    html character varying COLLATE pg_catalog."default" ,
+    CONSTRAINT "PK_1af82de239cf99a5ba1f66a4660" PRIMARY KEY (id),
+    CONSTRAINT "REL_3b02f5874c684eb15a17b3caab" UNIQUE (userid),
+    CONSTRAINT "UQ_e20953580a9f370ec98c5ae94e3" UNIQUE (uid),
+    CONSTRAINT "FK_3b02f5874c684eb15a17b3caab3" FOREIGN KEY (userid)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+)
 
-          ALTER TABLE public."reportgroup"
-          OWNER to postgres;
+TABLESPACE pg_default;
 
-          CREATE SEQUENCE reportgroup_id_seq AS BIGINT OWNED BY reportgroup.id;
-          ALTER TABLE public."reportgroup" ALTER COLUMN id SET DEFAULT nextval('reportgroup_id_seq');
+ALTER TABLE public.report
+    OWNER to postgres;
+	
+	CREATE TABLE public.reportgroup
+(
+    created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+    lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+    id bigint NOT NULL DEFAULT nextval('reportgroup_id_seq'::regclass),
+    uid character(13) COLLATE pg_catalog."default" NOT NULL,
+    code character varying COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    name character varying(256) COLLATE pg_catalog."default" ,
+    description text COLLATE pg_catalog."default",
+    lastupdatedby character varying COLLATE pg_catalog."default",
+    publicaccess character(8) COLLATE pg_catalog."default",
+    externalaccess boolean,
+    CONSTRAINT "PK_2a90e74adda4b6c08fe2998e262" PRIMARY KEY (id),
+    CONSTRAINT "UQ_75ad837fd6bedc91c080ab072b2" UNIQUE (uid)
+)
 
-      `);
+TABLESPACE pg_default;
 
-      await queryRunner.query(`
-          CREATE TABLE public.reportgroupmembers
-          (
-              "reportgroupId" bigint NOT NULL,
-              "reportId" bigint NOT NULL,
-              CONSTRAINT "PK_ccbf0e9ff27c065da0997ffe71a" PRIMARY KEY ("reportgroupId", "reportId"),
-              CONSTRAINT "FK_3d77f41fe60918e43eb1d9d706b" FOREIGN KEY ("reportgroupId")
-                  REFERENCES public."reportgroup" (id) MATCH SIMPLE
-                  ON UPDATE NO ACTION
-                  ON DELETE CASCADE,
-              CONSTRAINT "FK_df981dc4ca8fb4dcff049975fe3" FOREIGN KEY ("reportId")
-                  REFERENCES public.report (id) MATCH SIMPLE
-                  ON UPDATE NO ACTION
-                  ON DELETE CASCADE
-          )
-          
-          TABLESPACE pg_default;
-          
-          ALTER TABLE public.reportgroupmembers
-              OWNER to postgres;
-          ALTER TABLE report ALTER COLUMN uri DROP NOT NULL;
-          ALTER TABLE report ALTER COLUMN parameters DROP NOT NULL;
+ALTER TABLE public.reportgroup
+    OWNER to postgres;
+	
+	CREATE TABLE public.reportgroupmembers
+(
+    "reportgroupId" bigint NOT NULL,
+    "reportId" bigint NOT NULL,
+    CONSTRAINT "PK_af814dd7950fd7741850bb071d2" PRIMARY KEY ("reportgroupId", "reportId"),
+    CONSTRAINT "FK_abb6c0c7aa6e4f7f6e084cf981e" FOREIGN KEY ("reportgroupId")
+        REFERENCES public.reportgroup (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT "FK_fb988f65c0c3a89c183afb68ee0" FOREIGN KEY ("reportId")
+        REFERENCES public.report (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+)
 
+TABLESPACE pg_default;
 
-          
-          CREATE INDEX "IDX_3d77f41fe60918e43eb1d9d706"
-              ON public.reportgroupmembers USING btree
-              ("reportgroupId" ASC NULLS LAST)
-              TABLESPACE pg_default;
-          
-          CREATE INDEX "IDX_df981dc4ca8fb4dcff049975fe"
-              ON public.reportgroupmembers USING btree
-              ("reportId" ASC NULLS LAST)
-              TABLESPACE pg_default;
-      `);
+ALTER TABLE public.reportgroupmembers
+    OWNER to postgres;
+-- Index: IDX_abb6c0c7aa6e4f7f6e084cf981
+
+-- DROP INDEX public."IDX_abb6c0c7aa6e4f7f6e084cf981";
+
+CREATE INDEX "IDX_abb6c0c7aa6e4f7f6e084cf981"
+    ON public.reportgroupmembers USING btree
+    ("reportgroupId" ASC NULLS LAST)
+    TABLESPACE pg_default;
+-- Index: IDX_fb988f65c0c3a89c183afb68ee
+
+-- DROP INDEX public."IDX_fb988f65c0c3a89c183afb68ee";
+
+CREATE INDEX "IDX_fb988f65c0c3a89c183afb68ee"
+    ON public.reportgroupmembers USING btree
+    ("reportId" ASC NULLS LAST)
+    TABLESPACE pg_default;
+     `);
 
       await queryRunner.query(`INSERT INTO report(uid, name,  uri, parameters, type, html)
         VALUES (uid(), 'Completeness Report', '/reports/organisationunit/completeness/generate/redirect', '{"ou":true,"pe":false}', 'html', '<table
@@ -171,7 +144,7 @@ export class report1570103156996 implements MigrationInterface {
                 class="sorting"
                 tabindex="0"
                 aria-controls="DataTables_Table_0"
-                rowspan="1"
+                rowspan="1"y
                 colspan="1"
                 aria-label="Entered Records: activate to sort column ascending"
                 style="width: 113px;"
