@@ -78,6 +78,13 @@ export class Report extends EntityCoreProps {
   })
   code: string;
 
+  @Column('character varying', {
+    nullable: false,
+    length: 256,
+    name: 'html',
+  })
+  html: string;
+
   @OneToOne(
     () => User,
     (user: User) => user.report,

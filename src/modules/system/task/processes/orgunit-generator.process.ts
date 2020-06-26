@@ -5,14 +5,14 @@ import { BackgroundProcess } from './base.process';
 
 @Injectable()
 export class OrgUnitGenerator extends BackgroundProcess {
-  constructor(taskService: TaskService, private connetion: Connection) {
+  constructor(taskService: TaskService, private connection: Connection) {
     super(taskService);
   }
   async run() {
-    await this.connetion.manager.query(
+    await this.connection.manager.query(
       'DROP TABLE IF EXISTS _organisationunitstructure',
     );
-    await this.connetion.manager.query(
+    await this.connection.manager.query(
       `CREATE TABLE _organisationunitstructure(
                 organisationunitid bigserial NOT NULL,
                 uid character(30) COLLATE pg_catalog."default",
@@ -23,11 +23,11 @@ export class OrgUnitGenerator extends BackgroundProcess {
     let level = 1;
     let count: any;
     let countstructure: any;
-    let groups = await this.connetion.manager.query('SELECT id,uid FROM organisationunitgroup');
+    let groups = await this.connection.manager.query('SELECT id,uid FROM organisationunitgroup');
     let groupHeaders = '';
     for (const group of groups) {
       console.log("Group:", group);
-      await this.connetion.manager.query(
+      await this.connection.manager.query(
         `ALTER TABLE _organisationunitstructure ADD COLUMN "${group.uid}" boolean`,
       );
       groupHeaders += `,"${group.uid}"`;
@@ -37,17 +37,17 @@ export class OrgUnitGenerator extends BackgroundProcess {
       let INSERTFIELD = '';
       let FIELD = '';
       let WHERE = `oulevel${level} `;
-      await this.connetion.manager.query(
+      await this.connection.manager.query(
         'ALTER TABLE _organisationunitstructure ADD COLUMN idlevel' +
         level +
         ' integer',
       );
-      await this.connetion.manager.query(
+      await this.connection.manager.query(
         'ALTER TABLE _organisationunitstructure ADD COLUMN uidlevel' +
         level +
         ' character(30) COLLATE pg_catalog."default"',
       );
-      await this.connetion.manager.query(
+      await this.connection.manager.query(
         'ALTER TABLE _organisationunitstructure ADD COLUMN namelevel' +
         level +
         ' text COLLATE pg_catalog."default"',
@@ -82,11 +82,11 @@ export class OrgUnitGenerator extends BackgroundProcess {
               SELECT oulevel${level}.id as organisationunitid, oulevel${level}.uid,${level + FIELD}
               ${groupSelect}
               FROM organisationunit ${WHERE};`;
-      await this.connetion.manager.query(query);
-      countstructure = await this.connetion.manager.query(
+      await this.connection.manager.query(query);
+      countstructure = await this.connection.manager.query(
         'SELECT COUNT(*) FROM _organisationunitstructure',
       );
-      count = await this.connetion.manager.query(
+      count = await this.connection.manager.query(
         'SELECT COUNT(*) FROM organisationunit',
       );
       indexQuery += ",uidlevel" + level;
@@ -94,9 +94,13 @@ export class OrgUnitGenerator extends BackgroundProcess {
     } while (count[0].count !== countstructure[0].count);
     let creatIndex = `CREATE INDEX orgunitindex ON _organisationunitstructure(
       uid${indexQuery});`;
-    await this.connetion.manager.query(creatIndex);
+    await this.connection.manager.query(creatIndex);
+    await this.connection.manager.query(`UPDATE organisationunit o SET "level" = s.level
+    FROM  _organisationunitstructure s
+    WHERE o.id = s.organisationunitid`)
   }
   async getProcessName() {
     return "Orgunit Structure Table";
   }
+
 }

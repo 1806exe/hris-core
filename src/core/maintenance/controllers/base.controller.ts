@@ -74,7 +74,7 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
         ...pagerDetails,
         pageCount: entityRes?.length,
         total: totalCount,
-        nextPage: `/api/${this.Model.plural}?page=${pagerDetails?.page + 1}`,
+        nextPage: `/api/${this.Model.plural}?page=${+pagerDetails.page + +'1'}`,
       },
       [this.Model.plural]: _.map(entityRes, sanitizeResponseObject),
     };
@@ -154,6 +154,7 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
         createEntityDto,
         PayloadConfig,
       );
+
       const isIDExist = await this.maintenanceBaseService.findOneByUid(
         procCreateEntityDTO,
       );

@@ -1,15 +1,14 @@
-import { Get, Param, UseGuards, Res, Req, Controller } from '@nestjs/common';
+import { Controller, Get, Param, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ReportService } from '../services/report.service';
 import { Report } from '../entities/report.entity';
 import { SessionGuard } from '../../../modules/system/user/guards/session.guard';
 import { ApiResult } from '../../../core/interfaces';
 import { getSuccessResponse } from '../../../core/helpers/response.helper';
-import { MaintenanceBaseController } from '../../../core/maintenance/controllers/base.contoller';
-import { BaseController } from '../../../core/controllers/base.contoller';
+import { MaintenanceBaseController } from '../../../core/maintenance/controllers/base.controller';
 
 @Controller('api/' + Report.plural)
-export class ReportController extends BaseController<Report> {
+export class ReportController extends MaintenanceBaseController<Report> {
   constructor(private reportService: ReportService) {
     super(reportService, Report);
   }

@@ -133,4 +133,15 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
       throw new NotFoundException('Participant Not Available');
     }
   }
+  @Post(':session/sharing')
+  @UseGuards(SessionGuard)
+  async sessionSharing(@Param() Param, @Body() sessionSharingDTO: any) {
+    const session = this.trainingSessionService.findOneByUid(Param.session);
+    if (session) {
+      return await this.trainingSessionService.sessionSharing(
+        Param.session,
+        sessionSharingDTO,
+      );
+    }
+  }
 }

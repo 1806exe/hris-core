@@ -3,10 +3,11 @@ import { BaseController } from '../../../core/controllers/base.contoller';
 
 import { FieldOption } from '../entities/field-option.entity';
 import { FieldOptionService } from '../services/field-option.service';
-import { MaintenanceBaseController } from '../../../core/maintenance/controllers/base.contoller';
-
+import { MaintenanceBaseController } from '../../../core/maintenance/controllers/base.controller';
 @Controller('api/' + FieldOption.plural)
-export class FieldOptionController extends MaintenanceBaseController<FieldOption> {
+export class FieldOptionController extends MaintenanceBaseController<
+  FieldOption
+> {
   constructor(service: FieldOptionService) {
     super(service, FieldOption);
   }

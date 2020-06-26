@@ -14,14 +14,13 @@ import { MessageMetadata } from '../../../message/entities/message-metadata.enti
 import { MessageThreadMetadata } from '../../../message/entities/message-thread-metadata.entity';
 import { MessageThread } from '../../../message/entities/message-thread.entity';
 import { Message } from '../../../message/entities/message.entity';
+import { Record } from '../../../record/entities/record.entity';
 import { Report } from '../../../report/entities/report.entity';
-import { SessionParticipant } from '../../../training/entities/training-session-participant.entity';
+import { Dashboard } from '../../../visualization/entities/dashboard.entity';
+import { Visualization } from '../../../visualization/entities/visualization.entity';
 import { UserGroup } from '../../user-group/entities/user-group.entity';
 import { UserRole } from '../../user-role/entities/user-role.entity';
 import { UserSettings } from './user-settings.entity';
-import { Dashboard } from '../../../visualization/entities/dashboard.entity';
-import { Visualization } from '../../../visualization/entities/visualization.entity';
-import { Record } from '../../../record/entities/record.entity';
 import { passwordCompare } from '../../../../core/utilities/password-utilities';
 
 @Entity('user', { schema: 'public' })
@@ -336,15 +335,9 @@ export class User extends UserCoreProps {
   })
   report: Report[];
 
-  @OneToOne(
-    (type) => Record,
-    (record) => record.assesser,
-  )
+  @OneToOne((type) => Record, (record) => record.assesser)
   assesser: Record[];
 
-  @OneToOne(
-    (type) => Record,
-    (record) => record.certifier,
-  )
+  @OneToOne((type) => Record, (record) => record.certifier)
   certifier: Record[];
 }

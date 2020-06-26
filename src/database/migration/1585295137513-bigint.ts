@@ -248,9 +248,9 @@ export class bigint1585295137513 implements MigrationInterface {
         INNER JOIN trainingsession ON(trainingsession.id = sessionparticipant.sessionid);
 
         INSERT INTO facilitator(uid, "trainingsessionId", "recordId")
-        select uid(), sessionid,recordid from sessionparticipant
-        INNER JOIN record ON(record.id=sessionparticipant.recordid) 
-        INNER JOIN trainingsession ON(trainingsession.id = sessionparticipant.sessionid);
+        select uid(), sessionid,recordid from sessionfacilitator
+        INNER JOIN record ON(record.id=sessionfacilitator.recordid) 
+        INNER JOIN trainingsession ON(trainingsession.id = sessionfacilitator.sessionid);
         ALTER TABLE trainingsections ADD COLUMN signature text;     
         ALTER TABLE trainingsession ADD COLUMN access boolean;       
         `);

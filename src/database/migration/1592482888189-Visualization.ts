@@ -9,7 +9,7 @@ export class Visualization1592482888189 implements MigrationInterface {
     (
         created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
         lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
-        id integer NOT NULL DEFAULT nextval('dashboard_id_seq'::regclass),
+        id bigint NOT NULL DEFAULT nextval('dashboard_id_seq'::regclass),
         uid character(13) COLLATE pg_catalog."default" NOT NULL,
         code character varying(25) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
         name character varying(256) COLLATE pg_catalog."default" NOT NULL,
@@ -19,7 +19,7 @@ export class Visualization1592482888189 implements MigrationInterface {
         externalaccess boolean,
         href text COLLATE pg_catalog."default",
         displayname character varying(256) COLLATE pg_catalog."default" NOT NULL,
-        userid integer,
+        userid bigint,
         CONSTRAINT "PK_8904b99a9c07185947c5d70bfde" PRIMARY KEY (id),
         CONSTRAINT "UQ_bb9e0587e0266172504bf6b5271" UNIQUE (uid),
         CONSTRAINT "FK_737e17e1bc64698b29a6112cb1a" FOREIGN KEY (userid)
@@ -39,7 +39,7 @@ export class Visualization1592482888189 implements MigrationInterface {
     (
         created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
         lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
-        id integer NOT NULL DEFAULT nextval('visualization_id_seq'::regclass),
+        id bigint NOT NULL DEFAULT nextval('visualization_id_seq'::regclass),
         uid character(13) COLLATE pg_catalog."default" NOT NULL,
         code character varying(25) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
         name character varying(256) COLLATE pg_catalog."default" NOT NULL,
@@ -95,7 +95,7 @@ export class Visualization1592482888189 implements MigrationInterface {
         latitude double precision,
         zoom integer,
         basemap character varying(255) COLLATE pg_catalog."default",
-        userid integer,
+        userid bigint,
         CONSTRAINT "PK_1918200a782f94386026f94d539" PRIMARY KEY (id),
         CONSTRAINT "UQ_e6da6439709126f066f7874877e" UNIQUE (uid),
         CONSTRAINT "FK_ffbd862e88ef2feec177b5a9011" FOREIGN KEY (userid)
@@ -116,11 +116,11 @@ export class Visualization1592482888189 implements MigrationInterface {
     (
         created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
         lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
-        id integer NOT NULL DEFAULT nextval('visualizationdimension_id_seq'::regclass),
+        id bigint NOT NULL DEFAULT nextval('visualizationdimension_id_seq'::regclass),
         uid character(13) COLLATE pg_catalog."default" NOT NULL,
         dimension character varying(5) COLLATE pg_catalog."default" NOT NULL,
         layout character varying(10) COLLATE pg_catalog."default" NOT NULL,
-        visualizationid integer,
+        visualizationid bigint,
         CONSTRAINT "PK_f00c1512e803c7e84fa298b1e06" PRIMARY KEY (id),
         CONSTRAINT "UQ_2f2d36defb8bfba0de43ee7cf6e" UNIQUE (uid),
         CONSTRAINT "FK_97618f4576e2ac6f76fc6b9d260" FOREIGN KEY (visualizationid)
@@ -140,11 +140,12 @@ export class Visualization1592482888189 implements MigrationInterface {
     CREATE TABLE IF NOT EXISTS public.visualizationdimensionitem
     (
         created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+        uid character(13) COLLATE pg_catalog."default" NOT NULL,
         lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
-        id integer NOT NULL DEFAULT nextval('visualizationdimensionitem_id_seq'::regclass),
+        id bigint NOT NULL DEFAULT nextval('visualizationdimensionitem_id_seq'::regclass),
         dimensionitem character(13) COLLATE pg_catalog."default" NOT NULL,
         dimensionitemtype character varying(50) COLLATE pg_catalog."default" NOT NULL,
-        visualizationdimensionid integer,
+        visualizationdimensionid bigint,
         CONSTRAINT "PK_9a3b68597616e6d1bb115b389f2" PRIMARY KEY (id),
         CONSTRAINT "FK_7f1797678b81484632f65a7afca" FOREIGN KEY (visualizationdimensionid)
             REFERENCES public.visualizationdimension (id) MATCH SIMPLE
@@ -164,7 +165,7 @@ export class Visualization1592482888189 implements MigrationInterface {
     (
         created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
         lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
-        id integer NOT NULL DEFAULT nextval('dashboarditem_id_seq'::regclass),
+        id bigint NOT NULL DEFAULT nextval('dashboarditem_id_seq'::regclass),
         uid character(13) COLLATE pg_catalog."default" NOT NULL,
         code character varying(25) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
         lastupdatedby character varying COLLATE pg_catalog."default",
@@ -177,8 +178,8 @@ export class Visualization1592482888189 implements MigrationInterface {
         height integer,
         width integer,
         type character varying(50) COLLATE pg_catalog."default",
-        dashboardid integer,
-        visualizationid integer,
+        dashboardid bigint,
+        visualizationid bigint,
         CONSTRAINT "PK_67334f4a46e4b156982eebb2dc4" PRIMARY KEY (id),
         CONSTRAINT "UQ_68394f9b2c87727e2dd06ea8029" UNIQUE (uid),
         CONSTRAINT "FK_1f928172b909a9c9df65c380c11" FOREIGN KEY (dashboardid)
