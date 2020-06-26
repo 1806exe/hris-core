@@ -7,7 +7,7 @@ export class VisualizationAccess extends UserIdentification {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varying character', {
+  @Column('character varying', {
     nullable: false,
     name: 'access',
   })
