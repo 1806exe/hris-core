@@ -360,7 +360,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     const useraccess = await getConnection()
       .createQueryBuilder()
       .insert()
-      .into('useraccess')
+      .into('trainingsessionccess')
       .values([
         {
           userid: userId,
