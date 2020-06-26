@@ -4,10 +4,13 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { TransactionTimestamp } from '../../../core/entities/transaction-timestamp.entity';
 import { Dashboard } from './dashboard.entity';
 import { Visualization } from './visualization.entity';
+import { DashboardItemAccess } from './dashboard-item-useraccess.entity';
 
 @Entity('dashboarditem', { schema: 'public' })
 export class DashboardItem extends TransactionTimestamp {
@@ -99,4 +102,11 @@ export class DashboardItem extends TransactionTimestamp {
   )
   @JoinColumn({ name: 'visualizationid' })
   visualization: Visualization;
+
+  @ManyToMany(
+    () => DashboardItemAccess,
+    (dashboarditemaccess) => dashboarditemaccess.dashboarditem,
+  )
+  @JoinTable({ name: 'dashboarditemuseraccess' })
+  dashboarditemaccess: DashboardItemAccess[];
 }
