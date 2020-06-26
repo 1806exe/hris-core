@@ -1,7 +1,16 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { DashboardItem } from './dashboard-item.entity';
 import { EntityCoreProps } from '../../../core/entities/entity-core-props';
 import { User } from '../../system/user/entities/user.entity';
+import { DashboardAccess } from './dashboard-useraccess.entity';
 @Entity('dashboard', { schema: 'public' })
 export class Dashboard extends EntityCoreProps {
   static plural = 'dashboards';
@@ -31,4 +40,11 @@ export class Dashboard extends EntityCoreProps {
     { eager: true },
   )
   dashboardItems: DashboardItem[];
+
+  @ManyToMany(
+    () => DashboardAccess,
+    (dashboardaccess) => dashboardaccess.dashboard,
+  )
+  @JoinTable({ name: 'dashboarduseraccess' })
+  dashboardaccess: DashboardAccess[];
 }
