@@ -10,9 +10,6 @@ import { App } from '../../../app/entities/apps.entity';
 import { UserAuthority } from '../../user-authority/entities/user-authority.entity';
 import { UserIdentification } from '../../user/entities/user-identification';
 import { User } from '../../user/entities/user.entity';
-import { TrainingSessionAccess } from '../../../training/entities/training-session-access.entity';
-import { UserRoleAccess } from './user-role-access.entity';
-
 @Entity('userrole', { schema: 'public' })
 export class UserRole extends UserIdentification {
   static plural = 'userRoles';
