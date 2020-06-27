@@ -16,7 +16,10 @@ import { BaseController } from '../../../core/controllers/base.contoller';
 
 import { TrainingSessionService } from '../services/training-session.service';
 import { TrainingSession } from '../entities/training-session.entity';
-import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
+import {
+  SessionGuard,
+  SessionUser,
+} from 'src/modules/system/user/guards/session.guard';
 import { sanitizeResponseObject } from 'src/core/utilities/sanitize-response-object';
 import { SessionParticipant } from '../entities/training-session-participant.entity';
 import { getPagerDetails } from 'src/core/utilities';
@@ -136,9 +139,20 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
   @Post(':session/sharing')
   @UseGuards(SessionGuard)
   async sessionSharing(@Param() Param, @Body() sessionSharingDTO: any) {
-    const session = this.trainingSessionService.findOneByUid(Param.session);
-    if (session) {
-      return await this.trainingSessionService.sessionSharing(
+    const session = await this.trainingSessionService.findOneByUid(
+      Param.session,
+    );
+    const { user } = sessionSharingDTO;
+    const sessionaccess = await this.trainingSessionService.SharedUser(user);
+
+    if (session && sessionaccess === undefined) {
+      return await this.trainingSessionService.sessionSharingCreation(
+        Param.session,
+        sessionSharingDTO,
+      );
+    }
+    if (session && sessionaccess !== undefined) {
+      return await this.trainingSessionService.sessionSharingEdit(
         Param.session,
         sessionSharingDTO,
       );
