@@ -7,6 +7,7 @@ import {
   ManyToMany,
   OneToMany,
   OneToOne,
+  ManyToOne,
 } from 'typeorm';
 import { UserCoreProps } from '../../../../core/entities/user-core-props.entity';
 import { OrganisationUnit } from '../../../../modules/organisation-unit/entities/organisation-unit.entity';
@@ -21,6 +22,7 @@ import { Visualization } from '../../../visualization/entities/visualization.ent
 import { UserGroup } from '../../user-group/entities/user-group.entity';
 import { UserRole } from '../../user-role/entities/user-role.entity';
 import { UserSettings } from './user-settings.entity';
+import { TrainingSessionAccess } from 'src/modules/training/entities/training-session-access.entity';
 
 @Entity('user', { schema: 'public' })
 export class User extends UserCoreProps {
@@ -331,4 +333,11 @@ export class User extends UserCoreProps {
 
   @OneToOne((type) => Record, (record) => record.certifier)
   certifier: Record[];
+
+  @ManyToOne(
+    (type) => TrainingSessionAccess,
+    (sessionaccess) => sessionaccess.user,
+  )
+  @JoinColumn({ name: 'sessionaccessid', referencedColumnName: 'id' })
+  sessionaccess: TrainingSessionAccess[];
 }
