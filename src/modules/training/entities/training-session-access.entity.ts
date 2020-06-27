@@ -1,6 +1,15 @@
 import { UserIdentification } from '../../system/user/entities/user-identification';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
+} from 'typeorm';
 import { TrainingSession } from './training-session.entity';
+import { User } from 'src/modules/system/user/entities/user.entity';
 @Entity('trainingsessionaccess', { schema: 'public' })
 export class TrainingSessionAccess extends UserIdentification {
   static plural = 'userAccesses';
@@ -21,4 +30,8 @@ export class TrainingSessionAccess extends UserIdentification {
     (session) => session.trainingsessionaccess,
   )
   session: TrainingSession;
+
+  @OneToMany((type) => User, (user) => user.sessionaccess, {})
+  @JoinColumn({ name: 'userid', referencedColumnName: 'id' })
+  user: User[];
 }
