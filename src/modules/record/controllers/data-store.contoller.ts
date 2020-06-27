@@ -1,6 +1,6 @@
 import { Controller, Get, Res, Param, Query } from '@nestjs/common';
-import { BaseController } from 'src/core/controllers/base.contoller';
-import { DataStore } from 'src/modules/record/entities/data-store.entity';
+import { BaseController } from '../../../core/controllers/base.contoller';
+import { DataStore } from '../../../modules/record/entities/data-store.entity';
 
 import { DataStoreService } from '../services/data-store.service';
 

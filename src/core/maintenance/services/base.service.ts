@@ -7,13 +7,13 @@ import {
 } from 'typeorm';
 
 import * as _ from 'lodash';
-import { HRISBaseEntity } from 'src/core/entities/base-entity';
+import { HRISBaseEntity } from '../../../core/entities/base-entity';
 import {
   getSelections,
   getRelations,
-} from 'src/core/utilities/get-fields.utility';
-import { getWhereConditions } from 'src/core/utilities';
-import { entityTableMapper } from 'src/core/resolvers/database-table.resolver';
+} from '../../../core/utilities/get-fields.utility';
+import { getWhereConditions } from '../../../core/utilities';
+import { entityTableMapper } from '../../../core/resolvers/database-table.resolver';
 import { UIDToIDTransformation } from '@icodebible/utils/resolvers/uid-to-id';
 import { ObjectPayloadUpdater } from '@icodebible/utils/resolvers/updater';
 import { GetResponseSanitizer } from '@icodebible/utils/resolvers/id-to-uid';
@@ -204,7 +204,6 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
   async create(entity: any): Promise<any> {
     const model = new this.Model();
     const savedEntity = _.merge(model, entity);
-    console.log(savedEntity);
     const objModel = await UIDToIDTransformation(
       this.modelRepository,
       savedEntity,

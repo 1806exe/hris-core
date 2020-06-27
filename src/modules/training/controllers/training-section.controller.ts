@@ -3,7 +3,7 @@ import { BaseController } from '../../../core/controllers/base.contoller';
 
 import { TrainingSectionService } from '../services/training-section.service';
 import { TrainingSection } from '../entities/training-section.entity';
-import { MaintenanceBaseController } from 'src/core/maintenance/controllers/base.controller';
+import { MaintenanceBaseController } from '../../../core/maintenance/controllers/base.controller';
 
 @Controller('api/training/' + TrainingSection.plural)
 export class TrainingSectionController extends MaintenanceBaseController<

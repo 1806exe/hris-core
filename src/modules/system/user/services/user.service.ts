@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { BaseService } from '../../../../core/services/base.service';
 import { User } from '../entities/user.entity';
+import { passwordHash } from '../../../../core/utilities/password-utilities';
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -24,5 +25,10 @@ export class UserService extends BaseService<User> {
       where: { username },
     });
     return user;
+  }
+
+  async create(entity: User): Promise<any> {
+    entity.token = await passwordHash(entity.password);
+    return await super.create(entity);
   }
 }

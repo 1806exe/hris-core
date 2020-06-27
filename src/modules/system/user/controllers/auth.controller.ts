@@ -11,18 +11,19 @@ import {
   Post,
   Body,
 } from '@nestjs/common';
-import { User } from 'src/modules/system/user/entities/user.entity';
+import { User } from '../../../../modules/system/user/entities/user.entity';
 import { Request, Response } from 'express';
 import { AuthService } from '../services/auth.service';
 import { SessionGuard } from '../guards/session.guard';
-import { ApiResult } from 'src/core/interfaces';
+import { ApiResult } from '../../../../core/interfaces';
+import { AuthenticatedUser } from '../../../../core/helpers/user-decorator.helper';
 
 @Controller('api')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
   @Get('me')
   @UseGuards(SessionGuard)
-  async me(@Req() request): Promise<ApiResult> {
+  async me(@Req() request, @AuthenticatedUser() user): Promise<ApiResult> {
     const result = await this.authService.getUserByUid(
       request.session.user.uid,
     );
@@ -42,8 +43,8 @@ export class AuthController {
   }
   @Get('me.json')
   @UseGuards(SessionGuard)
-  async mejson(@Req() request): Promise<ApiResult> {
-    return this.me(request);
+  async mejson(@Req() request, @AuthenticatedUser() user): Promise<ApiResult> {
+    return this.me(request, user);
   }
   @Get('me/authorization')
   @UseGuards(SessionGuard)

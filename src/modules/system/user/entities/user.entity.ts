@@ -23,6 +23,7 @@ import { UserGroup } from '../../user-group/entities/user-group.entity';
 import { UserRole } from '../../user-role/entities/user-role.entity';
 import { UserSettings } from './user-settings.entity';
 import { TrainingSessionAccess } from 'src/modules/training/entities/training-session-access.entity';
+import { passwordCompare } from '../../../../core/utilities/password-utilities';
 
 @Entity('user', { schema: 'public' })
 export class User extends UserCoreProps {
@@ -86,7 +87,7 @@ export class User extends UserCoreProps {
     nullable: true,
     default: () => 'NULL::timestamp without time zone',
   })
-  lastLogin: Date | null;
+  lastLogin?: Date | null;
 
   @Column({
     type: 'timestamp without time zone',
@@ -294,16 +295,19 @@ export class User extends UserCoreProps {
   )
   visualizations: Visualization[];
 
-  public static async authenticateUser(user: {
+  /*public static async authenticateUser(user: {
     username: string;
     password: string;
   }): Promise<User> {
     return this.authenticateUserByToken(
       User.getBase64(user.username, user.password),
     );
-  }
+  }*/
 
   public static async authenticateUserByToken(token: string): Promise<User> {
+    let buff = new Buffer(token, 'base64');
+    let text = buff.toString('ascii');
+    console.log('Text:', text);
     let u: User;
     u = await User.findOne({
       where: { token },
@@ -313,14 +317,19 @@ export class User extends UserCoreProps {
       return u;
     }
   }
+  public static async authenticateUser(username, password): Promise<User>{
+    let user:User = await User.findOne({
+      where: { username },
+    });
+    if(user && await passwordCompare(password,user.token)){
+      return user;
+    }else{
+      return null;
+    }
+  }
 
   public static getBase64(username, password) {
     return Buffer.from(username + ':' + password).toString('base64');
-  }
-  @BeforeInsert()
-  createToken() {
-    this.token = User.getBase64(this.username, this.password);
-    this.enabled = true;
   }
 
   @OneToMany(() => Report, (report: Report) => report.user, {

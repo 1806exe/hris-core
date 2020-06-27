@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BaseService } from 'src/core/services/base.service';
-import { RecordValue } from 'src/modules/record/entities/record-value.entity';
+import { BaseService } from '../../../core/services/base.service';
+import { RecordValue } from '../../../modules/record/entities/record-value.entity';
 import { In, Repository, getConnection } from 'typeorm';
 import { generateUid } from '../../../core/helpers/makeuid';
 import { Record } from '../../../modules/record/entities/record.entity';

@@ -22,7 +22,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e": "jest --runInBand --detectOpenHandles --config ./test/jest-e2e.json",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
@@ -43,6 +43,7 @@
     "@types/pg": "^7.14.2",
     "apollo-server-express": "^2.15.0",
     "axios": "^0.19.2",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",
@@ -86,7 +87,7 @@
     "@types/supertest": "2.0.9",
     "commitizen": "^4.1.2",
     "cz-conventional-changelog": "^3.2.0",
-    "graphql-tools": "^6.0.10",
+    "graphql-tools": "^6.0.11",
     "husky": "^4.2.5",
     "jest": "26.1.0",
     "nodemon": "2.0.4",
