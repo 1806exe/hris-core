@@ -254,6 +254,9 @@ ALTER TABLE public.trainingsessionaccess
         ALTER TABLE record ADD CONSTRAINT FK_CERTIFICATION_ASSESSMENT FOREIGN KEY (assessedby) 
         REFERENCES public."user"(id);
 
+        ALTER TABLE "user" ADD COLUMN sessionaccessid BIGINT;
+        ALTER TABLE "user" ADD CONSTRAINT FK_USER_ACCESS FOREIGN KEY (sessionaccessid) 
+        REFERENCES public."trainingsessionaccess"(id);
 
         ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS id;
 

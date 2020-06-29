@@ -136,9 +136,20 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
   @Post(':session/sharing')
   @UseGuards(SessionGuard)
   async sessionSharing(@Param() Param, @Body() sessionSharingDTO: any) {
-    const session = this.trainingSessionService.findOneByUid(Param.session);
-    if (session) {
-      return await this.trainingSessionService.sessionSharing(
+    const session = await this.trainingSessionService.findOneByUid(
+      Param.session,
+    );
+    const { user } = sessionSharingDTO;
+    const sessionaccess = await this.trainingSessionService.SharedUser(user);
+
+    if (session && sessionaccess === undefined) {
+      return await this.trainingSessionService.sessionSharingCreation(
+        Param.session,
+        sessionSharingDTO,
+      );
+    }
+    if (session && sessionaccess !== undefined) {
+      return await this.trainingSessionService.sessionSharingEdit(
         Param.session,
         sessionSharingDTO,
       );
