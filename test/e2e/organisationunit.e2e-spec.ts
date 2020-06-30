@@ -11,6 +11,7 @@ afterAll(async (done) => {
   await tearDownServer();
   done();
 });
+let orgUnitId;
 describe('Organisation Unit API', () => {
   it(`Testing Authentication /api/organisationUnits (GET)`, () => {
     return request(server.getHttpServer())
@@ -18,7 +19,6 @@ describe('Organisation Unit API', () => {
       .expect(403)
       .expect('{"statusCode":403,"message":"Forbidden resource","error":"Forbidden"}');
   });
-  let orgUnitId;
   it(`Adding Organisation /api/organisationUnits (POST)`, () => {
     return addAuthentication(request(server.getHttpServer())
       .post(`/api/organisationUnits`))
@@ -155,7 +155,12 @@ describe('Organisation Unit Groups API', () => {
         "id": "52893cf9c4270",
         "code": "hospitals",
         "name": "Hospitals",
-        "description": "Hospitals"
+        "description": "Hospitals",
+        "organisationUnits": [
+          {
+            "id": orgUnitId
+          }
+        ]
       })
       //.expect(200)
       .expect(
@@ -164,6 +169,7 @@ describe('Organisation Unit Groups API', () => {
           expect(res.body.code).toEqual('hospitals');
           expect(res.body.name).toEqual('Hospitals');
           expect(res.body.description).toEqual('Hospitals');
+          expect(res.body.organisationUnits[0].id).toEqual(orgUnitId);
         }
       );
   });
