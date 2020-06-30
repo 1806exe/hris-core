@@ -11,7 +11,7 @@ import {
   Post,
   Body,
 } from '@nestjs/common';
-import { User } from '../../../../modules/system/user/entities/user.entity';
+import { User } from '../../../system/user/entities/user.entity';
 import { Request, Response } from 'express';
 import { AuthService } from '../services/auth.service';
 import { SessionGuard } from '../guards/session.guard';

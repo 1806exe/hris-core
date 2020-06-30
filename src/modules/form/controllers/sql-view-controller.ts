@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import { BaseController } from '../../../core/controllers/base.contoller';
 import { SqlView } from '../entities/sqlview.entity';
 import { SqlViewService } from '../services/sql-view.service';
-import { SessionGuard } from '../../../modules/system/user/guards/session.guard';
+import { SessionGuard } from '../../system/user/guards/session.guard';
 import { ApiResult } from '../../../core/interfaces';
 import {
   getSuccessResponse,

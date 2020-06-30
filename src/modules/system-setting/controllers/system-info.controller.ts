@@ -5,7 +5,7 @@ import {
   getSuccessResponse,
 } from '../../../core/helpers/response.helper';
 import { ApiResult } from '../../../core/interfaces';
-import { SessionGuard } from '../../../modules/system/user/guards/session.guard';
+import { SessionGuard } from '../../system/user/guards/session.guard';
 
 import { SystemSetting } from '../entities/system-setting.entity';
 import { SystemInfoService } from '../services/system-info.service';

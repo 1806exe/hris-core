@@ -9,12 +9,12 @@ import {
   OneToOne,
 } from 'typeorm';
 import { TransactionUser } from '../../../core/entities/transaction-user.entity';
-import { OrganisationUnit } from '../../../modules/organisation-unit/entities/organisation-unit.entity';
-import { TrainingSession } from '../../../modules/training/entities/training-session.entity';
+import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
+import { TrainingSession } from '../../training/entities/training-session.entity';
 import { Form } from '../../form/entities/form.entity';
 import { RecordValue } from './record-value.entity';
-import { SessionParticipant } from '../../../modules/training/entities/training-session-participant.entity';
-import { SessionFacilitator } from '../../../modules/training/entities/training-session-facilitatory.entity';
+import { SessionParticipant } from '../../training/entities/training-session-participant.entity';
+import { SessionFacilitator } from '../../training/entities/training-session-facilitatory.entity';
 import { User } from '../../system/user/entities/user.entity';
 
 @Entity('record', { schema: 'public' })

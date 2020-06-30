@@ -2,7 +2,7 @@ import { Controller, Get, Param, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ReportService } from '../services/report.service';
 import { Report } from '../entities/report.entity';
-import { SessionGuard } from '../../../modules/system/user/guards/session.guard';
+import { SessionGuard } from '../../system/user/guards/session.guard';
 import { ApiResult } from '../../../core/interfaces';
 import { getSuccessResponse } from '../../../core/helpers/response.helper';
 import { MaintenanceBaseController } from '../../../core/maintenance/controllers/base.controller';

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sanitizeResponseObject } from '../../../../core/utilities/sanitize-response-object';
-import { User } from '../../../../modules/system/user/entities/user.entity';
+import { User } from '../../../system/user/entities/user.entity';
 
 import { UserService } from './user.service';
 import { getBasicAuthanticationString } from '../../../../core/helpers/basic-auth-token';

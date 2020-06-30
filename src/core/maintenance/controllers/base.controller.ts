@@ -12,15 +12,15 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as _ from 'lodash';
-import { HRISBaseEntity } from '../../../core/entities/base-entity';
-import { ApiResult, Pager } from '../../../core/interfaces';
-import { DeleteResponse } from '../../../core/interfaces/response/delete.interface';
+import { HRISBaseEntity } from '../../entities/base-entity';
+import { ApiResult, Pager } from '../../interfaces';
+import { DeleteResponse } from '../../interfaces/response/delete.interface';
 import { getPagerDetails } from '../../../core/utilities';
 import { sanitizeResponseObject } from '../../../core/utilities/sanitize-response-object';
 import { SessionGuard } from '../../../modules/system/user/guards/session.guard';
 import { ObjectPropsResolver } from '@icodebible/utils/resolvers';
 import { MaintenanceBaseService } from '../services/base.service';
-import { PayloadConfig } from '../../../core/config/payload.config';
+import { PayloadConfig } from '../../config/payload.config';
 import {
   getSuccessResponse,
   genericFailureResponse,

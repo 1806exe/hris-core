@@ -2,7 +2,7 @@
  *
  */
 import { EntityCoreProps } from '../../../core/entities/entity-core-props';
-import { OrganisationUnitCompleteness } from '../../../modules/organisation-unit/entities/organisation-unit-completeness.entity';
+import { OrganisationUnitCompleteness } from '../../organisation-unit/entities/organisation-unit-completeness.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 /**

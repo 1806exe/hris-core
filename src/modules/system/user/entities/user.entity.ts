@@ -10,7 +10,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { UserCoreProps } from '../../../../core/entities/user-core-props.entity';
-import { OrganisationUnit } from '../../../../modules/organisation-unit/entities/organisation-unit.entity';
+import { OrganisationUnit } from '../../../organisation-unit/entities/organisation-unit.entity';
 import { MessageMetadata } from '../../../message/entities/message-metadata.entity';
 import { MessageThreadMetadata } from '../../../message/entities/message-thread-metadata.entity';
 import { MessageThread } from '../../../message/entities/message-thread.entity';

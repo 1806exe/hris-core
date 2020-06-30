@@ -16,7 +16,7 @@ import { BaseController } from '../../../core/controllers/base.contoller';
 
 import { TrainingSessionService } from '../services/training-session.service';
 import { TrainingSession } from '../entities/training-session.entity';
-import { SessionGuard } from '../../../modules/system/user/guards/session.guard';
+import { SessionGuard } from '../../system/user/guards/session.guard';
 import { sanitizeResponseObject } from '../../../core/utilities/sanitize-response-object';
 import { SessionParticipant } from '../entities/training-session-participant.entity';
 import { getPagerDetails } from '../../../core/utilities';

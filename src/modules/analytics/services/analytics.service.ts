@@ -4,13 +4,13 @@ import {
   getISOOrgUnits,
 } from '../../../core/helpers/ou.helper';
 import { getISOPeriods, getPeriodDetails } from '../../../core/helpers/pe.helper';
-import { Analytics } from '../../../modules/analytics/interfaces/analytics.interface';
+import { Analytics } from '../../analytics/interfaces/analytics.interface';
 import { getWhereConditions } from '../../../core/utilities';
-import { IndicatorService } from '../../../modules/indicator/services/indicator.service';
-import { OrganisationUnitLevelService } from '../../../modules/organisation-unit/services/organisation-unit-level.service';
+import { IndicatorService } from '../../indicator/services/indicator.service';
+import { OrganisationUnitLevelService } from '../../organisation-unit/services/organisation-unit-level.service';
 import { Connection } from 'typeorm';
 import { getAnalyticsHeaders } from '../helpers/get-analytics-headers.helper';
-import { OrganisationUnitService } from '../../../modules/organisation-unit/services/organisation-unit.service';
+import { OrganisationUnitService } from '../../organisation-unit/services/organisation-unit.service';
 
 declare module namespace {}
 

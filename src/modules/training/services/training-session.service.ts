@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from '../../../core/services/base.service';
-import { RecordValue } from '../../../modules/record/entities/record-value.entity';
+import { RecordValue } from '../../record/entities/record-value.entity';
 import { In, Repository, getConnection } from 'typeorm';
 import { generateUid } from '../../../core/helpers/makeuid';
-import { Record } from '../../../modules/record/entities/record.entity';
+import { Record } from '../../record/entities/record.entity';
 import { SessionFacilitator } from '../entities/training-session-facilitatory.entity';
 import { SessionParticipant } from '../entities/training-session-participant.entity';
 import { TrainingSession } from '../entities/training-session.entity';

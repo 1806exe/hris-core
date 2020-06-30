@@ -24,7 +24,7 @@ import {
   postSuccessResponse,
   genericFailureResponse,
 } from '../../../core/helpers/response.helper';
-import { SessionGuard } from '../../../modules/system/user/guards/session.guard';
+import { SessionGuard } from '../../system/user/guards/session.guard';
 
 @Controller('api/' + App.plural)
 export class AppsController extends BaseController<App> {

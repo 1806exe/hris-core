@@ -13,8 +13,8 @@ import {
 } from '@nestjs/common';
 import { BaseController } from '../../../core/controllers/base.contoller';
 import { ApiResult } from '../../../core/interfaces';
-import { Record } from '../../../modules/record/entities/record.entity';
-import { SessionGuard } from '../../../modules/system/user/guards/session.guard';
+import { Record } from '../../record/entities/record.entity';
+import { SessionGuard } from '../../system/user/guards/session.guard';
 import { RecordValue } from '../entities/record-value.entity';
 import { RecordService } from '../services/record.service';
 import { sanitizeResponseObject } from '../../../core/utilities/sanitize-response-object';

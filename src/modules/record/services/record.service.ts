@@ -6,9 +6,9 @@ import {
   getRelations,
   getSelections,
 } from '../../../core/utilities/get-fields.utility';
-import { Field } from '../../../modules/form/entities/field.entity';
-import { Form } from '../../../modules/form/entities/form.entity';
-import { OrganisationUnit } from '../../../modules/organisation-unit/entities/organisation-unit.entity';
+import { Field } from '../../form/entities/field.entity';
+import { Form } from '../../form/entities/form.entity';
+import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
 import { Repository } from 'typeorm';
 import { BaseService } from '../../../core/services/base.service';
 import { RecordValue } from '../entities/record-value.entity';
