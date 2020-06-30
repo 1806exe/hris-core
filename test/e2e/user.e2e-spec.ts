@@ -1,4 +1,3 @@
-
 import request from 'supertest';
 import { setUpServer, addAuthentication, tearDownServer, server } from '../set-up-e2e';
 

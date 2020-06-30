@@ -16,7 +16,6 @@ export class SessionGuard implements CanActivate {
         }*/
         //return true;
         // console.log(request.headers)
-        return true;
         try {
             if (request.session && request.session.user) {
                 request.session.previousPath = request.path;

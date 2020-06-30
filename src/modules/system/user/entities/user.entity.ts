@@ -87,7 +87,7 @@ export class User extends UserCoreProps {
     nullable: true,
     default: () => 'NULL::timestamp without time zone',
   })
-  lastLogin?: Date | null;
+  lastLogin: Date | null;
 
   @Column({
     type: 'timestamp without time zone',
