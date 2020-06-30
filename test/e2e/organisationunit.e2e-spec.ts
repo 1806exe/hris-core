@@ -125,7 +125,6 @@ describe('Organisation Unit API', () => {
             }
           });
           expect(parentExists).toEqual(true);
-          console.log(res.body);
         }
       );
   });

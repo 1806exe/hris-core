@@ -27,7 +27,7 @@ import { GetResponseSanitizer } from '@icodebible/utils/resolvers/id-to-uid';
 @Injectable()
 export class MaintenanceBaseService<T extends HRISBaseEntity> {
   constructor(
-    private readonly modelRepository: Repository<T>,
+    protected readonly modelRepository: Repository<T>,
     private readonly Model,
   ) {}
 
