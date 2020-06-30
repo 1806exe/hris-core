@@ -8,6 +8,8 @@ DROP TABLE IF EXISTS hris_indicator_target;
 DROP TABLE IF EXISTS indicatorgroupmembers;
 DROP TABLE IF EXISTS INDICATORGROUP;
 DROP TABLE IF EXISTS INDICATOR;
+CREATE SEQUENCE indicator_id_seq;
+CREATE SEQUENCE indicatorgroup_id_seq;
 
 CREATE TABLE public.indicator
 (

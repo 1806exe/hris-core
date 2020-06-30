@@ -1,4 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
+import {passwordHash} from '../../core/utilities/password-utilities';
 
 export class UserVersion3Refactoring1555771266128
   implements MigrationInterface {
@@ -978,23 +979,23 @@ CREATE INDEX "IDX_76bc448ca476788f7886a7569b"
     //     OIDS = FALSE
     // )
     // TABLESPACE pg_default;
-    
+
     // ALTER TABLE public.userformmembers
     //     OWNER to postgres;
-    
+
     // -- Index: IDX_9cb26e216d11de2a2b4f880a81
-    
+
     // -- DROP INDEX public."IDX_9cb26e216d11de2a2b4f880a81";
-    
+
     // CREATE INDEX "IDX_9cb26e216d11de2a2b4f880a81"
     //     ON public.userformmembers USING btree
     //     ("formId")
     //     TABLESPACE pg_default;
-    
+
     // -- Index: IDX_a6e197eeef17a3af9b33f33956
-    
+
     // -- DROP INDEX public."IDX_a6e197eeef17a3af9b33f33956";
-    
+
     // CREATE INDEX "IDX_a6e197eeef17a3af9b33f33956"
     //     ON public.userformmembers USING btree
     //     ("userId")
@@ -1717,14 +1718,14 @@ CREATE INDEX "IDX_76bc448ca476788f7886a7569b"
       ],
     };
     let authorities = [];
-    Object.keys(previousRoles).forEach(key => {
+    Object.keys(previousRoles).forEach((key) => {
       if (Array.isArray(previousRoles[key])) {
         authorities = authorities.concat(
           previousRoles[key]
             .filter(
-              role => authorities.indexOf(role.replace('ROLE_', '')) === -1,
+              (role) => authorities.indexOf(role.replace('ROLE_', '')) === -1,
             )
-            .map(role => role.replace('ROLE_', '')),
+            .map((role) => role.replace('ROLE_', '')),
         );
       } else if (
         authorities.indexOf(previousRoles[key].replace('ROLE_', '')) === -1
@@ -1744,7 +1745,7 @@ CREATE INDEX "IDX_76bc448ca476788f7886a7569b"
     const useroles = await queryRunner.manager.query('SELECT * FROM userrole');
     for (let userole of useroles) {
       let auths = [];
-      userole.roles.split(';').forEach(artifacts => {
+      userole.roles.split(';').forEach((artifacts) => {
         let authorities = artifacts.split(':');
         if (authorities[0] === 's') {
           auths.push(authorities[2].replace('ROLE_', ''));
@@ -1757,7 +1758,7 @@ CREATE INDEX "IDX_76bc448ca476788f7886a7569b"
 	VALUES (` +
             auths
               .map(
-                auth =>
+                (auth) =>
                   `${
                     userole.id
                   }, (SELECT id FROM userauthority WHERE name='${auth
@@ -1773,9 +1774,9 @@ CREATE INDEX "IDX_76bc448ca476788f7886a7569b"
     const users = await queryRunner.manager.query('SELECT * FROM public.user');
     for (let user of users) {
       await queryRunner.manager.query(
-        `UPDATE public.user SET token='${Buffer.from(
-          user.username + ':HRHIS2020',
-        ).toString('base64')}' WHERE id=${user.id}`,
+        `UPDATE public.user SET token='${await passwordHash('HRHIS2020')}' WHERE id=${
+          user.id
+        }`,
       );
     }
 

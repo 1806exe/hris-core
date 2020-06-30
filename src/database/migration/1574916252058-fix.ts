@@ -69,16 +69,6 @@ export class fix1574916252058 implements MigrationInterface {
     ALTER TABLE friendlyreport ALTER COLUMN  id SET DEFAULT nextval('friendlyreport_id_seq');
     ALTER TABLE friendlyreport ALTER COLUMN created SET DEFAULT LOCALTIMESTAMP;
 
-    ALTER TABLE "indicator" OWNER TO "postgres";
-    CREATE SEQUENCE indicator_id_seq AS BIGINT OWNED BY indicator.id;
-    ALTER TABLE indicator ALTER COLUMN  id SET DEFAULT nextval('indicator_id_seq');
-    ALTER TABLE indicator ALTER COLUMN created SET DEFAULT LOCALTIMESTAMP;
-
-    ALTER TABLE "indicatortarget" OWNER TO "postgres";
-    CREATE SEQUENCE indicatortarget_id_seq AS BIGINT OWNED BY indicatortarget.id;
-    ALTER TABLE indicatortarget ALTER COLUMN  id SET DEFAULT nextval('indicatortarget_id_seq');
-    ALTER TABLE indicatortarget ALTER COLUMN created SET DEFAULT LOCALTIMESTAMP;
-
     ALTER TABLE "sessionfacilitator" OWNER TO "postgres";
     CREATE SEQUENCE sessionfacilitator_id_seq AS BIGINT OWNED BY sessionfacilitator.id;
     ALTER TABLE sessionfacilitator ALTER COLUMN  id SET DEFAULT nextval('sessionfacilitator_id_seq');
@@ -223,7 +213,6 @@ export class fix1574916252058 implements MigrationInterface {
     ALTER TABLE "friendlyreportarithmeticfilter" OWNER TO "postgres";
     ALTER TABLE "friendlyreportcategory" OWNER TO "postgres";
     ALTER TABLE "friendlyreportrelationalfilter" OWNER TO "postgres";
-    ALTER TABLE "indicatortargetfieldoption" OWNER TO "postgres";
     ALTER TABLE "intergrationdhisdataelementfieldoptionrelation" OWNER TO "postgres";
     ALTER TABLE "intergrationdhisfieldoptiongroupsetmember" OWNER TO "postgres";
     ALTER TABLE "intergrationtiisemployeefieldrelation" OWNER TO "postgres";

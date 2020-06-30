@@ -22,7 +22,7 @@ import { Visualization } from '../../../visualization/entities/visualization.ent
 import { UserGroup } from '../../user-group/entities/user-group.entity';
 import { UserRole } from '../../user-role/entities/user-role.entity';
 import { UserSettings } from './user-settings.entity';
-import { TrainingSessionAccess } from 'src/modules/training/entities/training-session-access.entity';
+import { TrainingSessionAccess } from '../../../training/entities/training-session-access.entity';
 import { passwordCompare } from '../../../../core/utilities/password-utilities';
 
 @Entity('user', { schema: 'public' })
