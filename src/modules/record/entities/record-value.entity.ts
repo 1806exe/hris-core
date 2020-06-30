@@ -11,7 +11,7 @@ import {
 
 import { Record } from './record.entity';
 import { Field } from '../../form/entities/field.entity';
-import { TransactionUser } from '../../../core/entities/transaction-user.entity';
+import { TransactionUser } from '@hris/core/entities/transaction-user.entity';
 
 @Entity('recordvalue', { schema: 'public' })
 export class RecordValue extends TransactionUser {
