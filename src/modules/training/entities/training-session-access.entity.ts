@@ -9,7 +9,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { TrainingSession } from './training-session.entity';
-import { User } from 'src/modules/system/user/entities/user.entity';
+import { User } from '../../../modules/system/user/entities/user.entity';
 @Entity('trainingsessionaccess', { schema: 'public' })
 export class TrainingSessionAccess extends UserIdentification {
   static plural = 'userAccesses';

@@ -49,6 +49,7 @@ async function bootstrap() {
   );*/
   app.use(Compression());
   // app.setGlobalPrefix('api');
+  console.log('Port:',config.port);
   await app.listen(config.port);
 }
 bootstrap();
