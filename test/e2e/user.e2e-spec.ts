@@ -1,4 +1,3 @@
-
 import request from 'supertest';
 import { setUpServer, addAuthentication, tearDownServer, server } from '../set-up-e2e';
 
@@ -10,7 +9,7 @@ afterAll(async (done) => {
   await tearDownServer();
   done();
 });
-describe('HRHIS User API (e2e)', () => {
+describe('User API', () => {
 
   test(`Testing Authentication /api/users (GET)`, () => {
     return request(server.getHttpServer())

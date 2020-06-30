@@ -43,6 +43,7 @@ export const entityTableMapper = {
   organisationUnitGroups: 'organisationunitgroup',
   organisationUnitLevels: 'organisationunitlevel',
   organisationUnits: 'organisationunit',
+  parent: 'organisationunit',
   dataStore: 'datastore',
   records: 'record',
   reports: 'report',

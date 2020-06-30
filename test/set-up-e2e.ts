@@ -31,13 +31,12 @@ const client = new Client({
 });
 export let server;
 export const setUpServer = async () => {
-  if (global['app']) {
-    return global['app'];
+  if (server) {
+    return server;
   }
   await client.connect();
   try {
     await client.query(`DROP DATABASE ${database.database};`);
-    //await client.query(`CREATE DATABASE ${database.database};`);
   } catch (e) {
     await client.query(`
       SELECT pg_terminate_backend(pg_stat_activity.pid)
@@ -84,6 +83,6 @@ export const setUpServer = async () => {
   return app;
 };
 export const tearDownServer = async () => {
-  await global['app'].close();
+  await server.close();
   await client.end();
 };

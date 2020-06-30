@@ -87,7 +87,7 @@ export class User extends UserCoreProps {
     nullable: true,
     default: () => 'NULL::timestamp without time zone',
   })
-  lastLogin?: Date | null;
+  lastLogin: Date | null;
 
   @Column({
     type: 'timestamp without time zone',
@@ -317,13 +317,13 @@ export class User extends UserCoreProps {
       return u;
     }
   }
-  public static async authenticateUser(username, password): Promise<User>{
-    let user:User = await User.findOne({
+  public static async authenticateUser(username, password): Promise<User> {
+    let user: User = await User.findOne({
       where: { username },
     });
-    if(user && await passwordCompare(password,user.token)){
+    if (user && (await passwordCompare(password, user.token))) {
       return user;
-    }else{
+    } else {
       return null;
     }
   }
