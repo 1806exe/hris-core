@@ -8,9 +8,7 @@ import {
   OneToOne,
 } from 'typeorm';
 
-import { FieldDataType } from './field-datatype.entity';
 import { FieldGroup } from './field-group.entity';
-import { FieldInputType } from './field-input-type.entity';
 import { FieldOptionGroup } from './field-option-group.entity';
 import { FieldOptionMerge } from './field-option-merge.entity';
 import { FieldOption } from './field-option.entity';
@@ -83,18 +81,6 @@ export class Field extends EntityCoreProps {
   /**
    * Many To One Relationship: Field and FieldGroup
    */
-  @ManyToOne(
-    type => FieldDataType,
-    fieldDataType => fieldDataType.fields,
-    {
-      cascade: true,
-      eager: false,
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-    },
-  )
-  @JoinColumn({ referencedColumnName: 'id' })
-  dataType: FieldDataType;
 
   @OneToMany(
     type => FieldRelation,
@@ -130,19 +116,6 @@ export class Field extends EntityCoreProps {
   /**
    * Many To One Relationship: Field and FieldInputType
    */
-
-  @ManyToOne(
-    type => FieldInputType,
-    fieldInputType => fieldInputType.fields,
-    {
-      cascade: true,
-      eager: true,
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-    },
-  )
-  @JoinColumn({ referencedColumnName: 'id' })
-  fieldInputType: FieldInputType;
 
   @OneToMany(
     type => FieldOptionGroup,
