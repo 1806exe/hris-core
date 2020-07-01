@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { Record } from '../../../modules/record/entities/record.entity';
+import { Record } from '../../record/entities/record.entity';
 
 @Entity('sessionfacilitator', { schema: 'public' })
 export class SessionFacilitator {

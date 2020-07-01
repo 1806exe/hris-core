@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { BaseController } from 'src/core/controllers/base.contoller';
+import { BaseController } from '../../../core/controllers/base.contoller';
 import { Training } from '../entities/training.entity';
 import { TrainingService } from '../services/training.service';
 

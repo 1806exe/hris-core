@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { arrayToObject } from 'src/core/helpers/array-to-object.helper';
+import { arrayToObject } from '../../../core/helpers/array-to-object.helper';
 import { Repository } from 'typeorm';
 
 import { SystemInfo } from '../entities/system-info.entity';

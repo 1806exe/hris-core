@@ -70,15 +70,6 @@ export class bigint1585295137513 implements MigrationInterface {
         ALTER TABLE friendlyreportcategory ALTER COLUMN fieldoptiongroupid TYPE BIGINT;
         ALTER TABLE friendlyreportrelationalfilter ALTER COLUMN friendlyreportid TYPE BIGINT;
         ALTER TABLE friendlyreportrelationalfilter ALTER COLUMN relationalfilterid TYPE BIGINT;
-        ALTER TABLE indicator ALTER COLUMN id TYPE BIGINT;
-        ALTER TABLE indicator ALTER COLUMN formid TYPE BIGINT;
-        ALTER TABLE indicatorgroup ALTER COLUMN programindicatorgroupid TYPE BIGINT;
-        ALTER TABLE indicatorgroupmembers ALTER COLUMN "indicatorProgramindicatorid" TYPE BIGINT;
-        ALTER TABLE indicatorgroupmembers ALTER COLUMN "indicatorgroupProgramindicatorgroupid" TYPE BIGINT;
-        ALTER TABLE indicatortarget ALTER COLUMN id TYPE BIGINT;
-        ALTER TABLE indicatortarget ALTER COLUMN organisationunitgroupid TYPE BIGINT;
-        ALTER TABLE indicatortargetfieldoption ALTER COLUMN targetid TYPE BIGINT;
-        ALTER TABLE indicatortargetfieldoption ALTER COLUMN fieldoptionid TYPE BIGINT;
         ALTER TABLE sessionfacilitator ALTER COLUMN id TYPE BIGINT;
         ALTER TABLE sessionfacilitator ALTER COLUMN sessionid TYPE BIGINT;
         ALTER TABLE sessionfacilitator ALTER COLUMN recordid TYPE BIGINT;

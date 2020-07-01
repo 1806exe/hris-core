@@ -11,13 +11,13 @@ import {
   UseGuards,
   Patch,
 } from '@nestjs/common';
-import { BaseController } from 'src/core/controllers/base.contoller';
-import { ApiResult } from 'src/core/interfaces';
-import { Record } from 'src/modules/record/entities/record.entity';
-import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
+import { BaseController } from '../../../core/controllers/base.contoller';
+import { ApiResult } from '../../../core/interfaces';
+import { Record } from '../../record/entities/record.entity';
+import { SessionGuard } from '../../system/user/guards/session.guard';
 import { RecordValue } from '../entities/record-value.entity';
 import { RecordService } from '../services/record.service';
-import { sanitizeResponseObject } from 'src/core/utilities/sanitize-response-object';
+import { sanitizeResponseObject } from '../../../core/utilities/sanitize-response-object';
 
 @Controller('api/' + Record.plural)
 export class RecordsController extends BaseController<Record> {

@@ -1,21 +1,23 @@
 import {
-  BeforeInsert,
   Column,
   Entity,
   JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
   OneToOne,
 } from 'typeorm';
 import { UserCoreProps } from '../../../../core/entities/user-core-props.entity';
-import { OrganisationUnit } from '../../../../modules/organisation-unit/entities/organisation-unit.entity';
+import { passwordCompare } from '../../../../core/utilities/password-utilities';
 import { MessageMetadata } from '../../../message/entities/message-metadata.entity';
 import { MessageThreadMetadata } from '../../../message/entities/message-thread-metadata.entity';
 import { MessageThread } from '../../../message/entities/message-thread.entity';
 import { Message } from '../../../message/entities/message.entity';
+import { OrganisationUnit } from '../../../organisation-unit/entities/organisation-unit.entity';
 import { Record } from '../../../record/entities/record.entity';
 import { Report } from '../../../report/entities/report.entity';
+import { TrainingSessionAccess } from '../../../training/entities/training-session-access.entity';
 import { Dashboard } from '../../../visualization/entities/dashboard.entity';
 import { Visualization } from '../../../visualization/entities/visualization.entity';
 import { UserGroup } from '../../user-group/entities/user-group.entity';
@@ -191,6 +193,9 @@ export class User extends UserCoreProps {
   })
   messages: Message[];
 
+  @Column({ type: 'varchar' })
+  hash: string;
+
   /**
    * One To Many Relationship: User and MessageMetadata Entities
    */
@@ -292,16 +297,19 @@ export class User extends UserCoreProps {
   )
   visualizations: Visualization[];
 
-  public static async authenticateUser(user: {
+  /*public static async authenticateUser(user: {
     username: string;
     password: string;
   }): Promise<User> {
     return this.authenticateUserByToken(
       User.getBase64(user.username, user.password),
     );
-  }
+  }*/
 
   public static async authenticateUserByToken(token: string): Promise<User> {
+    let buff = new Buffer(token, 'base64');
+    let text = buff.toString('ascii');
+    console.log('Text:', text);
     let u: User;
     u = await User.findOne({
       where: { token },
@@ -311,14 +319,19 @@ export class User extends UserCoreProps {
       return u;
     }
   }
+  public static async authenticateUser(username, password): Promise<User> {
+    let user: User = await User.findOne({
+      where: { username },
+    });
+    if (user && (await passwordCompare(password, user.token))) {
+      return user;
+    } else {
+      return null;
+    }
+  }
 
   public static getBase64(username, password) {
     return Buffer.from(username + ':' + password).toString('base64');
-  }
-  @BeforeInsert()
-  createToken() {
-    this.token = User.getBase64(this.username, this.password);
-    this.enabled = true;
   }
 
   @OneToMany(() => Report, (report: Report) => report.user, {
@@ -331,4 +344,11 @@ export class User extends UserCoreProps {
 
   @OneToOne((type) => Record, (record) => record.certifier)
   certifier: Record[];
+
+  @ManyToOne(
+    (type) => TrainingSessionAccess,
+    (sessionaccess) => sessionaccess.user,
+  )
+  @JoinColumn({ name: 'sessionaccessid', referencedColumnName: 'id' })
+  sessionaccess: TrainingSessionAccess[];
 }

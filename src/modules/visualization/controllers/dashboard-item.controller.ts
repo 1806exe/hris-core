@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { BaseController } from 'src/core/controllers/base.contoller';
+import { BaseController } from '../../../core/controllers/base.contoller';
 import { DashboardItemService } from '../services/dashboard-item.service';
 import { DashboardItem } from '../entities/dashboard-item.entity';
 import { MaintenanceBaseController } from 'src/core/maintenance/controllers/base.controller';

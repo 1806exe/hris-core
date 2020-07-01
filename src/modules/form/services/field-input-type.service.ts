@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { FieldInputType } from '../entities/field-input-type.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BaseService } from 'src/core/services/base.service';
+import { BaseService } from '../../../core/services/base.service';
 
 @Injectable()
 export class FieldInputTypeService extends BaseService<

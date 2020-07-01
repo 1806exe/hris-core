@@ -1,11 +1,11 @@
 import { Controller, Get, UseGuards, Res, Param, Logger, Query } from '@nestjs/common';
-import { BaseController } from 'src/core/controllers/base.contoller';
+import { BaseController } from '../../../../core/controllers/base.contoller';
 import { Process } from '../entities/process.entity';
 import { ProcessService } from '../services/process.service';
 import { SessionGuard } from '../../user/guards/session.guard';
 import { CustomProcess } from '../../task/processes/custom.process';
 import { TaskService } from '../../task/services/task.service';
-import { ApiResult } from 'src/core/interfaces';
+import { ApiResult } from '../../../../core/interfaces';
 import { Connection } from 'typeorm';
 
 @Controller('api/' + Process.plural)

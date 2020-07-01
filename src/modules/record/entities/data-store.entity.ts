@@ -1,11 +1,6 @@
 import { Column, Entity, Generated, PrimaryColumn } from 'typeorm';
-import { UserIdentification } from '../../../modules/system/user/entities/user-identification';
+import { UserIdentification } from '../../system/user/entities/user-identification';
 
-import { Form } from '../../form/entities/form.entity';
-import { TransactionTimestamp } from '../../../core/entities/transaction-timestamp.entity';
-import { OrganisationUnit } from '../../../modules/organisation-unit/entities/organisation-unit.entity';
-import { TrainingSession } from '../../../modules/training/entities/training-session.entity';
-import { TransactionUser } from '../../../core/entities/transaction-user.entity';
 
 @Entity('datastore', { schema: 'public' })
 export class DataStore extends UserIdentification {

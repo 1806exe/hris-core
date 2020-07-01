@@ -34,6 +34,7 @@ import { Record } from '../record/entities/record.entity';
 import { RecordValue } from '../record/entities/record-value.entity';
 import { OrganisationUnit } from '../organisation-unit/entities/organisation-unit.entity';
 import { User } from '../system/user/entities/user.entity';
+import { TrainingSessionAccess } from './entities/training-session-access.entity';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { User } from '../system/user/entities/user.entity';
       RecordValue,
       OrganisationUnit,
       User,
+      TrainingSessionAccess,
     ]),
   ],
   controllers: [

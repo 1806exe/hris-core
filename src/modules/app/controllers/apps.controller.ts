@@ -15,16 +15,16 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { getConfiguration } from 'src/core/utilities/configuration';
+import { getConfiguration } from '../../../core/utilities/configuration';
 import * as fs from 'fs';
 import StreamZip from 'node-stream-zip';
-import { ApiResult } from 'src/core/interfaces';
+import { ApiResult } from '../../../core/interfaces';
 import { Request, Response } from 'express';
 import {
   postSuccessResponse,
   genericFailureResponse,
-} from 'src/core/helpers/response.helper';
-import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
+} from '../../../core/helpers/response.helper';
+import { SessionGuard } from '../../system/user/guards/session.guard';
 
 @Controller('api/' + App.plural)
 export class AppsController extends BaseController<App> {

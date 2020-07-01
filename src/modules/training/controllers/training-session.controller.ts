@@ -16,10 +16,10 @@ import { BaseController } from '../../../core/controllers/base.contoller';
 
 import { TrainingSessionService } from '../services/training-session.service';
 import { TrainingSession } from '../entities/training-session.entity';
-import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
-import { sanitizeResponseObject } from 'src/core/utilities/sanitize-response-object';
+import { SessionGuard } from '../../system/user/guards/session.guard';
+import { sanitizeResponseObject } from '../../../core/utilities/sanitize-response-object';
 import { SessionParticipant } from '../entities/training-session-participant.entity';
-import { getPagerDetails } from 'src/core/utilities';
+import { getPagerDetails } from '../../../core/utilities';
 import * as _ from 'lodash';
 
 @Controller('api/training/' + TrainingSession.plural)
@@ -131,6 +131,28 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
         .send(sanitizeResponseObject(participant));
     } else {
       throw new NotFoundException('Participant Not Available');
+    }
+  }
+  @Post(':session/sharing')
+  @UseGuards(SessionGuard)
+  async sessionSharing(@Param() Param, @Body() sessionSharingDTO: any) {
+    const session = await this.trainingSessionService.findOneByUid(
+      Param.session,
+    );
+    const { user } = sessionSharingDTO;
+    const sessionaccess = await this.trainingSessionService.SharedUser(user);
+
+    if (session && sessionaccess === undefined) {
+      return await this.trainingSessionService.sessionSharingCreation(
+        Param.session,
+        sessionSharingDTO,
+      );
+    }
+    if (session && sessionaccess !== undefined) {
+      return await this.trainingSessionService.sessionSharingEdit(
+        Param.session,
+        sessionSharingDTO,
+      );
     }
   }
 }

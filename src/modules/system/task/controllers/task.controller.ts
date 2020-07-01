@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { TaskService } from '../services/task.service';
-import { BaseController } from 'src/core/controllers/base.contoller';
+import { BaseController } from '../../../../core/controllers/base.contoller';
 import { Task } from '../entities/task.entity';
 import { Connection } from 'typeorm';
 import { AnalyticsGenerator } from '../processes/analytics.process';

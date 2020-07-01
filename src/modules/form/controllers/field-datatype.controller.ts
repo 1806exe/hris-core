@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { BaseController } from 'src/core/controllers/base.contoller';
+import { BaseController } from '../../../core/controllers/base.contoller';
 
 import { FieldDataType } from '../entities/field-datatype.entity';
 import { FieldDataTypeService } from '../services/field-datatype.service';

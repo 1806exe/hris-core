@@ -3,9 +3,9 @@ import { Request, Response } from 'express';
 import {
   genericFailureResponse,
   getSuccessResponse,
-} from 'src/core/helpers/response.helper';
-import { ApiResult } from 'src/core/interfaces';
-import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
+} from '../../../core/helpers/response.helper';
+import { ApiResult } from '../../../core/interfaces';
+import { SessionGuard } from '../../system/user/guards/session.guard';
 
 import { SystemSetting } from '../entities/system-setting.entity';
 import { SystemSettingService } from '../services/system-setting.service';

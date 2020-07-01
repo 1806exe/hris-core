@@ -23,8 +23,8 @@ export function getDataBaseConfiguration() {
     // synchronize: true,
     // migrationsRun: false,
     // database: 'hris4_new',
-    entities: ['src/**/*.entity{.ts,.js}'],
-    migrations: ['src/database/migration/*.ts'],
+    entities: ['../../../**/*.entity{.ts,.js}'],
+    migrations: ['../../../database/migration/*.ts'],
   };
 }
 export function getConfiguration() {

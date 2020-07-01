@@ -332,26 +332,6 @@ export class sequential1585499925311 implements MigrationInterface {
       `ALTER SEQUENCE friendlyreport_id_seq RESTART WITH ${nextfriendlyreport}`,
     );
 
-    const indicator_id_seq = await queryRunner.query(
-      `SELECT id FROM indicator ORDER BY id DESC LIMIT 1`,
-    );
-    const nextindicator = indicator_id_seq[0]
-      ? parseInt(indicator_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE indicator_id_seq RESTART WITH ${nextindicator}`,
-    );
-
-    const indicatortarget_id_seq = await queryRunner.query(
-      `SELECT id FROM indicatortarget ORDER BY id DESC LIMIT 1`,
-    );
-    const nextindicatortarget = indicatortarget_id_seq[0]
-      ? parseInt(indicatortarget_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE indicatortarget_id_seq RESTART WITH ${nextindicatortarget}`,
-    );
-
     const sessionfacilitator_id_seq = await queryRunner.query(
       `SELECT id FROM sessionfacilitator ORDER BY id DESC LIMIT 1`,
     );
@@ -608,9 +588,6 @@ export class sequential1585499925311 implements MigrationInterface {
     
     ALTER TABLE "leavetype" OWNER TO "postgres";
     CREATE SEQUENCE leavetype_id_seq AS BIGINT OWNED BY leavetype.id;
-
-    ALTER TABLE "indicatorgroup" OWNER TO "postgres";
-    CREATE SEQUENCE indicatorgroup_id_seq AS BIGINT OWNED BY indicatorgroup.programindicatorgroupid;
 
     ALTER TABLE "formsection" OWNER TO "postgres";
     CREATE SEQUENCE formsection_id_seq AS BIGINT OWNED BY formsection.id;

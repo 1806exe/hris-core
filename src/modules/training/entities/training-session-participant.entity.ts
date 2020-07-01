@@ -7,7 +7,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { Record } from '../../../modules/record/entities/record.entity';
+import { Record } from '../../record/entities/record.entity';
 import { TrainingSession } from './training-session.entity';
 import { User } from '../../system/user/entities/user.entity';
 import { TrainingCurriculum } from './training-curriculum.entity';

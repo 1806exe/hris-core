@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { Indicator } from '../entities/indicator.entity';
-import { BaseController } from 'src/core/controllers/base.contoller';
+import { BaseController } from '../../../core/controllers/base.contoller';
 import { IndicatorService } from '../services/indicator.service';
 
 @Controller('api/' + Indicator.plural)

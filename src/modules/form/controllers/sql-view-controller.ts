@@ -1,15 +1,15 @@
 import { Controller } from '@nestjs/common';
 import { Get, Param, UseGuards, Res, Req } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { BaseController } from 'src/core/controllers/base.contoller';
+import { BaseController } from '../../../core/controllers/base.contoller';
 import { SqlView } from '../entities/sqlview.entity';
 import { SqlViewService } from '../services/sql-view.service';
-import { SessionGuard } from '../../../modules/system/user/guards/session.guard';
-import { ApiResult } from 'src/core/interfaces';
+import { SessionGuard } from '../../system/user/guards/session.guard';
+import { ApiResult } from '../../../core/interfaces';
 import {
   getSuccessResponse,
   genericFailureResponse,
-} from 'src/core/helpers/response.helper';
+} from '../../../core/helpers/response.helper';
 
 @Controller('api/' + SqlView.plural)
 export class SqlViewController extends BaseController<SqlView> {

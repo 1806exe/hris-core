@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { SystemSetting } from '../entities/system-setting.entity';
-import { arrayToObject } from 'src/core/helpers/array-to-object.helper';
+import { arrayToObject } from '../../../core/helpers/array-to-object.helper';
 
 @Injectable()
 export class SystemSettingService {

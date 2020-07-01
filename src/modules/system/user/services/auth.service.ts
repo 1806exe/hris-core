@@ -1,20 +1,22 @@
-import { Injectable } from '@nestjs/common';
-import { sanitizeResponseObject } from 'src/core/utilities/sanitize-response-object';
-import { User } from 'src/modules/system/user/entities/user.entity';
+import { Injectable, Logger } from '@nestjs/common';
+import { sanitizeResponseObject } from '../../../../core/utilities/sanitize-response-object';
+import { User } from '../../../system/user/entities/user.entity';
 
 import { UserService } from './user.service';
-import { getBasicAuthanticationString } from 'src/core/helpers/basic-auth-token';
+import { getBasicAuthanticationString } from '../../../../core/helpers/basic-auth-token';
+import {
+  passwordCompare,
+  passwordHash,
+} from '../../../../core/utilities/password-utilities';
 
 @Injectable()
 export class AuthService {
-  private algorithm = 'sha512';
-  private encodeHashAsBase64 = true;
-  private iterations = 0;
-
   constructor(private readonly userService: UserService) {}
-
   async login(username, password): Promise<User> {
-    let token = getBasicAuthanticationString(username,password);
+    const hashpassword = await passwordHash('HRHIS2020');
+    Logger.log('HASH:::', hashpassword);
+
+    let token = getBasicAuthanticationString(username, password);
     let user = await User.authenticateUserByToken(token);
     return user;
   }
@@ -22,5 +24,17 @@ export class AuthService {
   async getUserByUid(uid: string): Promise<User> {
     const user = await this.userService.findOneByUid(uid);
     return sanitizeResponseObject(user);
+  }
+  async authenticateUser(username, password): Promise<User> {
+    console.log('WHat');
+    let user: User = await User.findOne({
+      where: { username },
+    });
+    console.log(user);
+    if (await passwordCompare(password, user.password)) {
+      return user;
+    } else {
+      return null;
+    }
   }
 }

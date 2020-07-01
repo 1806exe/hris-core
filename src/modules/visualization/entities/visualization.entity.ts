@@ -1,8 +1,9 @@
 import { EntityCoreProps } from '../../../core/entities/entity-core-props';
 import { User } from '../../system/user/entities/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { DashboardItem } from './dashboard-item.entity';
 import { VisualizationDimension } from './visualization-dimension.entity';
+import { VisualizationAccess } from './visualization-useraccess.entity';
 
 @Entity('visualization', { schema: 'public' })
 export class Visualization extends EntityCoreProps {
@@ -332,4 +333,11 @@ export class Visualization extends EntityCoreProps {
     { eager: true },
   )
   dimensions: VisualizationDimension[];
+
+  @ManyToMany(
+    () => VisualizationAccess,
+    (visualizationaccess) => visualizationaccess.visualization,
+  )
+  @JoinTable({ name: 'visualizationuseraccess' })
+  visualizationaccess: VisualizationAccess[];
 }

@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
-import { AuthenticatedUser } from 'src/core/helpers/user-decorator.helper';
-import { TaskService } from 'src/modules/system/task/services/task.service';
+import { AuthenticatedUser } from '../../../core/helpers/user-decorator.helper';
+import { TaskService } from '../../system/task/services/task.service';
 import { AnalyticsService } from '../services/analytics.service';
-import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
+import { SessionGuard } from '../../system/user/guards/session.guard';
 import { TrainingAnalyticsService } from '../services/training.analytics.service';
 
 @Controller('api/analytics')

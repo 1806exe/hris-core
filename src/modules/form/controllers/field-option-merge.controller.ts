@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { BaseController } from 'src/core/controllers/base.contoller';
+import { BaseController } from '../../../core/controllers/base.contoller';
 
 import { FieldOptionMerge } from '../entities/field-option-merge.entity';
 import { FieldOptionMergeService } from '../services/field-option-merge.service';

@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as _ from 'lodash';
-import { SessionGuard } from 'src/modules/system/user/guards/session.guard';
+import { SessionGuard } from '../../modules/system/user/guards/session.guard';
 
 import { HRISBaseEntity } from '../entities/base-entity';
 import {
@@ -72,9 +72,7 @@ export class BaseController<T extends HRISBaseEntity> {
         ...pagerDetails,
         pageCount: entityRes.length,
         total: totalCount,
-        nextPage: `/api/${this.Model.plural}?page=${
-          parseInt(pagerDetails.page) + 1
-        }`,
+        nextPage: `/api/${this.Model.plural}?page=${+pagerDetails.page + +'1'}`,
       },
       [this.Model.plural]: _.map(entityRes, sanitizeResponseObject),
     };
