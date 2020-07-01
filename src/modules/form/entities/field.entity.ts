@@ -72,7 +72,7 @@ export class Field extends EntityCoreProps {
     type => FieldGroup,
     fieldGroup => fieldGroup.fields,
     {
-      eager: true,
+      //eager: true,
       cascade: true,
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
@@ -131,7 +131,7 @@ export class Field extends EntityCoreProps {
    * Many To One Relationship: Field and FieldInputType
    */
 
-  @ManyToOne(
+  /*@ManyToOne(
     type => FieldInputType,
     fieldInputType => fieldInputType.fields,
     {
@@ -142,7 +142,7 @@ export class Field extends EntityCoreProps {
     },
   )
   @JoinColumn({ referencedColumnName: 'id' })
-  fieldInputType: FieldInputType;
+  fieldInputType: FieldInputType;*/
 
   @OneToMany(
     type => FieldOptionGroup,

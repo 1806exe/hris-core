@@ -18,10 +18,4 @@ export class FieldInputType extends EntityCoreProps {
     default: () => 'NULL::character varying',
   })
   htmlTag: string;
-
-  @OneToMany(
-    type => Field,
-    field => field.fieldInputType,
-  )
-  fields: Field[];
 }
