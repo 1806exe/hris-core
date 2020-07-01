@@ -11,10 +11,7 @@ afterAll(async (done) => {
   await tearDownServer();
   done();
 });
-<<<<<<< HEAD
-=======
 let orgUnitId;
->>>>>>> 25739e31d0f4648fbe44c5fe3900e523e5cdddca
 describe('Organisation Unit API', () => {
   it(`Testing Authentication /api/organisationUnits (GET)`, () => {
     return request(server.getHttpServer())
@@ -22,10 +19,6 @@ describe('Organisation Unit API', () => {
       .expect(403)
       .expect('{"statusCode":403,"message":"Forbidden resource","error":"Forbidden"}');
   });
-<<<<<<< HEAD
-  let orgUnitId;
-=======
->>>>>>> 25739e31d0f4648fbe44c5fe3900e523e5cdddca
   it(`Adding Organisation /api/organisationUnits (POST)`, () => {
     return addAuthentication(request(server.getHttpServer())
       .post(`/api/organisationUnits`))
@@ -146,8 +139,6 @@ describe('Organisation Unit API', () => {
         }
       );
   });
-<<<<<<< HEAD
-=======
 });
 describe('Organisation Unit Groups API', () => {
   it(`Testing Authentication /api/organisationUnitGroups (GET)`, () => {
@@ -245,5 +236,4 @@ describe('Organisation Unit Groups API', () => {
         }
       );
   });
->>>>>>> 25739e31d0f4648fbe44c5fe3900e523e5cdddca
 });
