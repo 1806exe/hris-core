@@ -76,8 +76,6 @@ TABLESPACE pg_default;
         'ALTER TABLE "user" ADD COLUMN "createdbyId" INTEGER',
       );
 
-      await queryRunner.query('ALTER TABLE "user" ADD COLUMN "hash" TEXT');
-
       await queryRunner.query(
         'ALTER TABLE "user" ADD CONSTRAINT "fk_user_createdby" FOREIGN KEY("createdbyId") REFERENCES "user"',
       );

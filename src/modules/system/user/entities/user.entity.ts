@@ -193,9 +193,6 @@ export class User extends UserCoreProps {
   })
   messages: Message[];
 
-  @Column({ type: 'varchar' })
-  hash: string;
-
   /**
    * One To Many Relationship: User and MessageMetadata Entities
    */
