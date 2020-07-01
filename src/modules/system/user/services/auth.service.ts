@@ -8,17 +8,19 @@ import {
   passwordCompare,
   passwordHash,
 } from '../../../../core/utilities/password-utilities';
+import { throwError } from 'rxjs';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly userService: UserService) {}
   async login(username, password): Promise<User> {
-    const hashpassword = await passwordHash('HRHIS2020');
-    Logger.log('HASH:::', hashpassword);
-
-    let token = getBasicAuthanticationString(username, password);
-    let user = await User.authenticateUserByToken(token);
-    return user;
+    const user: User = await User.findOne({ where: { username } });
+    const hashedPassword = await passwordCompare(password, user.token);
+    if (hashedPassword) {
+      return user;
+    } else {
+      throwError('Username or Password Invalid');
+    }
   }
 
   async getUserByUid(uid: string): Promise<User> {

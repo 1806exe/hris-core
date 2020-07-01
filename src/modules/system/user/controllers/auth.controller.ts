@@ -82,7 +82,6 @@ export class AuthController {
 
   @Post('login')
   async login(@Req() request, @Body() params): Promise<ApiResult> {
-    console.log(params);
     const user = await this.authService.login(params.username,params.password);
     if (user) {
       request.session.user = user;
@@ -92,7 +91,7 @@ export class AuthController {
         httpStatus: 'Unauthorized',
         httpStatusCode: 401,
         status: 'ERROR',
-        message: 'Username or password provided is incorrect.',
+        message: 'Username or Password provided is incorrect.',
         response: {
           responseType: 'ErrorReport',
         },
