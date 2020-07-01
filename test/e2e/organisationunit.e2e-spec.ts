@@ -155,12 +155,7 @@ describe('Organisation Unit Groups API', () => {
         "id": "52893cf9c4270",
         "code": "hospitals",
         "name": "Hospitals",
-        "description": "Hospitals",
-        "organisationUnits": [
-          {
-            "id": orgUnitId
-          }
-        ]
+        "description": "Hospitals"
       })
       //.expect(200)
       .expect(
@@ -169,7 +164,6 @@ describe('Organisation Unit Groups API', () => {
           expect(res.body.code).toEqual('hospitals');
           expect(res.body.name).toEqual('Hospitals');
           expect(res.body.description).toEqual('Hospitals');
-          expect(res.body.organisationUnits[0].id).toEqual(orgUnitId);
         }
       );
   });
