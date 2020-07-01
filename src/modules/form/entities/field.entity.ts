@@ -51,6 +51,14 @@ export class Field extends EntityCoreProps {
   })
   hasOptions: boolean | null;
 
+  @Column({
+    type: 'varchar',
+    nullable: false,
+    default: false,
+    name: 'datatype',
+  })
+  datatype: string | null;
+
   @Column({ type: 'boolean', nullable: true, name: 'hastarget' })
   hasTarget: boolean | null;
 
