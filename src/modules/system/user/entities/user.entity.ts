@@ -9,7 +9,6 @@ import {
   OneToOne,
 } from 'typeorm';
 import { UserCoreProps } from '../../../../core/entities/user-core-props.entity';
-import { passwordCompare } from '../../../../core/utilities/password-utilities';
 import { MessageMetadata } from '../../../message/entities/message-metadata.entity';
 import { MessageThreadMetadata } from '../../../message/entities/message-thread-metadata.entity';
 import { MessageThread } from '../../../message/entities/message-thread.entity';
@@ -17,12 +16,13 @@ import { Message } from '../../../message/entities/message.entity';
 import { OrganisationUnit } from '../../../organisation-unit/entities/organisation-unit.entity';
 import { Record } from '../../../record/entities/record.entity';
 import { Report } from '../../../report/entities/report.entity';
-import { TrainingSessionAccess } from '../../../training/entities/training-session-access.entity';
 import { Dashboard } from '../../../visualization/entities/dashboard.entity';
 import { Visualization } from '../../../visualization/entities/visualization.entity';
 import { UserGroup } from '../../user-group/entities/user-group.entity';
 import { UserRole } from '../../user-role/entities/user-role.entity';
 import { UserSettings } from './user-settings.entity';
+import { TrainingSessionAccess } from '../../../training/entities/training-session-access.entity';
+import { passwordCompare } from '../../../../core/utilities/password-utilities';
 
 @Entity('user', { schema: 'public' })
 export class User extends UserCoreProps {
