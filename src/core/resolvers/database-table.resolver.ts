@@ -54,4 +54,5 @@ export const entityTableMapper = {
   units: 'trainingunit',
   topics: 'trainingtopic',
   curriculums: 'trainingcurriculum',
+  process: 'process'
 };

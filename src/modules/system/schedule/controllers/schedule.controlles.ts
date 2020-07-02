@@ -1,6 +1,5 @@
 import { Controller, Res, Req, Body, Logger, Post } from '@nestjs/common';
 import { ScheduleService } from '../services/schedule.service';
-import { BaseController } from '../../../../core/controllers/base.contoller';
 import { Schedule } from '../entities/schedule.entity';
 import { Request, Response } from 'express';
 import {
@@ -8,11 +7,13 @@ import {
   postSuccessResponse,
   genericFailureResponse,
 } from '../../../../core/helpers/response.helper';
-import { ApiInternalServerErrorResponse } from '@nestjs/swagger';
+import { ObjectPropsResolver } from '@icodebible/utils/resolvers';
 import { ApiResult } from '../../../../core/interfaces';
+import { MaintenanceBaseController } from '@hris/core/maintenance/controllers/base.controller';
+import { PayloadConfig } from '@hris/core/config/payload.config';
 
 @Controller('api/' + Schedule.plural)
-export class ScheduleController extends BaseController<Schedule> {
+export class ScheduleController extends MaintenanceBaseController<Schedule> {
   constructor(private scheduleService: ScheduleService) {
     super(scheduleService, Schedule);
   }
@@ -23,14 +24,18 @@ export class ScheduleController extends BaseController<Schedule> {
     @Body() createEntityDto,
   ): Promise<ApiResult> {
     try {
+      const procCreateEntityDTO = await ObjectPropsResolver(
+        createEntityDto,
+        PayloadConfig,
+      );
       const isIDExist = await this.scheduleService.findOneByUid(
-        createEntityDto.id,
+        procCreateEntityDTO?.id,
       );
       if (isIDExist !== undefined) {
         return entityExistResponse(res, isIDExist);
       } else {
         const createdEntity = await this.scheduleService.create(
-          createEntityDto,
+          procCreateEntityDTO,
         );
         this.scheduleService.addCronJob(createdEntity);
         if (createdEntity !== undefined) {
