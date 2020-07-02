@@ -22,20 +22,16 @@ export class ScheduleController extends BaseController<Schedule> {
     @Res() res: Response,
     @Body() createEntityDto,
   ): Promise<ApiResult> {
-    console.log('This here');
     try {
       const isIDExist = await this.scheduleService.findOneByUid(
         createEntityDto.id,
       );
-      console.log('This here1:', isIDExist);
       if (isIDExist !== undefined) {
         return entityExistResponse(res, isIDExist);
       } else {
-        console.log(createEntityDto);
         const createdEntity = await this.scheduleService.create(
           createEntityDto,
         );
-        console.log('Results:', createdEntity);
         this.scheduleService.addCronJob(createdEntity);
         if (createdEntity !== undefined) {
           const isPropExcluded = delete createdEntity.id;
@@ -47,7 +43,7 @@ export class ScheduleController extends BaseController<Schedule> {
         }
       }
     } catch (error) {
-      console.error(error);
+      Logger.error(`[HRIS API] ${error}`);
       res.status(400).json({ error: error.message });
     }
   }
