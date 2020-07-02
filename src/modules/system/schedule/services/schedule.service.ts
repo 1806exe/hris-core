@@ -9,25 +9,30 @@ import { AnalyticsGenerator } from '../../task/processes/analytics.process';
 import { TaskService } from '../../task/services/task.service';
 import { PeriodGenerator } from '../../task/processes/period-generator.process';
 import { OrgUnitGenerator } from '../../task/processes/orgunit-generator.process';
-import { Process } from '../entities/process.entity';
 import { CustomProcess } from '../../task/processes/custom.process';
 
 @Injectable()
-export class ScheduleService extends BaseService<Schedule>  implements OnModuleInit{
+export class ScheduleService extends BaseService<Schedule>
+  implements OnModuleInit {
   constructor(
     @InjectRepository(Schedule)
     scheduleRepository: Repository<Schedule>,
     private readonly schedulerRegistry: SchedulerRegistry,
-    private taskService: TaskService,private connetion:Connection
+    private taskService: TaskService,
+    private connetion: Connection,
   ) {
     super(scheduleRepository, Schedule);
   }
   async onModuleInit(): Promise<void> {
-    let schedules = await this.findAll();
-    console.log('Schedules:',schedules);
-    schedules.forEach((schedule)=>{
-      this.addCronJob(schedule);
-    })
+    const schedules = await this.findAll();
+    if (schedules) {
+      for (const schedule of await schedules) {
+        this.addCronJob(schedule);
+        Logger.debug(
+          `[HRIS Custom Schedule] Current running schedule <${schedule?.name}>`,
+        );
+      }
+    }
   }
   async getProcess() {
     return this.findOneByUid;
@@ -37,42 +42,54 @@ export class ScheduleService extends BaseService<Schedule>  implements OnModuleI
   })
   triggerNotifications() {
     const job = this.schedulerRegistry.getCronJob('dhis 2 hrhis sync');
-
     job.stop();
-    console.log(job.lastDate());
+    Logger.verbose(`[HRIS Custom Schedule] Last JOB Date <${job.lastDate()}>`);
   }
-  addCronJob(schedule:Schedule) {
+  addCronJob(schedule: Schedule) {
     const job = new CronJob(`${schedule.cron}`, async () => {
-      Logger.warn(`time (${schedule.cron}) for job ${schedule.name} to run!`);
-      let task = await this.taskService.createEmptyTask(schedule.name);
+      Logger.warn(
+        `[HRIS Custom Schedule] Time <(${schedule.cron})> for JOB <${schedule.name}> to run!`,
+      );
+      const task = await this.taskService.createEmptyTask(schedule.name);
       let process;
-      if(schedule.type === 'ANALYTICS'){
-        process = (new AnalyticsGenerator(this.taskService, this.connetion)).start(task);
-      } else if(schedule.type === 'PERIODSTRUCTURE'){
-        process = (new PeriodGenerator(this.taskService, this.connetion)).start(task);
-      } else if(schedule.type === 'ORGUNITSTRUCTURE'){
-        process = (new OrgUnitGenerator(this.taskService, this.connetion)).start(task);
-      } else if(schedule.type === 'CUSTOMPROCESS'){
-        //let process:Process = await this.processService.findOneByUid(schedule.process);
-        process = (new CustomProcess(this.taskService, schedule.process, this.connetion, {})).start(task)
+      if (schedule.type === 'ANALYTICS') {
+        process = new AnalyticsGenerator(
+          this.taskService,
+          this.connetion,
+        ).start(task);
+      } else if (schedule.type === 'PERIODSTRUCTURE') {
+        process = new PeriodGenerator(this.taskService, this.connetion).start(
+          task,
+        );
+      } else if (schedule.type === 'ORGUNITSTRUCTURE') {
+        process = new OrgUnitGenerator(this.taskService, this.connetion).start(
+          task,
+        );
+      } else if (schedule.type === 'CUSTOMPROCESS') {
+        // let process:Process = await this.processService.findOneByUid(schedule.process);
+        process = new CustomProcess(
+          this.taskService,
+          schedule.process,
+          this.connetion,
+          {},
+        ).start(task);
       }
-      process.then(()=>{
-        Logger.log(
-          `${schedule.name} successfully done!`,
-        );
-      }).catch((error)=>{
-        console.log('Error:', error);
-        Logger.error(
-          `${schedule.name} Failed!`,
-        );
-      })
+      process
+        .then(() => {
+          Logger.log(
+            `[HRIS Custom Schedule] <${schedule.name}> successfully done!`,
+          );
+        })
+        .catch((error) => {
+          Logger.error(`[HRIS Custom Schedule] Error <${error}> Failed!`);
+          Logger.error(`[HRIS Custom Schedule] <${schedule.name}> Failed!`);
+        });
     });
 
     this.schedulerRegistry.addCronJob(schedule.name, job);
     job.start();
-
-    Logger.warn(
-      `${schedule.name} will sync every ${schedule.cron} seconds!`,
+    Logger.verbose(
+      `[HRIS Custom Schedule] <${schedule.name}> will sync every ${schedule.cron} seconds!`,
     );
   }
 }
