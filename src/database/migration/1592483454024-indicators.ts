@@ -123,11 +123,6 @@ ALTER TABLE FIELD ADD COLUMN DATATYPE TEXT;
 UPDATE FIELD F SET DATATYPE = D.name
         FROM  FIELDDATATYPE D
         WHERE D.id = F."dataTypeId";
-ALTER TABLE FIELD DROP COLUMN "dataTypeId";
-DROP TABLE FIELDDATATYPE;
-
-
-
 `);
   }
   public async down(queryRunner: QueryRunner): Promise<any> {}
