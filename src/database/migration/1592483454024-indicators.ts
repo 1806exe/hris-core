@@ -123,6 +123,24 @@ ALTER TABLE FIELD ADD COLUMN DATATYPE TEXT;
 UPDATE FIELD F SET DATATYPE = D.name
         FROM  FIELDDATATYPE D
         WHERE D.id = F."dataTypeId";
+
+ CREATE TABLE public.cron
+    (
+    created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+    lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+    id bigint NOT NULL DEFAULT nextval('cron_id_seq'::regclass),
+    uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    description character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    cron character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK_2191cb313f2d9e0a5713b05daff" PRIMARY KEY (id),
+    CONSTRAINT "UQ_80005b64da0c45a2d6e8289fb55" UNIQUE (uid)
+    )
+        
+        TABLESPACE pg_default;
+        
+        ALTER TABLE public.cron
+            OWNER to postgres;
 `);
   }
   public async down(queryRunner: QueryRunner): Promise<any> {}
