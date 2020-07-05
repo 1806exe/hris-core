@@ -141,6 +141,21 @@ UPDATE FIELD F SET DATATYPE = D.name
         
         ALTER TABLE public.cron
             OWNER to postgres;
+            
+CREATE TABLE RECORDSESSION("recordId" BIGINT, "trainingsessionId" BIGINT);
+INSERT INTO RECORDSESSION
+SELECT "recordId","trainingsessionId" FROM sessionparticipant
+INNER JOIN record ON(record.id=sessionparticipant."recordId");
+
+INSERT INTO RECORDSESSION
+SELECT "recordId","trainingsessionId" FROM sessionfacilitator
+INNER JOIN record ON(record.id=sessionfacilitator."recordId");
+
+SELECT DISTINCT * INTO RECORDSESSIONS FROM RECORDSESSION;
+DROP TABLE IF EXISTS RECORDSESSION;
+
+
+
 `);
   }
   public async down(queryRunner: QueryRunner): Promise<any> {}
