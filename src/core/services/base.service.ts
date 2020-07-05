@@ -100,6 +100,7 @@ export class BaseService<T extends HRISBaseEntity> {
    * @param entity
    */
   async findOneByUid(uid: string): Promise<T> {
+    console.log('MOdel Repo', this.modelRepository);
     return await this.modelRepository.findOne({ where: { uid } });
   }
 

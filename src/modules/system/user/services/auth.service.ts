@@ -18,9 +18,6 @@ export class AuthService {
     const user: User = await User.findOne({ where: { username } });
     const hashedPassword = await passwordCompare(password, user.token);
     if (hashedPassword) {
-      delete user.token;
-      delete user.id;
-
       return user;
     } else {
       throwError('Username or Password Invalid');
