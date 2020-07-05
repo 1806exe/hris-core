@@ -141,7 +141,7 @@ UPDATE FIELD F SET DATATYPE = D.name
         
         ALTER TABLE public.cron
             OWNER to postgres;
-            
+
 CREATE TABLE RECORDSESSION("recordId" BIGINT, "trainingsessionId" BIGINT);
 INSERT INTO RECORDSESSION
 SELECT "recordId","trainingsessionId" FROM sessionparticipant
@@ -152,6 +152,16 @@ SELECT "recordId","trainingsessionId" FROM sessionfacilitator
 INNER JOIN record ON(record.id=sessionfacilitator."recordId");
 
 SELECT DISTINCT * INTO RECORDSESSIONS FROM RECORDSESSION;
+ALTER TABLE recordsessions
+ADD CONSTRAINT "PK_recordsessions" PRIMARY KEY ("recordId", "trainingsessionId"),
+ADD CONSTRAINT "FK_recordsessions" FOREIGN KEY ("recordId" )
+                REFERENCES public.record (id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+ ADD CONSTRAINT "FK_recordsession" FOREIGN KEY ("trainingsessionId")
+                REFERENCES public.trainingsession (id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE;
 DROP TABLE IF EXISTS RECORDSESSION;
 
 
