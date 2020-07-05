@@ -3,7 +3,10 @@ import {
   generateOUFilterQuery,
   getISOOrgUnits,
 } from '../../../core/helpers/ou.helper';
-import { getISOPeriods, getPeriodDetails } from '../../../core/helpers/pe.helper';
+import {
+  getISOPeriods,
+  getPeriodDetails,
+} from '../../../core/helpers/pe.helper';
 import { Analytics } from '../../analytics/interfaces/analytics.interface';
 import { getWhereConditions } from '../../../core/utilities';
 import { IndicatorService } from '../../indicator/services/indicator.service';
