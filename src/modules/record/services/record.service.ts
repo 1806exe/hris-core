@@ -189,6 +189,7 @@ export class RecordService extends BaseService<Record> {
         leftJoinAndSelect: {
           form: 'record.form',
           organisationUnit: 'record.organisationUnit',
+          sessions: 'record.sessions',
         },
       },
     });
