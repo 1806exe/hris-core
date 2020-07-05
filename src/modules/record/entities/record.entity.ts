@@ -100,6 +100,6 @@ export class Record extends TransactionUser {
   @ManyToMany((type) => TrainingSession, (sessions) => sessions.record, {
     eager: true,
   })
-  @JoinTable({ name: 'sessionfacilitator' })
+  @JoinTable({ name: 'recordsessions' })
   sessions: TrainingSession[];
 }
