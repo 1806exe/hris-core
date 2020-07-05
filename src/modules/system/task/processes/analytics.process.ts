@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Connection } from 'typeorm';
 import { TaskService } from '../services/task.service';
 import { BackgroundProcess } from './base.process';
-
 
 @Injectable()
 export class AnalyticsGenerator extends BackgroundProcess {
@@ -10,23 +9,26 @@ export class AnalyticsGenerator extends BackgroundProcess {
     super(taskService);
   }
   async run() {
-    this.log({ type: "INFO", message: "Started Running Analytics" });
-    let forms: any = await this.connetion.manager.query(
+    this.log({ type: 'INFO', message: 'Started Running Analytics' });
+    const forms: any = await this.connetion.manager.query(
       'SELECT id as formid,uid,title FROM form',
     );
     for (const form of forms) {
-      this.log({ type: "INFO", message: `Droping Temporary table for ${form.uid}.` });
+      this.log({
+        type: 'INFO',
+        message: `Droping Temporary table for ${form.uid}.`,
+      });
       await this.connetion.manager.query(
         'DROP TABLE IF EXISTS _temp_resource_table_' + form.uid,
       );
-      let query = `
-      SELECT field.id as fieldid,field.uid,field.name,fdt.name as type 
-      FROM field 
-      INNER JOIN fielddatatype fdt ON(fdt.id = field."dataTypeId") 
-      INNER JOIN formfieldmember ON(formfieldmember.fieldid = field.id) 
+      const query = `
+      SELECT field.id as fieldid,field.uid,field.name,fdt.name as type
+      FROM field
+      INNER JOIN fielddatatype fdt ON(fdt.id = field."dataTypeId")
+      INNER JOIN formfieldmember ON(formfieldmember.fieldid = field.id)
       INNER JOIN form ON(form.id = formfieldmember.formid AND form.id =${form.formid})
       `;
-      let fields = await this.connetion.manager.query(query);
+      const fields = await this.connetion.manager.query(query);
       let additionalColumns = '';
       let additionalInsertColumns = '';
       let additionalQueries = '';
@@ -57,24 +59,28 @@ export class AnalyticsGenerator extends BackgroundProcess {
         'formid integer NOT NULL' +
         additionalColumns +
         ',PRIMARY KEY(instance))';*/
-        let createQuery = 'CREATE TABLE _temp_resource_table_' +
+      const createQuery =
+        'CREATE TABLE _temp_resource_table_' +
         form.uid +
         '(' +
         'id SERIAL PRIMARY KEY,' +
         'created timestamp without time zone NULL DEFAULT LOCALTIMESTAMP,' +
         'lastupdated timestamp without time zone NULL DEFAULT LOCALTIMESTAMP,' +
-        //'recordid integer NOT NULL DEFAULT nextval(\'record_recordid_seq\':: regclass)(INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1),'+
+        // 'recordid integer NOT NULL DEFAULT nextval(\'record_recordid_seq\':: regclass)(INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1),'+
         'uid character varying(13) COLLATE pg_catalog."default" NULL,' +
         'instance character varying(64) COLLATE pg_catalog."default" NULL,' +
         'ou character varying(13) NULL,' +
         'formid integer NULL' +
         additionalColumns +
-        //',PRIMARY KEY(instance))';
+        // ',PRIMARY KEY(instance))';
         ')';
-      this.log({ type: "INFO", message: `Creating Temporary table for ${form.uid}.` });
+      this.log({
+        type: 'INFO',
+        message: `Creating Temporary table for ${form.uid}.`,
+      });
       await this.connetion.manager.query(createQuery);
 
-      let insertQuery =
+      const insertQuery =
         'INSERT INTO _temp_resource_table_' +
         form.uid +
         '(' +
@@ -82,12 +88,12 @@ export class AnalyticsGenerator extends BackgroundProcess {
         additionalInsertColumns +
         ')' +
         'SELECT DISTINCT r.instance,r.created,r.lastupdated,r.uid,ou.uid,r.formid' +
-        //+ ((fields.length > 0)?',':'')+
+        // + ((fields.length > 0)?',':'')+
         fields
           .map((field, index) => {
             let results = index === 0 ? ',' : '';
             if (field.type === 'Date') {
-              //results += "TO_DATE(r" + index + ".value,'YYYY-MM-DD')";
+              // results += "TO_DATE(r" + index + ".value,'YYYY-MM-DD')";
               results +=
                 'CASE ' +
                 'WHEN r' +
@@ -133,20 +139,32 @@ export class AnalyticsGenerator extends BackgroundProcess {
         ' WHERE r.formid=' +
         form.formid +
         ';';
-        this.log({ type: "INFO", message: `Inserting records for ${form.uid}.` });
-        console.log('insertQuery:', insertQuery);
+      this.log({ type: 'INFO', message: `Inserting records for ${form.uid}.` });
+      Logger.debug(`[HRIS Analytics Query] ${insertQuery}`);
       await this.connetion.manager.query(insertQuery);
-      this.log({ type: "INFO", message: `Cleaning temporary tables for ${form.uid}.` });
+      this.log({
+        type: 'INFO',
+        message: `Cleaning temporary tables for ${form.uid}.`,
+      });
       await this.connetion.manager.query(
         `DROP TABLE IF EXISTS _resource_table_${form.uid};
         ALTER TABLE _temp_resource_table_${form.uid} RENAME TO _resource_table_${form.uid};`,
       );
-      this.log({ type: "INFO", message: `Creating indexes for form ${form.uid}.` });
-      let creatIndex = `CREATE INDEX record${form.uid}index ON _resource_table_${form.uid}(ou);`;
+      this.log({
+        type: 'INFO',
+        message: `Creating indexes for form ${form.uid}.`,
+      });
+      const creatIndex = `CREATE INDEX record${form.uid}index ON _resource_table_${form.uid}(ou);`;
       await this.connetion.manager.query(creatIndex);
-      this.log({ type: "INFO", message: `Done creating table for for form ${form.uid}.` });
+      this.log({
+        type: 'INFO',
+        message: `Done creating table for for form ${form.uid}.`,
+      });
     }
-    this.log({ type: "SUCCESS", message: "Analytics finished running successfully" });
+    this.log({
+      type: 'SUCCESS',
+      message: 'Analytics finished running successfully',
+    });
   }
   getGenericType(type) {
     if (type === 'timestamp without time zone') {
@@ -171,6 +189,6 @@ export class AnalyticsGenerator extends BackgroundProcess {
     }
   }
   async getProcessName() {
-    return "Analytics";
+    return 'Analytics';
   }
 }

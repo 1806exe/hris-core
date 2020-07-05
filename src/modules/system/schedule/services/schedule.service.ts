@@ -1,18 +1,19 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { BaseService } from '../../../../core/services/base.service';
-import { Repository, Connection } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Schedule } from '../entities/schedule.entity';
 import { SchedulerRegistry, Cron } from '@nestjs/schedule';
+import { Repository, Connection } from 'typeorm';
+
+import { Schedule } from '../entities/schedule.entity';
 import { CronJob } from 'cron';
 import { AnalyticsGenerator } from '../../task/processes/analytics.process';
 import { TaskService } from '../../task/services/task.service';
 import { PeriodGenerator } from '../../task/processes/period-generator.process';
 import { OrgUnitGenerator } from '../../task/processes/orgunit-generator.process';
 import { CustomProcess } from '../../task/processes/custom.process';
+import { MaintenanceBaseService } from 'src/core/maintenance/services/base.service';
 
 @Injectable()
-export class ScheduleService extends BaseService<Schedule>
+export class ScheduleService extends MaintenanceBaseService<Schedule>
   implements OnModuleInit {
   constructor(
     @InjectRepository(Schedule)

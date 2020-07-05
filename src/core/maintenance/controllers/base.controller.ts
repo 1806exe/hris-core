@@ -154,7 +154,6 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
         createEntityDto,
         PayloadConfig,
       );
-
       const isIDExist = await this.maintenanceBaseService.findOneByUid(
         procCreateEntityDTO,
       );
