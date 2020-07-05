@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Connection } from 'typeorm';
 import { TaskService } from '../services/task.service';
 import { BackgroundProcess } from './base.process';
@@ -23,10 +23,12 @@ export class OrgUnitGenerator extends BackgroundProcess {
     let level = 1;
     let count: any;
     let countstructure: any;
-    let groups = await this.connection.manager.query('SELECT id,uid FROM organisationunitgroup');
+    const groups = await this.connection.manager.query(
+      'SELECT id,uid FROM organisationunitgroup',
+    );
     let groupHeaders = '';
     for (const group of groups) {
-      console.log("Group:", group);
+      Logger.debug(`[HRIS OrgUnit Generator] ${JSON.stringify(group)}`);
       await this.connection.manager.query(
         `ALTER TABLE _organisationunitstructure ADD COLUMN "${group.uid}" boolean`,
       );
@@ -39,47 +41,57 @@ export class OrgUnitGenerator extends BackgroundProcess {
       let WHERE = `oulevel${level} `;
       await this.connection.manager.query(
         'ALTER TABLE _organisationunitstructure ADD COLUMN idlevel' +
-        level +
-        ' integer',
+          level +
+          ' integer',
       );
       await this.connection.manager.query(
         'ALTER TABLE _organisationunitstructure ADD COLUMN uidlevel' +
-        level +
-        ' character(30) COLLATE pg_catalog."default"',
+          level +
+          ' character(30) COLLATE pg_catalog."default"',
       );
       await this.connection.manager.query(
         'ALTER TABLE _organisationunitstructure ADD COLUMN namelevel' +
-        level +
-        ' text COLLATE pg_catalog."default"',
+          level +
+          ' text COLLATE pg_catalog."default"',
       );
       for (let i = 1; i <= level; i++) {
         INSERTFIELD += `, idlevel${i},uidlevel${i},namelevel${i}`;
         FIELD += `, oulevel${i}.id as organisationunitid,oulevel${i}.uid,oulevel${i}.name`;
-        if (i == 1) {
+        if (i === 1) {
           if (i === level) {
             WHERE += ' WHERE parentid IS NULL';
           } else {
-            WHERE += ` INNER JOIN organisationunit oulevel${level -
-              1} ON(oulevel${level - (i - 1)}.parentid =oulevel${level -
-              1}.id AND oulevel${level -
-              1}.id IN (SELECT organisationunitid FROM _organisationunitstructure WHERE level = ${level -
-              1}))`;
+            WHERE += ` INNER JOIN organisationunit oulevel${
+              level - 1
+            } ON(oulevel${level - (i - 1)}.parentid =oulevel${
+              level - 1
+            }.id AND oulevel${
+              level - 1
+            }.id IN (SELECT organisationunitid FROM _organisationunitstructure WHERE level = ${
+              level - 1
+            }))`;
           }
-        } else if (i != level) {
-          WHERE += ` INNER JOIN organisationunit oulevel${level -
-            i} ON(oulevel${level - (i - 1)}.parentid =oulevel${level - i}.id)`;
+        } else if (i !== level) {
+          WHERE += ` INNER JOIN organisationunit oulevel${
+            level - i
+          } ON(oulevel${level - (i - 1)}.parentid =oulevel${level - i}.id)`;
         }
       }
-      let groupSelect = groups.map((group) => `(SELECT COUNT(*) > 0 FROM organisationunitgroupmembers
-              WHERE oulevel${level}.id=organisationunitgroupmembers."organisationunitId" AND 
+      let groupSelect = groups
+        .map(
+          (group) => `(SELECT COUNT(*) > 0 FROM organisationunitgroupmembers
+              WHERE oulevel${level}.id=organisationunitgroupmembers."organisationunitId" AND
               organisationunitgroupmembers."organisationunitgroupId" = ${group.id})
-              `).join(',')
+              `,
+        )
+        .join(',');
       if (groups.length > 0) {
         groupSelect = ',' + groupSelect;
       }
-      let query =
-        `INSERT INTO _organisationunitstructure(organisationunitid, uid, level${INSERTFIELD} ${groupHeaders})
-              SELECT oulevel${level}.id as organisationunitid, oulevel${level}.uid,${level + FIELD}
+      const query = `INSERT INTO _organisationunitstructure(organisationunitid, uid, level${INSERTFIELD} ${groupHeaders})
+              SELECT oulevel${level}.id as organisationunitid, oulevel${level}.uid,${
+        level + FIELD
+      }
               ${groupSelect}
               FROM organisationunit ${WHERE};`;
       await this.connection.manager.query(query);
@@ -89,18 +101,18 @@ export class OrgUnitGenerator extends BackgroundProcess {
       count = await this.connection.manager.query(
         'SELECT COUNT(*) FROM organisationunit',
       );
-      indexQuery += ",uidlevel" + level;
+      indexQuery += ',uidlevel' + level;
       level++;
     } while (count[0].count !== countstructure[0].count);
-    let creatIndex = `CREATE INDEX orgunitindex ON _organisationunitstructure(
+    const creatIndex = `CREATE INDEX orgunitindex ON _organisationunitstructure(
       uid${indexQuery});`;
     await this.connection.manager.query(creatIndex);
-    await this.connection.manager.query(`UPDATE organisationunit o SET "level" = s.level
+    await this.connection.manager
+      .query(`UPDATE organisationunit o SET "level" = s.level
     FROM  _organisationunitstructure s
-    WHERE o.id = s.organisationunitid`)
+    WHERE o.id = s.organisationunitid`);
   }
   async getProcessName() {
-    return "Orgunit Structure Table";
+    return 'Orgunit Structure Table';
   }
-
 }

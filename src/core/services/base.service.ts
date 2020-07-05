@@ -190,7 +190,7 @@ export class BaseService<T extends HRISBaseEntity> {
    */
   async update(dataModel: any): Promise<UpdateResult> {
     if (dataModel) {
-      dataModel.id = parseInt(dataModel.id);
+      dataModel.id = +dataModel.id;
       return await this.modelRepository.update(dataModel.id, dataModel);
     }
   }
