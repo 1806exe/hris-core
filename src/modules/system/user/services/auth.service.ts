@@ -29,11 +29,9 @@ export class AuthService {
     return sanitizeResponseObject(user);
   }
   async authenticateUser(username, password): Promise<User> {
-    console.log('WHat');
-    let user: User = await User.findOne({
+    const user: User = await User.findOne({
       where: { username },
     });
-    console.log(user);
     if (await passwordCompare(password, user.password)) {
       return user;
     } else {
