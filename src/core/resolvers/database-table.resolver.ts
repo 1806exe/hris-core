@@ -58,4 +58,6 @@ export const entityTableMapper = {
   sessions: 'trainingsession',
   organizer: 'trainingsponsor',
   process: 'process',
+  recordRules: 'recordrule',
+  recordRuleActions: 'recordruleaction',
 };

@@ -23,6 +23,7 @@ import { UserRole } from '../../user-role/entities/user-role.entity';
 import { UserSettings } from './user-settings.entity';
 import { TrainingSessionAccess } from '../../../training/entities/training-session-access.entity';
 import { passwordCompare } from '../../../../core/utilities/password-utilities';
+import { RecordRule } from '../../../record-rule/entities/record-rule/record-rule.entity';
 
 @Entity('user', { schema: 'public' })
 export class User extends UserCoreProps {
@@ -148,6 +149,12 @@ export class User extends UserCoreProps {
     inverseJoinColumn: { referencedColumnName: 'id' },
   })
   userGroups: UserGroup[];
+
+  /**
+   *
+   */
+  @OneToMany((type) => RecordRule, (recordRule) => recordRule.form)
+  recordRules: RecordRule[];
 
   // @OneToMany(type => DashboardChart, dashboardChart => dashboardChart.user, {
   //   onDelete: 'CASCADE',

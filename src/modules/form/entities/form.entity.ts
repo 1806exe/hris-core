@@ -3,7 +3,7 @@
  */
 import { EntityCoreProps } from '../../../core/entities/entity-core-props';
 import { OrganisationUnitCompleteness } from '../../organisation-unit/entities/organisation-unit-completeness.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, JoinTable, ManyToMany } from 'typeorm';
 
 /**
  *
@@ -13,6 +13,7 @@ import { FormFieldMember } from './form-field-member.entity';
 import { FormSection } from './form-section.entity';
 import { FormVisibleField } from './form-visible-fields.entity';
 import { Indicator } from '../../indicator/entities/indicator.entity';
+import { RecordRule } from '@hris/modules/record-rule/entities/record-rule/record-rule.entity';
 
 /**
  *
@@ -128,4 +129,12 @@ export class Form extends EntityCoreProps {
    */
   @OneToMany(() => Indicator, (indicator: Indicator) => indicator.form)
   indicators: Indicator[];
+
+  @OneToMany((type) => RecordRule, (recordRule) => recordRule.form, {
+    eager: true,
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  recordRules: RecordRule[];
 }
