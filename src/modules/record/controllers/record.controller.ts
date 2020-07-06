@@ -127,10 +127,10 @@ export class RecordsController extends BaseController<Record> {
   }
 
   @Get('sessions/:record')
-  @UseGuards(SessionGuard)
+  // @UseGuards(SessionGuard)
   async getSessions(@Param() param, @Res() res): Promise<any> {
     console.log(param.record);
     const sessions = await this.recordService.getSessions(param.record);
-    return sanitizeResponseObject(sessions);
+    return getSuccessResponse(res, sanitizeResponseObject(sessions));
   }
 }
