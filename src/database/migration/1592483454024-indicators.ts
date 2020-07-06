@@ -119,6 +119,52 @@ ALTER TABLE public.indicator
             ("indicatorId" ASC NULLS LAST)
             TABLESPACE pg_default;
 
+ALTER TABLE FIELD ADD COLUMN DATATYPE TEXT;
+UPDATE FIELD F SET DATATYPE = D.name
+        FROM  FIELDDATATYPE D
+        WHERE D.id = F."dataTypeId";
+
+ CREATE TABLE public.cron
+    (
+    created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+    lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+    id bigint NOT NULL DEFAULT nextval('cron_id_seq'::regclass),
+    uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    description character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    cron character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK_2191cb313f2d9e0a5713b05daff" PRIMARY KEY (id),
+    CONSTRAINT "UQ_80005b64da0c45a2d6e8289fb55" UNIQUE (uid)
+    )
+        
+        TABLESPACE pg_default;
+        
+        ALTER TABLE public.cron
+            OWNER to postgres;
+
+CREATE TABLE RECORDSESSION("recordId" BIGINT, "trainingsessionId" BIGINT);
+INSERT INTO RECORDSESSION
+SELECT "recordId","trainingsessionId" FROM sessionparticipant
+INNER JOIN record ON(record.id=sessionparticipant."recordId");
+
+INSERT INTO RECORDSESSION
+SELECT "recordId","trainingsessionId" FROM sessionfacilitator
+INNER JOIN record ON(record.id=sessionfacilitator."recordId");
+
+SELECT DISTINCT * INTO RECORDSESSIONS FROM RECORDSESSION;
+ALTER TABLE recordsessions
+ADD CONSTRAINT "PK_recordsessions" PRIMARY KEY ("recordId", "trainingsessionId"),
+ADD CONSTRAINT "FK_recordsessions" FOREIGN KEY ("recordId" )
+                REFERENCES public.record (id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE,
+ ADD CONSTRAINT "FK_recordsession" FOREIGN KEY ("trainingsessionId")
+                REFERENCES public.trainingsession (id) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE CASCADE;
+DROP TABLE IF EXISTS RECORDSESSION;
+
+
 
 `);
   }

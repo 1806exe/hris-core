@@ -17,10 +17,12 @@ import { AuthService } from '../services/auth.service';
 import { SessionGuard } from '../guards/session.guard';
 import { ApiResult } from '../../../../core/interfaces';
 import { AuthenticatedUser } from '../../../../core/helpers/user-decorator.helper';
+import { getSuccessResponse } from '../../../../core/helpers/response.helper';
+import { sanitizeResponseObject } from '../../../../core/utilities/sanitize-response-object';
 
 @Controller('api')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
   @Get('me')
   @UseGuards(SessionGuard)
   async me(@Req() request): Promise<ApiResult> {
@@ -54,11 +56,13 @@ export class AuthController {
     );
     //result.userRoles.map()
     const allAuthorities = [];
-    result.userRoles.map(role => role.userAuthorities).forEach((authorities) => {
-      authorities.forEach(authority => {
-        allAuthorities.push(authority.name);
+    result.userRoles
+      .map((role) => role.userAuthorities)
+      .forEach((authorities) => {
+        authorities.forEach((authority) => {
+          allAuthorities.push(authority.name);
+        });
       });
-    });
     if (result) {
       return allAuthorities;
     } else {
@@ -81,18 +85,17 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Req() request, @Body() params): Promise<ApiResult> {
-    console.log(params);
-    const user = await this.authService.login(params.username,params.password);
+  async login(@Req() request, @Body() params, @Res() res): Promise<ApiResult> {
+    const user = await this.authService.login(params.username, params.password);
     if (user) {
       request.session.user = user;
-      return user;
+      return getSuccessResponse(res, sanitizeResponseObject(user));
     } else {
       return {
         httpStatus: 'Unauthorized',
         httpStatusCode: 401,
         status: 'ERROR',
-        message: 'Username or password provided is incorrect.',
+        message: 'Username or Password provided is incorrect.',
         response: {
           responseType: 'ErrorReport',
         },
@@ -106,7 +109,7 @@ export class AuthController {
       httpStatus: 'OK',
       httpStatusCode: 200,
       status: 'OK',
-      message: 'User logged out successfully'
-    }
+      message: 'User logged out successfully',
+    };
   }
 }

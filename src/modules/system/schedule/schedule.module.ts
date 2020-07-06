@@ -8,15 +8,19 @@ import { ProcessController } from './controllers/process.controller';
 import { ProcessService } from './services/process.service';
 import { Process } from './entities/process.entity';
 import { TaskModule } from '../task/task.module';
+import { Cron } from './entities/cron.entity';
+import { CronController } from './controllers/cron/cron.controller';
+import { CronService } from './services/cron/cron.service';
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'basic', session: true }),
-    TypeOrmModule.forFeature([Schedule, Process]),
-    TaskModule
+    TypeOrmModule.forFeature([Schedule, Process, Cron]),
+    TaskModule,
+    SchedulesModule
   ],
-  controllers: [ScheduleController, ProcessController],
-  providers: [ScheduleService, ProcessService],
-  exports: [ProcessService]
+  controllers: [ScheduleController, ProcessController, CronController],
+  providers: [ScheduleService, ProcessService, CronService],
+  exports: [ProcessService],
 })
 export class SchedulesModule {}

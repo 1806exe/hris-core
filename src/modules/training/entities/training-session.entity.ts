@@ -14,6 +14,7 @@ import { TrainingSponsor } from './training-sponsor.entity';
 import { TrainingTopic } from './training-topic.entity';
 import { TrainingVenue } from './training-venue.entity';
 import { TrainingSessionAccess } from './training-session-access.entity';
+import { Record } from '../../record/entities/record.entity';
 @Entity('trainingsession', { schema: 'public' })
 export class TrainingSession extends TransactionTimestamp {
   static plural = 'sessions';
@@ -123,4 +124,6 @@ export class TrainingSession extends TransactionTimestamp {
   @JoinTable({ name: 'sessionuseraccess' })
   trainingsessionaccess: TrainingSessionAccess[];
 
+  @ManyToMany((type) => Record, (record) => record.sessions, {})
+  record: Record[];
 }

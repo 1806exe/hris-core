@@ -1,8 +1,8 @@
+import { Entity, JoinTable, ManyToMany } from 'typeorm';
 import { EntityCoreProps } from '../../../core/entities/entity-core-props';
-import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
-
 import { FieldGroupSet } from './field-groupset.entity';
 import { Field } from './field.entity';
+
 
 @Entity('fieldgroup', { schema: 'public' })
 export class FieldGroup extends EntityCoreProps {

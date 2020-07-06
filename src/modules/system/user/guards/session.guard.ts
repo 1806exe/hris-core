@@ -14,19 +14,20 @@ export class SessionGuard implements CanActivate {
               ], "userSettings": null };
             return true;
         }
-        //return true;
-        // console.log(request.headers)
         try {
             if (request.session && request.session.user) {
                 request.session.previousPath = request.path;
                 return true;
             }
-            if (request.headers['authorization']) {
-                let buff = Buffer.from(request.headers['authorization'].replace('Basic ', ''), 'base64');
-                let auth = buff.toString('ascii').split(':');
-                let user = await User.authenticateUser(auth[0], auth[1]);
+            if (request.headers?.authorization) {
+                const buff = Buffer.from(
+                    request.headers?.authorization.replace('Basic ', ''),
+                    'base64',
+                );
+                const auth = buff.toString('ascii').split(':');
+                const user = await User.authenticateUser(auth[0], auth[1]);
                 if (user) {
-                    if(!request.session){
+                    if (!request.session) {
                         request.session = {};
                     }
                     request.session.user = user;
@@ -34,7 +35,6 @@ export class SessionGuard implements CanActivate {
                 }
             }
         } catch (e) {
-            Logger.error("Message");
             Logger.error(e.message);
             throw new Error('Not In Session');
         }
@@ -42,4 +42,4 @@ export class SessionGuard implements CanActivate {
 }
 export const SessionUser = createParamDecorator((data, req) => {
     return req.session.passport.user;
-})
+});

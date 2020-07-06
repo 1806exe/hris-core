@@ -1,11 +1,8 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
-import { FieldDatatypeController } from './controllers/field-datatype.controller';
 import { FieldGroupSetController } from './controllers/field-group-set.controller';
 import { FieldGroupController } from './controllers/field-group.controller';
-import { FieldInputTypeController } from './controllers/field-input-type.controller';
 import { FieldOptionChildrenController } from './controllers/field-option-children.controller';
 import { FieldOptionGroupSetController } from './controllers/field-option-group-set.controller';
 import { FieldOptionGroupController } from './controllers/field-option-group.controller';
@@ -19,10 +16,8 @@ import { FormVisibleFieldController } from './controllers/form-visible-fields.co
 import { FormController } from './controllers/form.controller';
 import { FormSectionFieldMemberController } from './controllers/formsection-fieldmembers.controller';
 import { SqlViewController } from './controllers/sql-view-controller';
-import { FieldDataType } from './entities/field-datatype.entity';
 import { FieldGroup } from './entities/field-group.entity';
 import { FieldGroupSet } from './entities/field-groupset.entity';
-import { FieldInputType } from './entities/field-input-type.entity';
 import { FieldOptionChildren } from './entities/field-option-children.entity';
 import { FieldOptionGroupSet } from './entities/field-option-group-set.entity';
 import { FieldOptionGroup } from './entities/field-option-group.entity';
@@ -36,10 +31,8 @@ import { FormVisibleField } from './entities/form-visible-fields.entity';
 import { Form } from './entities/form.entity';
 import { FormSectionFieldMember } from './entities/formsection-fieldmembers.entity';
 import { SqlView } from './entities/sqlview.entity';
-import { FieldDataTypeService } from './services/field-datatype.service';
 import { FieldGroupSetService } from './services/field-group-set.service';
 import { FieldGroupService } from './services/field-group.service';
-import { FieldInputTypeService } from './services/field-input-type.service';
 import { FieldOptionChildrenService } from './services/field-option-children.service';
 import { FieldOptionGroupSetService } from './services/field-option-group-set.service';
 import { FieldOptionGroupService } from './services/field-option-group.service';
@@ -54,15 +47,14 @@ import { FormService } from './services/form.service';
 import { FormSectionFieldMemberService } from './services/formsection-fieldmembers.service';
 import { SqlViewService } from './services/sql-view.service';
 
+
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'basic', session: true }),
     TypeOrmModule.forFeature([
       Field,
-      FieldDataType,
       FieldGroup,
       FieldGroupSet,
-      FieldInputType,
       FieldOption,
       FieldOptionChildren,
       FieldOptionGroup,
@@ -79,10 +71,8 @@ import { SqlViewService } from './services/sql-view.service';
   ],
   controllers: [
     FieldController,
-    FieldDatatypeController,
     FieldGroupController,
     FieldGroupSetController,
-    FieldInputTypeController,
     FieldOptionController,
     FieldOptionChildrenController,
     FieldOptionGroupController,
@@ -99,10 +89,8 @@ import { SqlViewService } from './services/sql-view.service';
   ],
   providers: [
     FieldService,
-    FieldDataTypeService,
     FieldGroupService,
     FieldGroupSetService,
-    FieldInputTypeService,
     FieldOptionService,
     FieldOptionChildrenService,
     FieldOptionGroupService,

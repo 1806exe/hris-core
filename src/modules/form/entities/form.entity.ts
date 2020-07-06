@@ -64,7 +64,7 @@ export class Form extends EntityCoreProps {
     (type) => FormFieldMember,
     (formFieldMember) => formFieldMember.form,
     {
-      eager: true,
+      eager: false,
       cascade: true,
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',

@@ -7,6 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   OneToOne,
+  JoinTable,
 } from 'typeorm';
 import { TransactionUser } from '../../../core/entities/transaction-user.entity';
 import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
@@ -95,4 +96,9 @@ export class Record extends TransactionUser {
   )
   @JoinColumn({ name: 'recordId' })
   facilitators: SessionFacilitator[];
+
+  @ManyToMany((type) => TrainingSession, (sessions) => sessions.record, {
+  })
+  @JoinTable({ name: 'recordsessions' })
+  sessions: TrainingSession[];
 }

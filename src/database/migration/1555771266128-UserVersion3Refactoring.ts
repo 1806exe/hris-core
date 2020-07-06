@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import {passwordHash} from '../../core/utilities/password-utilities';
+import { passwordHash } from '../../core/utilities/password-utilities';
 
 export class UserVersion3Refactoring1555771266128
   implements MigrationInterface {
@@ -75,6 +75,7 @@ TABLESPACE pg_default;
       await queryRunner.query(
         'ALTER TABLE "user" ADD COLUMN "createdbyId" INTEGER',
       );
+
       await queryRunner.query(
         'ALTER TABLE "user" ADD CONSTRAINT "fk_user_createdby" FOREIGN KEY("createdbyId") REFERENCES "user"',
       );
@@ -1774,9 +1775,9 @@ CREATE INDEX "IDX_76bc448ca476788f7886a7569b"
     const users = await queryRunner.manager.query('SELECT * FROM public.user');
     for (let user of users) {
       await queryRunner.manager.query(
-        `UPDATE public.user SET token='${await passwordHash('HRHIS2020')}' WHERE id=${
-          user.id
-        }`,
+        `UPDATE public.user SET token='${await passwordHash(
+          'HRHIS2020',
+        )}' WHERE id=${user.id}`,
       );
     }
 
