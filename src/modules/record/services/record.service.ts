@@ -1,4 +1,4 @@
-import { Injectable, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpStatus, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { generateUid } from '../../../core/helpers/makeuid';
 import { getWhereConditions } from '../../../core/utilities';
@@ -9,11 +9,12 @@ import {
 import { Field } from '../../form/entities/field.entity';
 import { Form } from '../../form/entities/form.entity';
 import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
-import { Repository } from 'typeorm';
+import { Repository, QueryBuilder, createQueryBuilder, In } from 'typeorm';
 import { BaseService } from '../../../core/services/base.service';
 import { RecordValue } from '../entities/record-value.entity';
 import { Record } from '../entities/record.entity';
-import { response } from 'express';
+import { TrainingSession } from '@hris/modules/training/entities/training-session.entity';
+import { SessionParticipant } from '@hris/modules/training/entities/training-session-participant.entity';
 
 @Injectable()
 export class RecordService extends BaseService<Record> {
@@ -27,6 +28,10 @@ export class RecordService extends BaseService<Record> {
     @InjectRepository(Form)
     private formRepository: Repository<Form>,
     @InjectRepository(Field) private fieldRepository: Repository<Field>,
+    @InjectRepository(TrainingSession)
+    private traainingSessionRepository: Repository<TrainingSession>,
+    @InjectRepository(SessionParticipant)
+    private sessionRepository: Repository<SessionParticipant>,
   ) {
     super(recordRepository, Record);
   }
@@ -249,5 +254,21 @@ export class RecordService extends BaseService<Record> {
         },
       },
     });
+  }
+  async getSessions(uid: string): Promise<any> {
+    const record = (
+      await this.recordRepository.findOne({ where: { uid: uid } })
+    ).id;
+    const query = await this.sessionRepository.find({
+      select: ['trainingsessionId'],
+      where: { recordId: record },
+    });
+    console.log('Queries:::', query);
+    const session = this.traainingSessionRepository.find({
+      where: {
+        id: In(query.map((session) => session.trainingsessionId)),
+      },
+    });
+    return session;
   }
 }

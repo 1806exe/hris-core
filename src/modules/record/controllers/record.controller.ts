@@ -18,6 +18,7 @@ import { SessionGuard } from '../../system/user/guards/session.guard';
 import { RecordValue } from '../entities/record-value.entity';
 import { RecordService } from '../services/record.service';
 import { sanitizeResponseObject } from '../../../core/utilities/sanitize-response-object';
+import { getSuccessResponse } from '../../../core/helpers/response.helper';
 
 @Controller('api/' + Record.plural)
 export class RecordsController extends BaseController<Record> {
@@ -73,7 +74,6 @@ export class RecordsController extends BaseController<Record> {
     @Body() createRecordDto,
     @Res() res,
   ): Promise<RecordValue> {
-
     const recordvalue = await this.recordService.finOneRecordValue(
       recordValue.recordValue,
     );
@@ -124,5 +124,13 @@ export class RecordsController extends BaseController<Record> {
     return res
       .status(HttpStatus.OK)
       .send(sanitizeResponseObject(recordtransfered));
+  }
+
+  @Get('sessions/:record')
+  @UseGuards(SessionGuard)
+  async getSessions(@Param() param, @Res() res): Promise<any> {
+    console.log(param.record);
+    const sessions = await this.recordService.getSessions(param.record);
+    return sanitizeResponseObject(sessions);
   }
 }

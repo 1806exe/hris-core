@@ -77,11 +77,12 @@ export class Record extends TransactionUser {
   )
   recordValues: RecordValue[];
 
-  @ManyToMany(
-    (type) => TrainingSession,
-    (trainingSession) => trainingSession.topics,
-  )
-  trainingSessions: TrainingSession[];
+  // @ManyToMany(
+  //   (type) => TrainingSession,
+  //   (trainingSession) => trainingSession.record,
+  // )
+  // @JoinTable({ name: 'sessionparticipant' })
+  // trainingSessions: TrainingSession[];
 
   @OneToMany(
     (type) => SessionParticipant,
@@ -96,9 +97,4 @@ export class Record extends TransactionUser {
   )
   @JoinColumn({ name: 'recordId' })
   facilitators: SessionFacilitator[];
-
-  @ManyToMany((type) => TrainingSession, (sessions) => sessions.record, {
-  })
-  @JoinTable({ name: 'recordsessions' })
-  sessions: TrainingSession[];
 }
