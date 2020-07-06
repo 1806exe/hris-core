@@ -93,7 +93,7 @@ export class Record extends TransactionUser {
 
   @OneToMany(
     (type) => SessionFacilitator,
-    (sessionfacilitator) => sessionfacilitator.recordId,
+    (facilitators) => facilitators.recordId,
   )
   @JoinColumn({ name: 'recordId' })
   facilitators: SessionFacilitator[];

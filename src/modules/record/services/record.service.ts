@@ -265,7 +265,7 @@ export class RecordService extends BaseService<Record> {
     console.log('Queries:::', query);
     const session = this.traainingSessionRepository.find({
       where: {
-        id: In(query.map((session) => session.trainingsessionId)),
+        id: In(query.map((session) => +(+session.trainingsessionId))),
       },
     });
     return session;
