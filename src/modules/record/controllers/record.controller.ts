@@ -131,6 +131,6 @@ export class RecordsController extends BaseController<Record> {
   async getSessions(@Param() param, @Res() res): Promise<any> {
     console.log(param.record);
     const sessions = await this.recordService.getSessions(param.record);
-    return getSuccessResponse(res, sanitizeResponseObject(sessions));
+    return getSuccessResponse(res, sessions);
   }
 }
