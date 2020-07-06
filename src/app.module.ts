@@ -25,6 +25,7 @@ import { UserRoleModule } from './modules/system/user-role/user-role.module';
 import { UserModule } from './modules/system/user/user.module';
 import { TrainingModule } from './modules/training/training.module';
 import { VisualizationModule } from './modules/visualization/visualization.module';
+import { RecordRuleModule } from './modules/record-rule/record-rule.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { VisualizationModule } from './modules/visualization/visualization.modul
     ScheduleModule.forRoot(),
     OrganisatinUnitModule,
     FormModule,
+    RecordRuleModule,
     UserModule,
     UserRoleModule,
     UserGroupModule,
