@@ -78,7 +78,6 @@ export class Field extends EntityCoreProps {
     type => FieldGroup,
     fieldGroup => fieldGroup.fields,
     {
-      eager: false,
       cascade: true,
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE',
