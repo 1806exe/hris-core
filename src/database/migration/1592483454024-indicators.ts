@@ -124,6 +124,7 @@ UPDATE FIELD F SET DATATYPE = D.name
         FROM  FIELDDATATYPE D
         WHERE D.id = F."dataTypeId";
 
+ create sequence cron_id_seq;
  CREATE TABLE public.cron
     (
     created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
@@ -141,31 +142,64 @@ UPDATE FIELD F SET DATATYPE = D.name
         
         ALTER TABLE public.cron
             OWNER to postgres;
-
-CREATE TABLE RECORDSESSION("recordId" BIGINT, "trainingsessionId" BIGINT);
-INSERT INTO RECORDSESSION
-SELECT "recordId","trainingsessionId" FROM sessionparticipant
-INNER JOIN record ON(record.id=sessionparticipant."recordId");
-
-INSERT INTO RECORDSESSION
-SELECT "recordId","trainingsessionId" FROM sessionfacilitator
-INNER JOIN record ON(record.id=sessionfacilitator."recordId");
-
-SELECT DISTINCT * INTO RECORDSESSIONS FROM RECORDSESSION;
-ALTER TABLE recordsessions
-ADD CONSTRAINT "PK_recordsessions" PRIMARY KEY ("recordId", "trainingsessionId"),
-ADD CONSTRAINT "FK_recordsessions" FOREIGN KEY ("recordId" )
-                REFERENCES public.record (id) MATCH SIMPLE
-                ON UPDATE NO ACTION
-                ON DELETE CASCADE,
- ADD CONSTRAINT "FK_recordsession" FOREIGN KEY ("trainingsessionId")
-                REFERENCES public.trainingsession (id) MATCH SIMPLE
-                ON UPDATE NO ACTION
-                ON DELETE CASCADE;
-DROP TABLE IF EXISTS RECORDSESSION;
-
-
-
+            DROP SEQUENCE IF EXISTS recordrule_id_seq;
+            CREATE SEQUENCE recordrule_id_seq;
+            CREATE TABLE public.recordrule
+            (
+              created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+              lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+              id integer NOT NULL DEFAULT nextval('recordrule_id_seq'::regclass),
+              uid character(13) NOT NULL,
+              name character varying(256) NOT NULL,
+              description text,
+              priority character varying NOT NULL,
+              condition text NOT NULL,
+              lastupdatedby character varying,
+              publicaccess character(8),
+              externalaccess boolean,
+              formid integer,
+              userid integer,
+              CONSTRAINT "PK_89e9c5b24d45038cb01c2f23b0e" PRIMARY KEY (id),
+              CONSTRAINT "FK_1f1aca176f5e40a18ab74d65348" FOREIGN KEY (formid)
+                  REFERENCES public.form (id) MATCH SIMPLE
+                  ON UPDATE NO ACTION ON DELETE NO ACTION,
+              CONSTRAINT "FK_312aa72e475ac853dce2da0d35b" FOREIGN KEY (userid)
+                  REFERENCES public."user" (id) MATCH SIMPLE
+                  ON UPDATE NO ACTION ON DELETE NO ACTION,
+              CONSTRAINT "UQ_e428b68335b540d6394759928f8" UNIQUE (uid)
+            )
+            WITH (
+              OIDS=FALSE
+            );
+            DROP SEQUENCE IF EXISTS recordruleaction_id_seq;
+            CREATE SEQUENCE recordruleaction_id_seq;
+            CREATE TABLE public.recordruleaction
+            (
+              created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+              lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+              id integer NOT NULL DEFAULT nextval('recordruleaction_id_seq'::regclass),
+              uid character(13) NOT NULL,
+              name character varying(256) NOT NULL,
+              description text,
+              actiontype character varying(256) NOT NULL,
+              field character varying(256) NOT NULL,
+              message text,
+              expression character varying(256),
+              lastupdatedby character varying,
+              publicaccess character(8),
+              externalaccess boolean,
+              recordruleid integer,
+              CONSTRAINT "PK_c306fd6d5c5ac83e4aa5f77c9bc" PRIMARY KEY (id),
+              CONSTRAINT "FK_dadde9af3f6cf2045faa5cca5fb" FOREIGN KEY (recordruleid)
+                  REFERENCES public.recordrule (id) MATCH SIMPLE
+                  ON UPDATE NO ACTION ON DELETE NO ACTION,
+              CONSTRAINT "UQ_c1a6aeb35dc695c747d0cf69495" UNIQUE (uid)
+            )
+            WITH (
+              OIDS=FALSE
+            );
+            ALTER TABLE public.form DROP CONSTRAINT IF EXISTS UQ_b745636607c72a13191d0b91f77;
+            ALTER TABLE public.form ADD CONSTRAINT UQ_b745636607c72a13191d0b91f77 UNIQUE (uid);
 `);
   }
   public async down(queryRunner: QueryRunner): Promise<any> {}
