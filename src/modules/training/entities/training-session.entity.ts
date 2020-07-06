@@ -124,6 +124,6 @@ export class TrainingSession extends TransactionTimestamp {
   @JoinTable({ name: 'sessionuseraccess' })
   trainingsessionaccess: TrainingSessionAccess[];
 
-  @ManyToMany((type) => Record, (record) => record.sessions, {})
-  record: Record[];
+  // @ManyToMany((type) => Record, (record) => record.trainingSessions, {})
+  // record: Record[];
 }
