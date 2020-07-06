@@ -262,12 +262,25 @@ export class RecordService extends BaseService<Record> {
       select: ['trainingsessionId'],
       where: { recordId: record },
     });
-    console.log('Queries:::', query);
-    const session = this.traainingSessionRepository.find({
-      where: {
-        id: In(query.map((session) => +(+session.trainingsessionId))),
-      },
-    });
-    return session;
+
+    if (query.length === 0 || query == undefined) {
+      return { sessions: [] };
+    }
+    if (query.length == 1) {
+      const session = await this.traainingSessionRepository.find({
+        where: {
+          id: query[0].trainingsessionId,
+        },
+      });
+      return session;
+    }
+    if (query.length > 1) {
+      const session = await this.traainingSessionRepository.find({
+        where: {
+          id: In(query.map((session) => +session.trainingsessionId)),
+        },
+      });
+      return session;
+    }
   }
 }
