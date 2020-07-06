@@ -72,9 +72,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       },
     });
     if (participants[0] == undefined) {
-      throw new NotFoundException(
-        `Participants are not available for this training session `,
-      );
+      return { participants: [] };
     }
     return {
       participants: await this.recordRepository.find({
@@ -94,9 +92,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       },
     });
     if (facilitators[0] == undefined) {
-      throw new NotFoundException(
-        `Facilitators are not available for this training session `,
-      );
+      return { facilitators: [] };
     }
     return {
       facilitators: await this.recordRepository.find({
