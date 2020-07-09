@@ -4,6 +4,7 @@ import {
   generateOUFilterQuery,
   getISOOrgUnits,
 } from '../../../core/helpers/ou.helper';
+import * as _ from 'lodash';
 
 @Injectable()
 export class TrainingAnalyticsService {
@@ -741,7 +742,7 @@ export class TrainingAnalyticsService {
       let rows = await this.connetion.manager.query(
         `SELECT * FROM _periodstructure WHERE iso IN ('${pe.join("','")}')`,
       );
-      if(rows.length > 0){
+      if (rows.length > 0) {
         periodFilter = `WHERE (${rows
           .map((row) => {
             return `ts.startdate BETWEEN '${row.startdate.toISOString()}' AND '${row.enddate.toISOString()}' 
@@ -750,12 +751,39 @@ export class TrainingAnalyticsService {
           .join(' OR ')} )`;
       }
     }
+
+    if (otherDimensions) {
+      _.each(_.keys(otherDimensions), (key) => {
+        otherDimensions[key] = otherDimensions[key]
+          .split(':')[1]
+          .split(',')
+          .join("','");
+      });
+
+      curriculumnFilter = otherDimensions['curriculumn']
+        ? otherDimensions['curriculumn']
+        : '';
+      unitFilter = otherDimensions['unit'] ? otherDimensions['unit'] : '';
+      sectionFilter = otherDimensions['sections']
+        ? otherDimensions['sections']
+        : '';
+      organiserFilter = otherDimensions['organiser']
+        ? otherDimensions['organiser']
+        : '';
+      sponsorFilter = otherDimensions['sponsor']
+        ? otherDimensions['sponsor']
+        : '';
+    }
+
     let query = 'SELECT level FROM organisationunitlevel';
     let orglevels = await this.connetion.manager.query(query);
     let levelquery = orglevels.map(
-      orglevel =>
+      (orglevel) =>
         'ous.uidlevel' + orglevel.level + " IN ('" + ou.join("','") + "')",
     );
+
+    //AND curriculum.uid IN('uodfidh','difgod)
+
     query = `
     SELECT section.name section,unit.name unit,
         curriculum.name curriculum,region.name region,
@@ -763,20 +791,49 @@ export class TrainingAnalyticsService {
         venuename venue,sponsor.name sponsor,organiser.name organiser,
         ts.deliverymode,ts.startdate,ts.enddate,COUNT(sp) participants 
     FROM trainingsession ts
-    INNER JOIN _organisationunitstructure ous ON(ous.organisationunitid = ts.organisationunit AND (${levelquery.join(' OR ')}))
+    INNER JOIN _organisationunitstructure ous ON(ous.organisationunitid = ts.organisationunit AND (${levelquery.join(
+      ' OR ',
+    )}))
         INNER JOIN organisationunit district ON(district.id=ts.organisationunit ${ouFilter})
         INNER JOIN organisationunit region ON(district.parentid=region.id)
-        INNER JOIN trainingcurriculum curriculum ON(ts.curriculumid=curriculum.id ${curriculumnFilter})
-        INNER JOIN trainingunit unit ON(unit.id=curriculum.unitid ${unitFilter})
-        INNER JOIN trainingsections section ON(section.id=unit.sectionid ${sectionFilter})
-        INNER JOIN trainingsponsor sponsor ON(sponsor.id=ts.sponsor ${sponsorFilter})
-        INNER JOIN trainingsponsor organiser ON(organiser.id=ts.organiser ${organiserFilter})
-        LEFT JOIN sessionparticipant sp ON(sp."trainingsessionId" = ts.id)
+  
+    INNER JOIN trainingcurriculum curriculum ON(ts.curriculumid=curriculum.id AND curriculum.uid IN('${curriculumnFilter}'))
+         INNER JOIN trainingunit unit ON(unit.id=curriculum.unitid AND unit.uid IN('${unitFilter}'))
+         INNER JOIN trainingsections section ON(section.id=unit.sectionid AND section.uid IN('${sectionFilter}'))
+         INNER JOIN trainingsponsor sponsor ON(sponsor.id=ts.sponsor AND sponsor.uid IN('${sponsorFilter}'))
+         INNER JOIN trainingsponsor organiser ON(organiser.id=ts.organiser AND organiser.uid IN('${organiserFilter}'))
+         LEFT JOIN sessionparticipant sp ON(sp."trainingsessionId" = ts.id)
         ${periodFilter}
         GROUP BY section.name,unit.name,curriculum.name,region.name,district.name,
         venuename,sponsor.name,organiser.name,ts.deliverymode,ts.startdate,ts.enddate
     `;
-    console.log(query);
+
+    // `;
+    // let keys = Object.keys(otherDimensions);
+
+    // console.log('keys ::: ', keys);
+
+    // _.each(keys, (key) => {
+    //   console.log('key :: ', key);
+
+    //   if (key == 'curriculumn') {
+    //     query += `INNER JOIN trainingcurriculum curriculum ON(ts.curriculumid=curriculum.id AND curriculum.uid IN('${otherDimensions[key]}'))
+    //     `;
+    //   } else if (key == 'unit') {
+    //     query += `INNER JOIN trainingunit unit ON(unit.id=curriculum.unitid AND unit.uid IN('${otherDimensions[key]}'))
+    //     `;
+    //   } else if (key == 'sections') {
+    //     query += `INNER JOIN trainingsections section ON(section.id=unit.sectionid AND section.uid IN('${otherDimensions[key]}'))
+    //     `;
+    //   } else if (key == 'sponsor') {
+    //     query += `INNER JOIN trainingsponsor sponsor ON(sponsor.id=ts.sponsor AND sponsor.uid IN('${otherDimensions[key]}'))
+    //     `;
+    //   } else if (key == 'organiser') {
+    //     query += `INNER JOIN trainingsponsor organiser ON(organiser.id=ts.organiser AND organiser.uid IN('${otherDimensions[key]}'))
+    //     `;
+    //   }
+    // });
+    console.log('logged query :: ', query);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
     analytics.rows = rows.map((row) => {
