@@ -504,10 +504,12 @@ export class TrainingAnalyticsService {
         )
         .join(', ')}
       ,${groups.map((group) => 'ous."' + group.uid + '"').join(', ')}`;
+      console.log(query);
     analytics.headers = orglevels.map((orglevel) => {
       return {
-        id: orglevel.uid,
+        //id: orglevel.uid,
         name:  orglevel.name,
+        id: 'namelevel' + orglevel.level,
       };
     });
     analytics.headers = analytics.headers.concat(
@@ -519,6 +521,7 @@ export class TrainingAnalyticsService {
       }),
     );
     analytics.headers.push({
+      id: 'providers',
       name: 'providers',
     });
     let rows = await this.connetion.manager.query(query);
@@ -526,7 +529,7 @@ export class TrainingAnalyticsService {
     analytics.rows = rows.map((row) => {
       let newRow = [];
       analytics.headers.forEach((header, index) => {
-        newRow[index] = row[header.name];
+        newRow[index] = row[header.id];
       });
       return newRow;
     });
