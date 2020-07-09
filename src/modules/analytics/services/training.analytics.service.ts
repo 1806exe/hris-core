@@ -381,7 +381,7 @@ export class TrainingAnalyticsService {
     };
     analytics.width = analytics.headers.length;
 
-    let query = 'SELECT level FROM organisationunitlevel';
+    let query = 'SELECT uid,name,level FROM organisationunitlevel';
     let orglevels = await this.connetion.manager.query(query);
 
     /*let periodquery = pe.map(p => {
@@ -394,7 +394,7 @@ export class TrainingAnalyticsService {
       return `(data."${dx}" BETWEEN pes.startdate AND pes.enddate AND pes.iso='${operand}')`;
     });*/
     let groups = await this.connetion.manager.query(
-      'SELECT id,uid FROM organisationunitgroup',
+      'SELECT id,uid,name FROM organisationunitgroup',
     );
     //TODO improve performance for fetching alot of data
     let filter = '';
@@ -506,13 +506,15 @@ export class TrainingAnalyticsService {
       ,${groups.map((group) => 'ous."' + group.uid + '"').join(', ')}`;
     analytics.headers = orglevels.map((orglevel) => {
       return {
-        name: 'namelevel' + orglevel.level,
+        id: orglevel.uid,
+        name:  orglevel.name,
       };
     });
     analytics.headers = analytics.headers.concat(
       groups.map((group) => {
         return {
-          name: group.uid,
+          id: group.uid,
+          name: group.name,
         };
       }),
     );
@@ -534,9 +536,16 @@ export class TrainingAnalyticsService {
       ') ';
     let organisationunits = await this.connetion.manager.query(query);
     organisationunits.forEach((orgUnit) => {
-      analytics.metaData.items[orgUnit.uid] = orgUnit.name;
+      analytics.metaData.items[orgUnit.uid] = {
+        name:orgUnit.name
+      };
       analytics.metaData.dimensions.ou.push(orgUnit.uid);
     });
+    groups.forEach((group) => {
+      analytics.metaData.items[group.uid] = {
+        name:group.name
+      };
+    })
     return analytics;
   }
   getDimensionFilter(dimensionMap, dimension, table) {
