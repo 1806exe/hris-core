@@ -135,7 +135,7 @@ export class AnalyticsController {
         otherDimensions[split[0]] = split[1];
       }
     });
-    console.log(otherDimensions);
+    console.log('helloooo :: ', otherDimensions);
     /*if (!pe || pe[0] === '') {
       return {
         status: 'ERROR',
