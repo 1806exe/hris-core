@@ -264,7 +264,7 @@ export class RecordService extends BaseService<Record> {
     });
 
     if (query.length === 0 || query == undefined) {
-      return { sessions: [] };
+      return [];
     }
     if (query.length == 1) {
       const session = await this.traainingSessionRepository.find({
