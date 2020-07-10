@@ -398,7 +398,7 @@ export class AnalyticsService {
       const orgUnitLevels = await this.orgUnitLevelService.findAll();
 
       // Get indicators for use in computation
-      const indicators = await this.indicatorService.findIn({ uid: dx });
+      const indicators = await this.getIndicators(dx);
 
       // Attached indicator information in analytics payload
 
@@ -448,7 +448,6 @@ export class AnalyticsService {
           );
         }
       }
-
       // Find fields based on supplied indicators
       const fields = await this.getFields(dx);
       for (const field of fields) {
@@ -479,7 +478,6 @@ export class AnalyticsService {
           );
         }
       }
-
       // update period in analytics metadata
       analytics.metaData.dimensions.pe = getISOPeriods(pe);
       analytics.metaData.dimensions.pe.forEach((pe) => {
@@ -519,8 +517,8 @@ export class AnalyticsService {
 
   async getIndicators(dx) {
     let indicators = {
-      wo7ITisRXe1: {
-        id: 'wo7ITisRXe1',
+      NMLDD43RiBt5g: {
+        id: 'NMLDD43RiBt5g',
         created: '2020-04-03T08:30:16.506Z',
         lastupdated: '2020-04-03T08:30:16.506Z',
         name: 'Forecast Retirement',
@@ -533,8 +531,8 @@ export class AnalyticsService {
         aggregationtype: 'SUM',
         analyticstype: 'RECORDS',
       },
-      wo7ITisRXeE: {
-        id: 'wo7ITisRXeE',
+      uLhsWqITzfk6p: {
+        id: 'uLhsWqITzfk6p',
         created: '2020-04-03T08:30:16.506Z',
         lastupdated: '2020-04-03T08:30:16.506Z',
         name: 'Employments',
@@ -715,8 +713,16 @@ export class AnalyticsService {
         analyticstype: 'RECORDS',
       },
     };
-
-    return await this.indicatorService.findIn({ uid: dx });
+    return dx.map((d)=>{
+      return {
+        ...indicators[d],
+        uid: indicators[d].id,
+        form: {
+          uid:indicators[d].formuid
+        }
+      }
+    }).concat(await this.indicatorService.findIn({ uid: dx }));
+    //return await this.indicatorService.findIn({ uid: dx });
   }
 
   async getFields(dx) {

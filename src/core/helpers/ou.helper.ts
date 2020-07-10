@@ -7,6 +7,8 @@ export function getISOOrgUnits(ou, user) {
   );
   ou.forEach((orgU) => {
     if (orgU === 'USER_ORGUNIT') {
+      console.log(user.organisationUnits);
+      console.log(user.organisationUnits);
       ouIds = ouIds.concat(user.organisationUnits.map((orgUnit) => orgUnit.id));
     }
   });
