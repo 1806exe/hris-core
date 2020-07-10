@@ -13,8 +13,8 @@ import { Repository, QueryBuilder, createQueryBuilder, In } from 'typeorm';
 import { BaseService } from '../../../core/services/base.service';
 import { RecordValue } from '../entities/record-value.entity';
 import { Record } from '../entities/record.entity';
-import { TrainingSession } from '@hris/modules/training/entities/training-session.entity';
-import { SessionParticipant } from '@hris/modules/training/entities/training-session-participant.entity';
+import { TrainingSession } from '../../training/entities/training-session.entity';
+import { SessionParticipant } from '../../training/entities/training-session-participant.entity';
 
 @Injectable()
 export class RecordService extends BaseService<Record> {

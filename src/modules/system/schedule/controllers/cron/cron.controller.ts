@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { MaintenanceBaseController } from '@hris/core/maintenance/controllers/base.controller';
+import { MaintenanceBaseController } from '../../../../../core/maintenance/controllers/base.controller';
 import { Cron } from '../../entities/cron.entity';
 import { CronService } from '../../services/cron/cron.service';
 

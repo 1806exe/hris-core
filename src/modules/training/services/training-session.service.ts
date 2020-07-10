@@ -15,8 +15,8 @@ import { TrainingCurriculum } from '../entities/training-curriculum.entity';
 import { TrainingTopic } from '../entities/training-topic.entity';
 import { TrainingVenue } from '../entities/training-venue.entity';
 import { TrainingSponsor } from '../entities/training-sponsor.entity';
-import { OrganisationUnit } from 'src/modules/organisation-unit/entities/organisation-unit.entity';
-import { User } from 'src/modules/system/user/entities/user.entity';
+import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
+import { User } from '../../system/user/entities/user.entity';
 import { TrainingSessionAccess } from '../entities/training-session-access.entity';
 
 @Injectable()

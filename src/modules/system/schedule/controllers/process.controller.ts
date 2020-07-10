@@ -6,7 +6,7 @@ import { CustomProcess } from '../../task/processes/custom.process';
 import { TaskService } from '../../task/services/task.service';
 import { ApiResult } from '../../../../core/interfaces';
 import { Connection } from 'typeorm';
-import { MaintenanceBaseController } from 'src/core/maintenance/controllers/base.controller';
+import { MaintenanceBaseController } from '../../../../core/maintenance/controllers/base.controller';
 
 @Controller('api/' + Process.plural)
 export class ProcessController extends MaintenanceBaseController<Process> {

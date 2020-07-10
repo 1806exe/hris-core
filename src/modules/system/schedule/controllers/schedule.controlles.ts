@@ -9,8 +9,8 @@ import {
 } from '../../../../core/helpers/response.helper';
 import { ObjectPropsResolver } from '@icodebible/utils/resolvers';
 import { ApiResult } from '../../../../core/interfaces';
-import { MaintenanceBaseController } from '@hris/core/maintenance/controllers/base.controller';
-import { PayloadConfig } from '@hris/core/config/payload.config';
+import { MaintenanceBaseController } from '../../../../core/maintenance/controllers/base.controller';
+import { PayloadConfig } from '../../../../core/config/payload.config';
 
 @Controller('api/' + Schedule.plural)
 export class ScheduleController extends MaintenanceBaseController<Schedule> {
