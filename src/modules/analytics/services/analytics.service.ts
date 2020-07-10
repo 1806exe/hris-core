@@ -38,7 +38,6 @@ export class AnalyticsService {
 
       // Get indicators for use in computation
       const indicators = await this.getIndicators(dx);
-
       // Attached indicator information in analytics payload
 
       let queries = [];
@@ -136,7 +135,6 @@ export class AnalyticsService {
         return [data.dx, data.ou, data.pe, data.value];
       });
 
-      console.log(analytics.metaData.dimensions.ou);
       // Find organisation units to attach in analytics payload
       const orgUnits = await this.orgUnitService.findIn({
         uid: analytics.metaData.dimensions.ou,
@@ -353,7 +351,9 @@ export class AnalyticsService {
         analyticstype: 'RECORDS',
       },
     };
-    return dx.map((d)=>{
+    return dx.filter((d)=>{
+      return Object.keys(indicators).includes(d);
+    }).map((d)=>{
       return {
         ...indicators[d],
         uid: indicators[d].id,
