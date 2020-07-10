@@ -505,11 +505,11 @@ export class TrainingAnalyticsService {
         )
         .join(', ')}
       ,${groups.map((group) => 'ous."' + group.uid + '"').join(', ')}`;
-      console.log(query);
+    console.log(query);
     analytics.headers = orglevels.map((orglevel) => {
       return {
         //id: orglevel.uid,
-        name:  orglevel.name,
+        name: orglevel.name,
         id: 'namelevel' + orglevel.level,
       };
     });
@@ -541,15 +541,15 @@ export class TrainingAnalyticsService {
     let organisationunits = await this.connetion.manager.query(query);
     organisationunits.forEach((orgUnit) => {
       analytics.metaData.items[orgUnit.uid] = {
-        name:orgUnit.name
+        name: orgUnit.name,
       };
       analytics.metaData.dimensions.ou.push(orgUnit.uid);
     });
     groups.forEach((group) => {
       analytics.metaData.items[group.uid] = {
-        name:group.name
+        name: group.name,
       };
-    })
+    });
     return analytics;
   }
   getDimensionFilter(dimensionMap, dimension, table) {
@@ -797,11 +797,25 @@ export class TrainingAnalyticsService {
         INNER JOIN organisationunit district ON(district.id=ts.organisationunit ${ouFilter})
         INNER JOIN organisationunit region ON(district.parentid=region.id)
   
-    INNER JOIN trainingcurriculum curriculum ON(ts.curriculumid=curriculum.id AND curriculum.uid IN('${curriculumnFilter}'))
-         INNER JOIN trainingunit unit ON(unit.id=curriculum.unitid AND unit.uid IN('${unitFilter}'))
-         INNER JOIN trainingsections section ON(section.id=unit.sectionid AND section.uid IN('${sectionFilter}'))
-         INNER JOIN trainingsponsor sponsor ON(sponsor.id=ts.sponsor AND sponsor.uid IN('${sponsorFilter}'))
-         INNER JOIN trainingsponsor organiser ON(organiser.id=ts.organiser AND organiser.uid IN('${organiserFilter}'))
+    INNER JOIN trainingcurriculum curriculum ON(ts.curriculumid=curriculum.id${
+      curriculumnFilter != ''
+        ? ` AND curriculum.uid IN('${curriculumnFilter}')`
+        : ''
+    })
+         INNER JOIN trainingunit unit ON(unit.id=curriculum.unitid${
+           unitFilter != '' ? ` AND unit.uid IN('${unitFilter}')` : ''
+         })
+         INNER JOIN trainingsections section ON(section.id=unit.sectionid${
+           sectionFilter != '' ? ` AND section.uid IN('${sectionFilter}')` : ''
+         })
+         INNER JOIN trainingsponsor sponsor ON(sponsor.id=ts.sponsor${
+           sponsorFilter != '' ? ` AND sponsor.uid IN('${sponsorFilter}')` : ''
+         })
+         INNER JOIN trainingsponsor organiser ON(organiser.id=ts.organiser${
+           organiserFilter != ''
+             ? ` AND organiser.uid IN('${organiserFilter}')`
+             : ''
+         })
          LEFT JOIN sessionparticipant sp ON(sp."trainingsessionId" = ts.id)
         ${periodFilter}
         GROUP BY section.name,unit.name,curriculum.name,region.name,district.name,
