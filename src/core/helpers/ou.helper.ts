@@ -1,14 +1,13 @@
 export function getISOOrgUnits(ou, user) {
+  ou = ou.map((o)=>o.trim());
   let ouIds = ou.filter(
     (ouId) =>
-      ouId.indexOf('LEVEL-') === -1 &&
-      ouId.indexOf('OU_GROUP-') === -1 &&
-      ouId.indexOf('USER_ORGUNIT') === -1,
+      ouId.trim().indexOf('LEVEL-') === -1 &&
+      ouId.trim().indexOf('OU_GROUP-') === -1 &&
+      ouId.trim().indexOf('USER_ORGUNIT') === -1,
   );
   ou.forEach((orgU) => {
-    if (orgU === 'USER_ORGUNIT') {
-      console.log(user.organisationUnits);
-      console.log(user.organisationUnits);
+    if (orgU.trim() === 'USER_ORGUNIT') {
       ouIds = ouIds.concat(user.organisationUnits.map((orgUnit) => orgUnit.id));
     }
   });
@@ -16,6 +15,7 @@ export function getISOOrgUnits(ou, user) {
 }
 
 export function generateOUFilterQuery(ousAlias, ou, orgUnitLevels, user) {
+  ou = ou.map((o)=>o.trim());
   let ouIds = ou.filter(
     (ouId) =>
       ouId.indexOf('LEVEL-') === -1 &&
