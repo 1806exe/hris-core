@@ -11,10 +11,11 @@ import {
 
 import { Record } from './record.entity';
 import { Field } from '../../form/entities/field.entity';
-import { TransactionUser } from '../../../core/entities/transaction-user.entity';
+import { User } from '../../../modules/system/user/entities/user.entity';
+import { TransactionTimestamp } from '../../../core/entities/transaction-timestamp.entity';
 
 @Entity('recordvalue', { schema: 'public' })
-export class RecordValue extends TransactionUser {
+export class RecordValue extends TransactionTimestamp {
   @PrimaryGeneratedColumn()
   recordvalueid: number;
 
@@ -81,4 +82,10 @@ export class RecordValue extends TransactionUser {
 
   @Column()
   fieldid: number;
+
+  @JoinColumn({ name: 'createdbyid' })
+  createdBy: User;
+
+  @JoinColumn({ name: 'lastupdatedbyid' })
+  lastUpdatedBy: User;
 }
