@@ -24,7 +24,7 @@ import { UserSettings } from './user-settings.entity';
 import { TrainingSessionAccess } from '../../../training/entities/training-session-access.entity';
 import { passwordCompare } from '../../../../core/utilities/password-utilities';
 import { RecordRule } from '../../../record-rule/entities/record-rule/record-rule.entity';
-import { SessionParticipant } from '@hris/modules/training/entities/training-session-participant.entity';
+import { SessionParticipant } from '../../../../modules/training/entities/training-session-participant.entity';
 
 @Entity('user', { schema: 'public' })
 export class User extends UserCoreProps {
