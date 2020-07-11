@@ -3,9 +3,10 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ReportGroup } from '../entities/report.group.entity';
 import { MaintenanceBaseService } from '../../../core/maintenance/services/base.service';
+import { BaseService } from '../../../core/services/base.service';
 
 @Injectable()
-export class ReportGroupService extends MaintenanceBaseService<ReportGroup> {
+export class ReportGroupService extends BaseService<ReportGroup> {
     constructor(
         @InjectRepository(ReportGroup)
         reportGroupRepository: Repository<ReportGroup>,

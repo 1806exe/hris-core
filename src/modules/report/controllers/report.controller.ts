@@ -6,9 +6,10 @@ import { SessionGuard } from '../../system/user/guards/session.guard';
 import { ApiResult } from '../../../core/interfaces';
 import { getSuccessResponse } from '../../../core/helpers/response.helper';
 import { MaintenanceBaseController } from '../../../core/maintenance/controllers/base.controller';
+import { BaseController } from '../../../core/controllers/base.contoller';
 
 @Controller('api/' + Report.plural)
-export class ReportController extends MaintenanceBaseController<Report> {
+export class ReportController extends BaseController<Report> {
   constructor(private reportService: ReportService) {
     super(reportService, Report);
   }
