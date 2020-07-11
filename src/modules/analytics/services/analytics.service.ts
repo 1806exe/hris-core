@@ -41,7 +41,6 @@ export class AnalyticsService {
       // Attached indicator information in analytics payload
 
       let queries = [];
-
       // Pass through each indicator to generate its data
       for (const indicator of indicators) {
         // Push indicator information in analytics metadata payload
@@ -65,7 +64,6 @@ export class AnalyticsService {
         if (filter.trim() !== '') {
           filter = ` AND (${filter}) `;
         }
-
         // Pass through selected organisation units to process data by ous
         for (let orgUnit of getISOOrgUnits(ou, context.user)) {
           queries.push(
@@ -134,7 +132,6 @@ export class AnalyticsService {
         }
         return [data.dx, data.ou, data.pe, data.value];
       });
-
       // Find organisation units to attach in analytics payload
       const orgUnits = await this.orgUnitService.findIn({
         uid: analytics.metaData.dimensions.ou,
