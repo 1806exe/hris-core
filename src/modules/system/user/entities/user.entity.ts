@@ -312,9 +312,8 @@ export class User extends UserCoreProps {
   }*/
 
   public static async authenticateUserByToken(token: string): Promise<User> {
-    let buff = new Buffer(token, 'base64');
-    let text = buff.toString('ascii');
-    console.log('Text:', text);
+    const buff = new Buffer(token, 'base64');
+    const text = buff.toString('ascii');
     let u: User;
     u = await User.findOne({
       where: { token },
@@ -325,7 +324,7 @@ export class User extends UserCoreProps {
     }
   }
   public static async authenticateUser(username, password): Promise<User> {
-    let user: User = await User.findOne({
+    const user: User = await User.findOne({
       where: { username },
     });
     if (user && (await passwordCompare(password, user.token))) {
@@ -339,10 +338,12 @@ export class User extends UserCoreProps {
     return Buffer.from(username + ':' + password).toString('base64');
   }
 
-  @OneToMany(() => Report, (report: Report) => report.user, {
-    onDelete: 'CASCADE',
-  })
-  report: Report[];
+  // ToDo: BEGIN: Improve Approach
+  // @OneToMany(() => Report, (report: Report) => report.user, {
+  //   onDelete: 'CASCADE',
+  // })
+  // report: Report[];
+  // ToDo: END: Improve Approach
 
   @OneToOne((type) => SessionParticipant, (participant) => participant.assesser)
   assesser: SessionParticipant[];
