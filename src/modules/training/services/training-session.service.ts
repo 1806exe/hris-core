@@ -15,8 +15,8 @@ import { TrainingCurriculum } from '../entities/training-curriculum.entity';
 import { TrainingTopic } from '../entities/training-topic.entity';
 import { TrainingVenue } from '../entities/training-venue.entity';
 import { TrainingSponsor } from '../entities/training-sponsor.entity';
-import { OrganisationUnit } from 'src/modules/organisation-unit/entities/organisation-unit.entity';
-import { User } from 'src/modules/system/user/entities/user.entity';
+import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
+import { User } from '../../system/user/entities/user.entity';
 import { TrainingSessionAccess } from '../entities/training-session-access.entity';
 
 @Injectable()
@@ -270,7 +270,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     return await this.recordRepository.findOne({ uid: uid });
   }
   async updateParticipant(uid: string, updateParticipantDTO: any) {
-    const participant = await this.recordRepository.findOne({ uid: uid });
+    const participant = await this.participantRepository.findOne({ uid: uid });
     const {
       certified,
       assessed,

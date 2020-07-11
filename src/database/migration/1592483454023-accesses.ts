@@ -243,15 +243,15 @@ ALTER TABLE public.trainingsessionaccess
                 ("visualizationId" ASC NULLS LAST)
                 TABLESPACE pg_default;
 
-        ALTER TABLE record ADD COLUMN certified BOOLEAN;
-        ALTER TABLE record ADD COLUMN assessed BOOLEAN;
-        ALTER TABLE record ADD COLUMN certifiedby BIGINT;
-        ALTER TABLE record ADD COLUMN certificationdate TIMESTAMP;
-        ALTER TABLE record ADD COLUMN assessedby BIGINT;
-        ALTER TABLE record ADD COLUMN assessmentdate TIMESTAMP;
-        ALTER TABLE record ADD CONSTRAINT FK_CERTIFICATION_CERTIFICATION FOREIGN KEY (certifiedby) 
+        ALTER TABLE sessionparticipant ADD COLUMN certified BOOLEAN;
+        ALTER TABLE sessionparticipant ADD COLUMN assessed BOOLEAN;
+        ALTER TABLE sessionparticipant ADD COLUMN certifiedby BIGINT;
+        ALTER TABLE sessionparticipant ADD COLUMN certificationdate TIMESTAMP;
+        ALTER TABLE sessionparticipant ADD COLUMN assessedby BIGINT;
+        ALTER TABLE sessionparticipant ADD COLUMN assessmentdate TIMESTAMP;
+        ALTER TABLE sessionparticipant ADD CONSTRAINT FK_CERTIFICATION_CERTIFICATION FOREIGN KEY (certifiedby) 
         REFERENCES public."user"(id);
-        ALTER TABLE record ADD CONSTRAINT FK_CERTIFICATION_ASSESSMENT FOREIGN KEY (assessedby) 
+        ALTER TABLE sessionparticipant ADD CONSTRAINT FK_CERTIFICATION_ASSESSMENT FOREIGN KEY (assessedby) 
         REFERENCES public."user"(id);
 
         ALTER TABLE "user" ADD COLUMN sessionaccessid BIGINT;

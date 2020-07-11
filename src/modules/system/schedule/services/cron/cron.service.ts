@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cron } from '../../entities/cron.entity';
-import { MaintenanceBaseService } from '@hris/core/maintenance/services/base.service';
+import { MaintenanceBaseService } from '../../../../../core/maintenance/services/base.service';
 
 @Injectable()
 export class CronService extends MaintenanceBaseService<Cron> {

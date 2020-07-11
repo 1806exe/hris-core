@@ -15,14 +15,14 @@ export class ReportGroup extends EntityCoreProps {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('character varying', {
+  @Column('char', {
     nullable: false,
-    length: 255,
+    length: 13,
     name: 'uid',
   })
   uid: string;
 
-  @Column('character varying', {
+  @Column('char', {
     nullable: false,
     length: 255,
     name: 'name',

@@ -1,4 +1,3 @@
-import { EntityCoreProps } from '@hris/core/entities/entity-core-props';
 import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert } from 'typeorm';
 import { TransactionTimestamp } from '../../../../core/entities/transaction-timestamp.entity';
 import { generateUid } from '../../../../core/helpers/makeuid';
