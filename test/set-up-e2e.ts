@@ -6,6 +6,7 @@ import { UserModule } from '../src/modules/system/user/user.module';
 import { getBasicAuthanticationString } from '../src/core/helpers/basic-auth-token';
 import { OrganisatinUnitModule } from '../src/modules/organisation-unit/organisation-unit.module';
 import { ReportModule } from '../src/modules/report/report.module';
+import { UserRoleModule } from '../src/modules/system/user-role/user-role.module';
 
 let database: any = {
   type: 'postgres',
@@ -52,6 +53,7 @@ export const setUpServer = async () => {
     OrganisatinUnitModule,
     UserModule,
     ReportModule,
+    UserRoleModule,
   ];
   const moduleFixture = await Test.createTestingModule({
     imports: imports,
