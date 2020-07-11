@@ -30,15 +30,16 @@ export class TrainingVenue extends EntityCoreProps {
   })
   district: string;
   @ManyToOne(
-    type => OrganisationUnit,
-    organisationUnit => organisationUnit.trainingVenues,
-    { onDelete: 'CASCADE' },
+    (type) => OrganisationUnit,
+    (organisationUnit) => organisationUnit.trainingVenues,
+    { onDelete: 'CASCADE', eager: true },
   )
-  @JoinColumn({ name: 'organisationunitid' })
+  @JoinColumn({ name: 'organisationunit' })
   organisationUnit: OrganisationUnit | null;
+
   @OneToMany(
-    type => TrainingSession,
-    trainingSession => trainingSession.venue,
+    (type) => TrainingSession,
+    (trainingSession) => trainingSession.venue,
     { onDelete: 'CASCADE' },
   )
   trainingSessions: TrainingSession[];

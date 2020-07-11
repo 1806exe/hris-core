@@ -200,6 +200,12 @@ UPDATE FIELD F SET DATATYPE = D.name
             );
             ALTER TABLE public.form DROP CONSTRAINT IF EXISTS UQ_b745636607c72a13191d0b91f77;
             ALTER TABLE public.form ADD CONSTRAINT UQ_b745636607c72a13191d0b91f77 UNIQUE (uid);
+            ALTER TABLE trainingvenue ADD COLUMN organisationunit BIGINT;
+
+       ALTER TABLE trainingvenue UPDATE COLUMN organisationunit 
+       UPDATE trainingvenue t SET organisationunit = o.id
+        FROM  organisationunit o
+        WHERE o.name = t.district;
 `);
   }
   public async down(queryRunner: QueryRunner): Promise<any> {}
