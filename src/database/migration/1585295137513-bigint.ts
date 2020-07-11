@@ -242,6 +242,56 @@ export class bigint1585295137513 implements MigrationInterface {
         select uid(), sessionid,recordid from sessionfacilitator
         INNER JOIN record ON(record.id=sessionfacilitator.recordid) 
         INNER JOIN trainingsession ON(trainingsession.id = sessionfacilitator.sessionid);
+        -- step 1
+        CREATE TABLE facilitator_temp (LIKE facilitator);
+
+        -- step 2
+        INSERT INTO facilitator_temp(id, uid, "recordId", "trainingsessionId")
+        SELECT 
+        DISTINCT ON ("recordId","trainingsessionId") id, uid(),"recordId", "trainingsessionId"
+        FROM facilitator; 
+
+        -- step 3
+        DROP TABLE facilitator;
+
+        -- step 4
+        ALTER TABLE facilitator_temp 
+        RENAME TO facilitator; 
+
+        -- step 1
+        CREATE TABLE participant_temp (LIKE participant);
+
+        -- step 2
+        INSERT INTO participant_temp(id, uid, "recordId", "trainingsessionId")
+        SELECT 
+        DISTINCT ON ("recordId","trainingsessionId") id, uid(),"recordId", "trainingsessionId"
+        FROM participant; 
+
+        -- step 3
+        DROP TABLE participant;
+
+        -- step 4
+        ALTER TABLE participant_temp 
+        RENAME TO participant; 
+
+        ALTER TABLE participant ADD CONSTRAINT "FK_participant_sessionid" FOREIGN KEY ("trainingsessionId")
+        REFERENCES public.trainingsession (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+        ALTER TABLE facilitator ADD CONSTRAINT "FK_constraint_sessionid" FOREIGN KEY ("trainingsessionId")
+        REFERENCES public.trainingsession (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+
+        ALTER TABLE participant ADD CONSTRAINT "FK_participant_recordid" FOREIGN KEY ("recordId")
+        REFERENCES public.record (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+        ALTER TABLE facilitator ADD CONSTRAINT "FK_constraint_recordid" FOREIGN KEY ("recordId")
+        REFERENCES public.record (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+
         ALTER TABLE trainingsections ADD COLUMN signature text;     
         ALTER TABLE trainingsession ADD COLUMN access boolean;       
         `);

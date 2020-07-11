@@ -13,7 +13,7 @@ import { FormFieldMember } from './form-field-member.entity';
 import { FormSection } from './form-section.entity';
 import { FormVisibleField } from './form-visible-fields.entity';
 import { Indicator } from '../../indicator/entities/indicator.entity';
-import { RecordRule } from '@hris/modules/record-rule/entities/record-rule/record-rule.entity';
+import { RecordRule } from '../../record-rule/entities/record-rule/record-rule.entity';
 
 /**
  *

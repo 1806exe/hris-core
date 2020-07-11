@@ -10,7 +10,7 @@ import { TaskService } from '../../task/services/task.service';
 import { PeriodGenerator } from '../../task/processes/period-generator.process';
 import { OrgUnitGenerator } from '../../task/processes/orgunit-generator.process';
 import { CustomProcess } from '../../task/processes/custom.process';
-import { MaintenanceBaseService } from 'src/core/maintenance/services/base.service';
+import { MaintenanceBaseService } from '../../../../core/maintenance/services/base.service';
 
 @Injectable()
 export class ScheduleService extends MaintenanceBaseService<Schedule>

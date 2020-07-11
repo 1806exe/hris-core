@@ -4,6 +4,7 @@ import { TaskService } from '../../system/task/services/task.service';
 import { AnalyticsService } from '../services/analytics.service';
 import { SessionGuard } from '../../system/user/guards/session.guard';
 import { TrainingAnalyticsService } from '../services/training.analytics.service';
+import { extractAnalytics } from '@hris/core/utilities/analytics-query-extractor';
 
 @Controller('api/analytics')
 export class AnalyticsController {
@@ -15,38 +16,8 @@ export class AnalyticsController {
   @Get()
   @UseGuards(SessionGuard)
   async fetchAnalytics(@Query() query, @AuthenticatedUser() user) {
-    let pe = [];
-    let ou = [];
-    let dx = [];
-    let otherDimensions = {};
-    query.dimension.forEach((dimension) => {
-      let split = dimension.split(':');
-      if (split[0] === 'pe') {
-        pe = pe.concat(split[1].split(';'));
-      } else if (split[0] === 'ou') {
-        ou = ou.concat(split[1].split(';'));
-      } else if (split[0] === 'dx') {
-        dx = dx.concat(split[1].split(';'));
-      }
-    });
-    if (query.filter) {
-      if (!Array.isArray(query.filter)) {
-        query.filter = [query.filter];
-      }
-
-      query.filter.forEach((dimension) => {
-        let split = dimension.split(':');
-        if (split[0] === 'pe') {
-          pe = pe.concat(split[1].split(';'));
-        } else if (split[0] === 'ou') {
-          ou = ou.concat(split[1].split(';'));
-        } else if (split[0] === 'dx') {
-          dx = dx.concat(split[1].split(';'));
-        }
-      });
-    }
-
-    return this.analyticsService.fetchAnalytics(dx, pe, ou, {
+    let params = extractAnalytics(query);
+    return this.analyticsService.fetchAnalytics(params.dx, params.pe, params.ou, {
       user,
     });
   }
@@ -135,7 +106,7 @@ export class AnalyticsController {
         otherDimensions[split[0]] = split[1];
       }
     });
-    console.log(otherDimensions);
+    console.log('helloooo :: ', otherDimensions);
     /*if (!pe || pe[0] === '') {
       return {
         status: 'ERROR',

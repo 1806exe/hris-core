@@ -8,17 +8,16 @@ import {
   Put,
   Query,
   Res,
-  UseGuards,
-  Patch,
+  UseGuards
 } from '@nestjs/common';
 import { BaseController } from '../../../core/controllers/base.contoller';
+import { getSuccessResponse } from '../../../core/helpers/response.helper';
 import { ApiResult } from '../../../core/interfaces';
+import { sanitizeResponseObject } from '../../../core/utilities/sanitize-response-object';
 import { Record } from '../../record/entities/record.entity';
 import { SessionGuard } from '../../system/user/guards/session.guard';
 import { RecordValue } from '../entities/record-value.entity';
 import { RecordService } from '../services/record.service';
-import { sanitizeResponseObject } from '../../../core/utilities/sanitize-response-object';
-import { getSuccessResponse } from '../../../core/helpers/response.helper';
 
 @Controller('api/' + Record.plural)
 export class RecordsController extends BaseController<Record> {
@@ -129,8 +128,8 @@ export class RecordsController extends BaseController<Record> {
   @Get('sessions/:record')
   // @UseGuards(SessionGuard)
   async getSessions(@Param() param, @Res() res): Promise<any> {
-    console.log(param.record);
     const sessions = await this.recordService.getSessions(param.record);
-    return sessions;
+    
+    return getSuccessResponse(res, sessions);
   }
 }

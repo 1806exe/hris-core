@@ -25,369 +25,8 @@ export class AnalyticsService {
     private orgUnitLevelService: OrganisationUnitLevelService,
     private orgUnitService: OrganisationUnitService,
   ) {}
-  sampleAnalytics = {
-    wo7ITisRXeE: {
-      headers: [
-        {
-          name: 'dx',
-          column: 'Data',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'pe',
-          column: 'Period',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'ou',
-          column: 'Organisation unit',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'value',
-          column: 'Value',
-          valueType: 'NUMBER',
-          type: 'java.lang.Double',
-          hidden: false,
-          meta: false,
-        },
-      ],
-      metaData: {
-        items: {
-          '2010': { name: '2010' },
-          '2011': { name: '2011' },
-          '2012': { name: '2012' },
-          '2013': { name: '2013' },
-          '2014': { name: '2014' },
-          '2015': { name: '2015' },
-          '2016': { name: '2016' },
-          '2017': { name: '2017' },
-          '2018': { name: '2018' },
-          '2019': { name: '2019' },
-          '2020': { name: '2020' },
-          ou: { name: 'Organisation unit' },
-          dx: { name: 'Data' },
-          pe: { name: 'Period' },
-          m0frOspS7JY: { name: 'MOH - Tanzania' },
-          wo7ITisRXeE: { name: 'Number of employments' },
-        },
-        dimensions: {
-          dx: ['wo7ITisRXeE'],
-          pe: [
-            '2010',
-            '2011',
-            '2012',
-            '2013',
-            '2014',
-            '2015',
-            '2016',
-            '2017',
-            '2018',
-            '2019',
-          ],
-          ou: ['m0frOspS7JY'],
-          co: [],
-        },
-      },
-      rows: [
-        ['wo7ITisRXeE', '2010', 'm0frOspS7JY', '5275'],
-        ['wo7ITisRXeE', '2011', 'm0frOspS7JY', '3310'],
-        ['wo7ITisRXeE', '2012', 'm0frOspS7JY', '5031'],
-        ['wo7ITisRXeE', '2013', 'm0frOspS7JY', '5207'],
-        ['wo7ITisRXeE', '2014', 'm0frOspS7JY', '7437'],
-        ['wo7ITisRXeE', '2015', 'm0frOspS7JY', '7498'],
-        ['wo7ITisRXeE', '2016', 'm0frOspS7JY', '718'],
-        ['wo7ITisRXeE', '2017', 'm0frOspS7JY', '1975'],
-        ['wo7ITisRXeE', '2018', 'm0frOspS7JY', '5650'],
-        ['wo7ITisRXeE', '2019', 'm0frOspS7JY', '340'],
-      ],
-      width: 4,
-      height: 36,
-    },
-    yKypqIROIO9: {
-      headers: [
-        {
-          name: 'dx',
-          column: 'Data',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'ou',
-          column: 'Organisation unit',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'value',
-          column: 'Value',
-          valueType: 'NUMBER',
-          type: 'java.lang.Double',
-          hidden: false,
-          meta: false,
-        },
-      ],
-      metaData: {
-        items: {
-          '2010': { name: '2010' },
-          '2011': { name: '2011' },
-          '2012': { name: '2012' },
-          '2013': { name: '2013' },
-          '2014': { name: '2014' },
-          '2015': { name: '2015' },
-          '2016': { name: '2016' },
-          '2017': { name: '2017' },
-          '2018': { name: '2018' },
-          '2019': { name: '2019' },
-          '2020': { name: '2020' },
-          ou: { name: 'Organisation unit' },
-          dx: { name: 'Data' },
-          pe: { name: 'Period' },
-          m0frOspS7JY: { name: 'MOH - Tanzania' },
-          yKypqIROIO3: { name: 'Female' },
-          yKypqIROIO9: { name: 'Male' },
-        },
-        dimensions: {
-          dx: ['yKypqIROIO9', 'yKypqIROIO3'],
-          pe: [],
-          ou: ['m0frOspS7JY'],
-          co: [],
-        },
-      },
-      rows: [
-        ['yKypqIROIO9', 'm0frOspS7JY', '5275'],
-        ['yKypqIROIO3', 'm0frOspS7JY', '3310'],
-      ],
-      width: 4,
-      height: 36,
-    },
-    yKypqIROIO4: {
-      headers: [
-        {
-          name: 'dx',
-          column: 'Data',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'pe',
-          column: 'Period',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'ou',
-          column: 'Organisation unit',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'value',
-          column: 'Value',
-          valueType: 'NUMBER',
-          type: 'java.lang.Double',
-          hidden: false,
-          meta: false,
-        },
-      ],
-      metaData: {
-        items: {
-          '2010': { name: '20-24' },
-          '2011': { name: '25-29' },
-          '2012': { name: '30-34' },
-          '2013': { name: '35-39' },
-          '2014': { name: '40-44' },
-          '2015': { name: '45-49' },
-          '2016': { name: '50-54' },
-          '2017': { name: '55-59' },
-          '2018': { name: '60-64' },
-          '2019': { name: '65-69' },
-          '2020': { name: '70-74' },
-          ou: { name: 'Organisation unit' },
-          dx: { name: 'Data' },
-          pe: { name: 'Period' },
-          m0frOspS7JY: { name: 'MOH - Tanzania' },
-          wo7ITisRXeE: { name: 'Number of employees by age' },
-        },
-        dimensions: {
-          dx: ['wo7ITisRXeE'],
-          pe: [
-            '2010',
-            '2011',
-            '2012',
-            '2013',
-            '2014',
-            '2015',
-            '2016',
-            '2017',
-            '2018',
-            '2019',
-          ],
-          ou: ['m0frOspS7JY'],
-          co: [],
-        },
-      },
-      rows: [
-        ['wo7ITisRXeE', '2010', 'm0frOspS7JY', '0'],
-        ['wo7ITisRXeE', '2011', 'm0frOspS7JY', '1188'],
-        ['wo7ITisRXeE', '2012', 'm0frOspS7JY', '13714'],
-        ['wo7ITisRXeE', '2013', 'm0frOspS7JY', '16401'],
-        ['wo7ITisRXeE', '2014', 'm0frOspS7JY', '10221'],
-        ['wo7ITisRXeE', '2015', 'm0frOspS7JY', '10841'],
-        ['wo7ITisRXeE', '2016', 'm0frOspS7JY', '9725'],
-        ['wo7ITisRXeE', '2017', 'm0frOspS7JY', '10320'],
-        ['wo7ITisRXeE', '2018', 'm0frOspS7JY', '9834'],
-        ['wo7ITisRXeE', '2019', 'm0frOspS7JY', '4076'],
-      ],
-      width: 4,
-      height: 36,
-    },
-    any: {
-      headers: [
-        {
-          name: 'dx',
-          column: 'Data',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'pe',
-          column: 'Period',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'ou',
-          column: 'Organisation unit',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'value',
-          column: 'Value',
-          valueType: 'NUMBER',
-          type: 'java.lang.Double',
-          hidden: false,
-          meta: false,
-        },
-      ],
-      metaData: {
-        items: {
-          '201907': { name: 'July 2019' },
-          MqMQnGOqLuY: { name: 'KE' },
-          '201906': { name: 'June 2019' },
-          '201909': { name: 'September 2019' },
-          '201908': { name: 'August 2019' },
-          '201903': { name: 'March 2019' },
-          '201902': { name: 'February 2019' },
-          yKypqIROIO9: { name: 'Watoto Waliopatiwa LLIN' },
-          '201905': { name: 'May 2019' },
-          ou: { name: 'Organisation unit' },
-          '201904': { name: 'April 2019' },
-          '201910': { name: 'October 2019' },
-          '201901': { name: 'January 2019' },
-          '201912': { name: 'December 2019' },
-          '201911': { name: 'November 2019' },
-          X0Me7ygpiUT: { name: 'ME' },
-          dx: { name: 'Data' },
-          pe: { name: 'Period' },
-          Kl9MzjQI3ms: { name: 'Expected children Under 1 Year' },
-          m0frOspS7JY: { name: 'MOH - Tanzania' },
-          wo7ITisRXeE: { name: 'Measles/Rubella 1 doses given' },
-        },
-        dimensions: {
-          dx: ['Kl9MzjQI3ms', 'wo7ITisRXeE', 'yKypqIROIO9'],
-          pe: [
-            '201901',
-            '201902',
-            '201903',
-            '201904',
-            '201905',
-            '201906',
-            '201907',
-            '201908',
-            '201909',
-            '201910',
-            '201911',
-            '201912',
-          ],
-          ou: ['m0frOspS7JY'],
-          co: ['MqMQnGOqLuY', 'X0Me7ygpiUT'],
-        },
-      },
-      rows: [
-        ['Kl9MzjQI3ms', '201901', 'm0frOspS7JY', '2.36250253E7'],
-        ['Kl9MzjQI3ms', '201902', 'm0frOspS7JY', '2.6156278E7'],
-        ['Kl9MzjQI3ms', '201903', 'm0frOspS7JY', '2.36250253E7'],
-        ['Kl9MzjQI3ms', '201904', 'm0frOspS7JY', '2.44125262E7'],
-        ['Kl9MzjQI3ms', '201905', 'm0frOspS7JY', '2.36250253E7'],
-        ['Kl9MzjQI3ms', '201906', 'm0frOspS7JY', '2.44125262E7'],
-        ['Kl9MzjQI3ms', '201907', 'm0frOspS7JY', '2.36250253E7'],
-        ['Kl9MzjQI3ms', '201908', 'm0frOspS7JY', '2.36250253E7'],
-        ['Kl9MzjQI3ms', '201909', 'm0frOspS7JY', '2.44125262E7'],
-        ['Kl9MzjQI3ms', '201910', 'm0frOspS7JY', '2.36250253E7'],
-        ['Kl9MzjQI3ms', '201911', 'm0frOspS7JY', '2.44125262E7'],
-        ['Kl9MzjQI3ms', '201912', 'm0frOspS7JY', '2.36250253E7'],
-        ['wo7ITisRXeE', '201901', 'm0frOspS7JY', '172808.0'],
-        ['wo7ITisRXeE', '201902', 'm0frOspS7JY', '164532.0'],
-        ['wo7ITisRXeE', '201903', 'm0frOspS7JY', '171820.0'],
-        ['wo7ITisRXeE', '201904', 'm0frOspS7JY', '162847.0'],
-        ['wo7ITisRXeE', '201905', 'm0frOspS7JY', '181111.0'],
-        ['wo7ITisRXeE', '201906', 'm0frOspS7JY', '167957.0'],
-        ['wo7ITisRXeE', '201907', 'm0frOspS7JY', '177640.0'],
-        ['wo7ITisRXeE', '201908', 'm0frOspS7JY', '181368.0'],
-        ['wo7ITisRXeE', '201909', 'm0frOspS7JY', '177983.0'],
-        ['wo7ITisRXeE', '201910', 'm0frOspS7JY', '204312.0'],
-        ['wo7ITisRXeE', '201911', 'm0frOspS7JY', '155853.0'],
-        ['wo7ITisRXeE', '201912', 'm0frOspS7JY', '139938.0'],
-        ['yKypqIROIO9', '201910', 'm0frOspS7JY', '134130.0'],
-        ['yKypqIROIO9', '201911', 'm0frOspS7JY', '126009.0'],
-        ['yKypqIROIO9', '201902', 'm0frOspS7JY', '127274.0'],
-        ['yKypqIROIO9', '201909', 'm0frOspS7JY', '146883.0'],
-        ['yKypqIROIO9', '201901', 'm0frOspS7JY', '134887.0'],
-        ['yKypqIROIO9', '201903', 'm0frOspS7JY', '135008.0'],
-        ['yKypqIROIO9', '201912', 'm0frOspS7JY', '105449.0'],
-        ['yKypqIROIO9', '201906', 'm0frOspS7JY', '133842.0'],
-        ['yKypqIROIO9', '201905', 'm0frOspS7JY', '140172.0'],
-        ['yKypqIROIO9', '201907', 'm0frOspS7JY', '146057.0'],
-        ['yKypqIROIO9', '201908', 'm0frOspS7JY', '149497.0'],
-        ['yKypqIROIO9', '201904', 'm0frOspS7JY', '126747.0'],
-      ],
-      width: 4,
-      height: 36,
-    },
-  };
   async fetchAnalytics(dx: any, pe: any, ou: any[], context: any) {
-    if (false) {
-      return this.sampleAnalytics[dx]
-        ? this.sampleAnalytics[dx]
-        : this.sampleAnalytics['any'];
-    } else {
+    {
       let analytics: Analytics = {
         headers: getAnalyticsHeaders(),
         metaData: { items: {}, dimensions: { dx: [], pe: [], ou: [], co: [] } },
@@ -398,12 +37,10 @@ export class AnalyticsService {
       const orgUnitLevels = await this.orgUnitLevelService.findAll();
 
       // Get indicators for use in computation
-      const indicators = await this.indicatorService.findIn({ uid: dx });
-
+      const indicators = await this.getIndicators(dx);
       // Attached indicator information in analytics payload
 
       let queries = [];
-
       // Pass through each indicator to generate its data
       for (const indicator of indicators) {
         // Push indicator information in analytics metadata payload
@@ -427,7 +64,6 @@ export class AnalyticsService {
         if (filter.trim() !== '') {
           filter = ` AND (${filter}) `;
         }
-
         // Pass through selected organisation units to process data by ous
         for (let orgUnit of getISOOrgUnits(ou, context.user)) {
           queries.push(
@@ -448,7 +84,6 @@ export class AnalyticsService {
           );
         }
       }
-
       // Find fields based on supplied indicators
       const fields = await this.getFields(dx);
       for (const field of fields) {
@@ -479,7 +114,6 @@ export class AnalyticsService {
           );
         }
       }
-
       // update period in analytics metadata
       analytics.metaData.dimensions.pe = getISOPeriods(pe);
       analytics.metaData.dimensions.pe.forEach((pe) => {
@@ -498,7 +132,6 @@ export class AnalyticsService {
         }
         return [data.dx, data.ou, data.pe, data.value];
       });
-
       // Find organisation units to attach in analytics payload
       const orgUnits = await this.orgUnitService.findIn({
         uid: analytics.metaData.dimensions.ou,
@@ -519,8 +152,8 @@ export class AnalyticsService {
 
   async getIndicators(dx) {
     let indicators = {
-      wo7ITisRXe1: {
-        id: 'wo7ITisRXe1',
+      NMLDD43RiBt5g: {
+        id: 'NMLDD43RiBt5g',
         created: '2020-04-03T08:30:16.506Z',
         lastupdated: '2020-04-03T08:30:16.506Z',
         name: 'Forecast Retirement',
@@ -533,8 +166,8 @@ export class AnalyticsService {
         aggregationtype: 'SUM',
         analyticstype: 'RECORDS',
       },
-      wo7ITisRXeE: {
-        id: 'wo7ITisRXeE',
+      uLhsWqITzfk6p: {
+        id: 'uLhsWqITzfk6p',
         created: '2020-04-03T08:30:16.506Z',
         lastupdated: '2020-04-03T08:30:16.506Z',
         name: 'Employments',
@@ -715,8 +348,18 @@ export class AnalyticsService {
         analyticstype: 'RECORDS',
       },
     };
-
-    return await this.indicatorService.findIn({ uid: dx });
+    return dx.filter((d)=>{
+      return Object.keys(indicators).includes(d);
+    }).map((d)=>{
+      return {
+        ...indicators[d],
+        uid: indicators[d].id,
+        form: {
+          uid:indicators[d].formuid
+        }
+      }
+    }).concat(await this.indicatorService.findIn({ uid: dx }));
+    //return await this.indicatorService.findIn({ uid: dx });
   }
 
   async getFields(dx) {

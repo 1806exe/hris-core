@@ -24,6 +24,7 @@ import { UserSettings } from './user-settings.entity';
 import { TrainingSessionAccess } from '../../../training/entities/training-session-access.entity';
 import { passwordCompare } from '../../../../core/utilities/password-utilities';
 import { RecordRule } from '../../../record-rule/entities/record-rule/record-rule.entity';
+import { SessionParticipant } from '../../../../modules/training/entities/training-session-participant.entity';
 
 @Entity('user', { schema: 'public' })
 export class User extends UserCoreProps {
@@ -344,11 +345,14 @@ export class User extends UserCoreProps {
   // report: Report[];
   // ToDo: END: Improve Approach
 
-  @OneToOne((type) => Record, (record) => record.assesser)
-  assesser: Record[];
+  @OneToOne((type) => SessionParticipant, (participant) => participant.assesser)
+  assesser: SessionParticipant[];
 
-  @OneToOne((type) => Record, (record) => record.certifier)
-  certifier: Record[];
+  @OneToOne(
+    (type) => SessionParticipant,
+    (participant) => participant.certifier,
+  )
+  certifier: SessionParticipant[];
 
   @ManyToOne(
     (type) => TrainingSessionAccess,

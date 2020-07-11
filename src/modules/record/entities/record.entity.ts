@@ -9,7 +9,6 @@ import {
   OneToOne,
   JoinTable,
 } from 'typeorm';
-import { TransactionUser } from '../../../core/entities/transaction-user.entity';
 import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
 import { TrainingSession } from '../../training/entities/training-session.entity';
 import { Form } from '../../form/entities/form.entity';
@@ -17,9 +16,10 @@ import { RecordValue } from './record-value.entity';
 import { SessionParticipant } from '../../training/entities/training-session-participant.entity';
 import { SessionFacilitator } from '../../training/entities/training-session-facilitatory.entity';
 import { User } from '../../system/user/entities/user.entity';
+import { TransactionTimestamp } from '../../../core/entities/transaction-timestamp.entity';
 
 @Entity('record', { schema: 'public' })
-export class Record extends TransactionUser {
+export class Record extends TransactionTimestamp {
   static plural = 'records';
 
   @PrimaryGeneratedColumn()
@@ -50,26 +50,6 @@ export class Record extends TransactionUser {
   })
   instance: string;
 
-  @Column('boolean', { nullable: false, name: 'certified' })
-  certified: boolean;
-
-  @Column('date', { nullable: false, name: 'certificationdate' })
-  certificationdate: Date;
-
-  @Column('boolean', { nullable: false, name: 'assessed' })
-  assessed: boolean;
-
-  @Column('date', { nullable: false, name: 'assessmentdate' })
-  assessmentdate: Date;
-
-  @OneToOne((type) => User, (user) => user.assesser, { eager: true })
-  @JoinColumn({ name: 'assessedby' })
-  assesser: User[];
-
-  @OneToOne((type) => User, (user) => user.certifier, { eager: true })
-  @JoinColumn({ name: 'certifiedby' })
-  certifier: User[];
-
   @OneToMany(
     () => RecordValue,
     (recordvalue: RecordValue) => recordvalue.record,
@@ -97,4 +77,10 @@ export class Record extends TransactionUser {
   )
   @JoinColumn({ name: 'recordId' })
   facilitators: SessionFacilitator[];
+
+  @JoinColumn({ name: 'createdbyid' })
+    createdBy: User;
+
+    @JoinColumn({ name: 'lastupdatedbyid' })
+    lastUpdatedBy: User;
 }

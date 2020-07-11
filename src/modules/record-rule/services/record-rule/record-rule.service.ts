@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { MaintenanceBaseService } from '@hris/core/maintenance/services/base.service';
+import { MaintenanceBaseService } from '../../../../core/maintenance/services/base.service';
 import { RecordRule } from '../../entities/record-rule/record-rule.entity';
 
 @Injectable()

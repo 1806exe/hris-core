@@ -17,6 +17,13 @@ export class Report extends EntityCoreProps {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column('char', {
+    nullable: false,
+    length: 13,
+    name: 'uid',
+  })
+  uid: string;
+
   @Column('character varying', {
     nullable: true,
     length: 255,

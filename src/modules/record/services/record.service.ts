@@ -13,8 +13,8 @@ import { Repository, QueryBuilder, createQueryBuilder, In } from 'typeorm';
 import { BaseService } from '../../../core/services/base.service';
 import { RecordValue } from '../entities/record-value.entity';
 import { Record } from '../entities/record.entity';
-import { TrainingSession } from '@hris/modules/training/entities/training-session.entity';
-import { SessionParticipant } from '@hris/modules/training/entities/training-session-participant.entity';
+import { TrainingSession } from '../../training/entities/training-session.entity';
+import { SessionParticipant } from '../../training/entities/training-session-participant.entity';
 
 @Injectable()
 export class RecordService extends BaseService<Record> {
@@ -262,12 +262,25 @@ export class RecordService extends BaseService<Record> {
       select: ['trainingsessionId'],
       where: { recordId: record },
     });
-    console.log('Queries:::', query);
-    const session = this.traainingSessionRepository.find({
-      where: {
-        id: In(query.map((session) => +(+session.trainingsessionId))),
-      },
-    });
-    return session;
+
+    if (query.length === 0 || query == undefined) {
+      return [];
+    }
+    if (query.length == 1) {
+      const session = await this.traainingSessionRepository.find({
+        where: {
+          id: query[0].trainingsessionId,
+        },
+      });
+      return session;
+    }
+    if (query.length > 1) {
+      const session = await this.traainingSessionRepository.find({
+        where: {
+          id: In(query.map((session) => +session.trainingsessionId)),
+        },
+      });
+      return session;
+    }
   }
 }
