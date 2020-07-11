@@ -16,7 +16,7 @@ import { RecordValue } from './record-value.entity';
 import { SessionParticipant } from '../../training/entities/training-session-participant.entity';
 import { SessionFacilitator } from '../../training/entities/training-session-facilitatory.entity';
 import { User } from '../../system/user/entities/user.entity';
-import { TransactionTimestamp } from '@hris/core/entities/transaction-timestamp.entity';
+import { TransactionTimestamp } from '../../../core/entities/transaction-timestamp.entity';
 
 @Entity('record', { schema: 'public' })
 export class Record extends TransactionTimestamp {
