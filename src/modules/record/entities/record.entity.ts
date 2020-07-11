@@ -50,26 +50,6 @@ export class Record extends TransactionUser {
   })
   instance: string;
 
-  @Column('boolean', { nullable: false, name: 'certified' })
-  certified: boolean;
-
-  @Column('date', { nullable: false, name: 'certificationdate' })
-  certificationdate: Date;
-
-  @Column('boolean', { nullable: false, name: 'assessed' })
-  assessed: boolean;
-
-  @Column('date', { nullable: false, name: 'assessmentdate' })
-  assessmentdate: Date;
-
-  @OneToOne((type) => User, (user) => user.assesser, { eager: true })
-  @JoinColumn({ name: 'assessedby' })
-  assesser: User[];
-
-  @OneToOne((type) => User, (user) => user.certifier, { eager: true })
-  @JoinColumn({ name: 'certifiedby' })
-  certifier: User[];
-
   @OneToMany(
     () => RecordValue,
     (recordvalue: RecordValue) => recordvalue.record,

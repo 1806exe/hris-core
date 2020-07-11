@@ -270,7 +270,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     return await this.recordRepository.findOne({ uid: uid });
   }
   async updateParticipant(uid: string, updateParticipantDTO: any) {
-    const participant = await this.recordRepository.findOne({ uid: uid });
+    const participant = await this.participantRepository.findOne({ uid: uid });
     const {
       certified,
       assessed,
