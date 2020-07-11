@@ -338,10 +338,12 @@ export class User extends UserCoreProps {
     return Buffer.from(username + ':' + password).toString('base64');
   }
 
-  @OneToMany(() => Report, (report: Report) => report.user, {
-    onDelete: 'CASCADE',
-  })
-  report: Report[];
+  // ToDo: BEGIN: Improve Approach
+  // @OneToMany(() => Report, (report: Report) => report.user, {
+  //   onDelete: 'CASCADE',
+  // })
+  // report: Report[];
+  // ToDo: END: Improve Approach
 
   @OneToOne((type) => Record, (record) => record.assesser)
   assesser: Record[];

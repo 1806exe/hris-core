@@ -85,17 +85,20 @@ export class Report extends EntityCoreProps {
   })
   html: string;
 
-  @OneToOne(
-    () => User,
-    (user: User) => user.report,
-    { onDelete: 'CASCADE' },
-  )
-  @JoinColumn({ name: 'userid', referencedColumnName: 'id' })
-  user: User;
+  // ToDo: BEGIN: Improve Approach
+  // @OneToOne(
+  //   () => User,
+  //   (user: User) => user.report,
+  //   { onDelete: 'CASCADE' },
+  // )
+  // @JoinColumn({ name: 'userid', referencedColumnName: 'id' })
+  // user: User;
 
-  @ManyToMany(
-    type => ReportGroup,
-    reportGroup => reportGroup.reports,
-  )
+  // @OneToOne(() => User, (user: User) => user.report, { onDelete: 'CASCADE' })
+  // @JoinColumn({ name: 'userid' })
+  // user: User;
+  // ToDo: END: Improve Approach
+
+  @ManyToMany((type) => ReportGroup, (reportGroup) => reportGroup.reports)
   reportGroups: ReportGroup[];
 }
