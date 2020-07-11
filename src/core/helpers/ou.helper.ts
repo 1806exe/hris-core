@@ -24,7 +24,7 @@ export function generateOUFilterQuery(ousAlias, ou, orgUnitLevels, user) {
   );
   ou.forEach((orgU) => {
     if (orgU === 'USER_ORGUNIT') {
-      ouIds = ouIds.concat(user.organisationUnits.map((orgUnit) => orgUnit.id));
+      ouIds = ouIds.concat(user.organisationUnits.map((orgUnit) => orgUnit.uid));
     }
   });
   const ouLevelIds = ou.filter((ouId) => ouId.indexOf('LEVEL-') > -1);
