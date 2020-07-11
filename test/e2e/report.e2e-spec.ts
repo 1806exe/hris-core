@@ -10,7 +10,7 @@ afterAll(async (done) => {
   done();
 });
 let reportId;
-describe('User API', () => {
+describe('Report API', () => {
   it(`Testing Authentication /api/reports (GET)`, () => {
     return request(server.getHttpServer())
       .get(`/api/reports`)
