@@ -17,6 +17,13 @@ export class Report extends EntityCoreProps {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column('char', {
+    nullable: false,
+    length: 13,
+    name: 'uid',
+  })
+  uid: string;
+
   @Column('character varying', {
     nullable: true,
     length: 255,
@@ -85,17 +92,10 @@ export class Report extends EntityCoreProps {
   })
   html: string;
 
-  @OneToOne(
-    () => User,
-    (user: User) => user.report,
-    { onDelete: 'CASCADE' },
-  )
+  @OneToOne(() => User, (user: User) => user.report, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userid', referencedColumnName: 'id' })
   user: User;
 
-  @ManyToMany(
-    type => ReportGroup,
-    reportGroup => reportGroup.reports,
-  )
+  @ManyToMany((type) => ReportGroup, (reportGroup) => reportGroup.reports)
   reportGroups: ReportGroup[];
 }
