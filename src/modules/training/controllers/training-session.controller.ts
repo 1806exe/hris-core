@@ -111,19 +111,20 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
     await this.trainingSessionService.saveTopics(Param.session, saveTopicsDTO);
     return res.status(HttpStatus.OK).send('Topics Added Successfully');
   }
-  @Put('participants/:participant')
+  @Put(':session/participants/:record')
   @UseGuards(SessionGuard)
   async updateParticipant(
     @Param() Param,
     @Body() updateParticipantDTO: any,
     @Res() res,
   ) {
-    const sessionparticipant = await this.trainingSessionService.findOneParticipant(
-      Param.participant,
+    const record = await this.trainingSessionService.findOneParticipant(
+      Param.record,
     );
-    if (sessionparticipant !== undefined) {
+    if (record !== undefined) {
       const participant = await this.trainingSessionService.updateParticipant(
-        Param.participant,
+        Param.record,
+        Param.session,
         updateParticipantDTO,
       );
       return res

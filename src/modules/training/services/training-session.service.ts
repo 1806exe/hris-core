@@ -269,8 +269,22 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
   async findOneParticipant(uid: string) {
     return await this.recordRepository.findOne({ uid: uid });
   }
-  async updateParticipant(uid: string, updateParticipantDTO: any) {
-    const participant = await this.participantRepository.findOne({ uid: uid });
+  async updateParticipant(
+    record: string,
+    session: string,
+    updateParticipantDTO: any,
+  ) {
+    const recordid = (await this.recordRepository.findOne({
+      where: { uid: record },
+    })).id
+    const sessionid = (await this.trainingSessionRepository.findOne({
+      where: { uid: session },
+    })).id
+
+    const participant = await this.participantRepository.findOne({
+      where: [{ recordId: recordid }, { trainingsessionId: sessionid }],
+    });
+    console.log('Participant', participant);
     const {
       certified,
       assessed,
@@ -280,73 +294,75 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       assessmentdate,
     } = updateParticipantDTO;
 
-    if (assessedby !== undefined && certifiedby === undefined) {
-      const assesser = await this.userRepository.manager.query(
-        `SELECT ID FROM "user" WHERE uid='${assessedby}'`,
-      );
-      participant.assessed = assessed;
-      participant.assesser = assesser[0].id;
-      participant.assessmentdate = assessmentdate;
+    // if (assessedby !== undefined && certifiedby === undefined) {
+    //   const assesser = await this.userRepository.manager.query(
+    //     `SELECT ID FROM "user" WHERE uid='${assessedby}'`,
+    //   );
+    //   participant.assessed = assessed;
+    //   participant.assesser = assesser[0].id;
+    //   participant.assessmentdate = assessmentdate;
 
-      await this.recordRepository.save(participant);
-      const participants = await this.recordRepository.findOne({
-        where: { uid: participant.uid },
-        join: {
-          alias: 'record',
-          leftJoinAndSelect: {
-            assessedby: 'record.assesser',
-          },
-        },
-      });
-      return participants;
-    }
-    if (certifiedby !== undefined && assessedby === undefined) {
-      const certifier = await this.userRepository.manager.query(
-        `SELECT ID FROM "user" WHERE uid='${certifiedby}'`,
-      );
-      participant.certified = certified;
-      participant.certifier = certifier[0].id;
-      participant.certificationdate = certificationdate;
+    //   return await this.participantRepository.save(participant);
+    //   // return {
+    //   //   participant: await this.participantRepository.findOne({
+    //   //     where: { uid: participant.uid },
+    //   //     join: {
+    //   //       alias: 'record',
+    //   //       leftJoinAndSelect: {
+    //   //         assessedby: 'record.assesser',
+    //   //       },
+    //   //     },
+    //   //   }),
+    //   // };
+    // }
+    // if (certifiedby !== undefined && assessedby === undefined) {
+    //   const certifier = await this.userRepository.manager.query(
+    //     `SELECT ID FROM "user" WHERE uid='${certifiedby}'`,
+    //   );
+    //   participant.certified = certified;
+    //   participant.certifier = certifier[0].id;
+    //   participant.certificationdate = certificationdate;
 
-      await this.recordRepository.save(participant);
-      const participants = await this.recordRepository.findOne({
-        where: { uid: participant.uid },
-        join: {
-          alias: 'record',
-          leftJoinAndSelect: {
-            certifiedby: 'record.certifier',
-          },
-        },
-      });
-      return participants;
-    }
-    if (assessedby !== undefined && certifiedby !== undefined) {
-      const certifier = await this.userRepository.manager.query(
-        `SELECT ID FROM "user" WHERE uid='${certifiedby}'`,
-      );
-      const assesser = await this.userRepository.manager.query(
-        `SELECT ID FROM "user" WHERE uid='${assessedby}'`,
-      );
-      participant.assessed = assessed;
-      participant.certified = certified;
-      participant.assesser = assesser[0].id;
-      participant.certificationdate = certifier[0].id;
-      participant.assessmentdate = assessmentdate;
-      participant.certificationdate = certificationdate;
+    //   await this.recordRepository.save(participant);
+    //   const participants = await this.recordRepository.findOne({
+    //     where: { uid: participant.uid },
+    //     join: {
+    //       alias: 'record',
+    //       leftJoinAndSelect: {
+    //         certifiedby: 'record.certifier',
+    //       },
+    //     },
+    //   });
+    //   return participants;
+    // }
+    // if (assessedby !== undefined && certifiedby !== undefined) {
+    const certifier = await this.userRepository.manager.query(
+      `SELECT ID FROM "user" WHERE uid='${certifiedby}'`,
+    );
+    const assesser = await this.userRepository.manager.query(
+      `SELECT ID FROM "user" WHERE uid='${assessedby}'`,
+    );
+    participant.assessed = assessed;
+    participant.certified = certified;
+    participant.assesser = assesser[0].id;
+    participant.certificationdate = certifier[0].id;
+    participant.assessmentdate = assessmentdate;
+    participant.certificationdate = certificationdate;
 
-      await this.recordRepository.save(participant);
-      const participants = await this.recordRepository.findOne({
-        where: { uid: participant.uid },
-        join: {
-          alias: 'record',
-          leftJoinAndSelect: {
-            assessedby: 'record.assesser',
-            certifiedby: 'record.certifier',
-          },
+    console.log(participant);
+
+    return await this.participantRepository.save(participant);
+    const participants = await this.recordRepository.findOne({
+      where: { uid: participant.uid },
+      join: {
+        alias: 'record',
+        leftJoinAndSelect: {
+          assessedby: 'record.assesser',
+          certifiedby: 'record.certifier',
         },
-      });
-      return participants;
-    }
+      },
+    });
+    return participants;
   }
   async sessionSharingCreation(uid: String, sessionsharingDTO) {
     const session = (

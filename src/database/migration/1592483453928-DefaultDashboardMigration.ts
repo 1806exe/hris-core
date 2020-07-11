@@ -110,13 +110,114 @@ export class DefaultDashboardMigration1592483453928
                                 created, lastupdated, id, uid, dimension, layout, visualizationid)
                                 VALUES ('2019-07-26', '2019-07-26', 10, 'I89T5MJIt57', 'dx', 'columns', 4)`);
 
-    await queryRunner.query(`INSERT INTO public.visualizationdimension(
-                                    created, lastupdated, id, uid, dimension, layout, visualizationid)
-                                    VALUES ('2019-07-26', '2019-07-26', 11, 'I89T5MJIt58', 'ou', 'filters', 4)`);
+    //     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
+    //                                         created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+    //                                         VALUES ('2019-07-26', '2019-07-26', 10,'PgKpMKe9syVt5', 'yE9m8ltllxfq6', 'INDICATOR', 10)`);
+
+    //     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
+    //                                                 created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+    //                                                 VALUES ('2019-07-26', '2019-07-26', 11,'LgKpMKet1yVz5', 'yE9m8ltllxfq7', 'INDICATOR', 10)`);
+
+    //     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
+    //                                                         created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+    //                                                         VALUES ('2019-07-26', '2019-07-26', 12,'LVlFDGieo8emw', 'yE9m8ltllxfq8', 'INDICATOR', 10)`);
+
+    //     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
+    //                                                                 created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+    //                                                                 VALUES ('2019-07-26', '2019-07-26', 13,'fGawAQkYTLzMQ', 'yE9m8ltllxfq9', 'INDICATOR', 10)`);
+
+    //     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
+    //                                                                         created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+    //                                                                         VALUES ('2019-07-26', '2019-07-26', 14,'iA4WBSRYW45KP', 'yE9m8ltllxf10', 'INDICATOR', 10)`);
+
+    //     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
+    //                                                                                 created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+    //                                                                                 VALUES ('2019-07-26', '2019-07-26', 15,'YybSWJQux7lHY', 'yE9m8ltllxf11', 'INDICATOR', 10)`);
+    //     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
+    //                                                                                         created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+    //                                                                                         VALUES ('2019-07-26', '2019-07-26', 16,'ZURM4cj6CskDS', 'yE9m8ltllxf12', 'INDICATOR', 10)`);
+    //     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
+    //                                                                                                 created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+    //                                                                                                 VALUES ('2019-07-26', '2019-07-26', 17,'sawuBJuhaACVT', 'yE9m8ltllxf13', 'INDICATOR', 10)`);
+    //     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
+    //                                                                                                         created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+    //                                                                                                         VALUES ('2019-07-26', '2019-07-26', 18,'MlalJxoKXxwXM', 'yE9m8ltllxfq4', 'INDICATOR', 10)`);
+    //     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
+    //                                                                                                                 created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+    //                                                                                                                 VALUES ('2019-07-26', '2019-07-26', 19,'F92ddcEUv9qFA', 'yE9m8ltllxfq5', 'INDICATOR', 10)`);
+    //     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
+    //                                                                                                                         created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+    //                                                                                                                         VALUES ('2019-07-26', '2019-07-26', 20,'wWPTrs4zWUcmp', 'uLhsWqITzfk6p', 'INDICATOR', 10)`);
+
+    //     await queryRunner.query(`INSERT INTO public.visualizationdimension(
+    //                                     created, lastupdated, id, uid, dimension, layout, visualizationid)
+    //                                     VALUES ('2019-07-26', '2019-07-26', 11, 'I89T5MJIt58', 'ou', 'filters', 4)`);
+
+    //                                     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
+    //                                         created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+    //                                         VALUES ('2019-07-26', '2019-07-26', 21,'wWPsrs4zWUcmp', 'USER_ORGUNIT', 'INDICATOR', 11)`);
+    await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                        VALUES ('2019-07-26', '2019-07-26', 10,'PgKpMKe9syVt5', 'yE9m8ltllxfq6', 'INDICATOR', 10);
+                        
+                        
+                        INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                        VALUES ('2019-07-26', '2019-07-26', 11,'LgKpMKet1yVz5', 'yE9m8ltllxfq7', 'INDICATOR', 10);
+                        
+                        
+                        INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                        VALUES ('2019-07-26', '2019-07-26', 12,'LVlFDGieo8emw', 'yE9m8ltllxfq8', 'INDICATOR', 10);
+                        
+                        
+                        INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                        VALUES ('2019-07-26', '2019-07-26', 13,'fGawAQkYTLzMQ', 'yE9m8ltllxfq9', 'INDICATOR', 10);
+                        
+                        
+                        INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                        VALUES ('2019-07-26', '2019-07-26', 14,'iA4WBSRYW45KP', 'yE9m8ltllxf10', 'INDICATOR', 10);
+                        
+                        
+                        INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                        VALUES ('2019-07-26', '2019-07-26', 15,'YybSWJQux7lHY', 'yE9m8ltllxf11', 'INDICATOR', 10);
+                        
+                        
+                        INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                        VALUES ('2019-07-26', '2019-07-26', 16,'ZURM4cj6CskDS', 'yE9m8ltllxf12', 'INDICATOR', 10);
+                        
+                        
+                        INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                        VALUES ('2019-07-26', '2019-07-26', 17,'ZURM4cj6CskDS', 'yE9m8ltllxf12', 'INDICATOR', 10);
+                        
+                        
+                        INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                        VALUES ('2019-07-26', '2019-07-26', 18,'sawuBJuhaACVT', 'yE9m8ltllxf13', 'INDICATOR', 10);
+                        
+                        
+                        INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                        VALUES ('2019-07-26', '2019-07-26', 19,'MlalJxoKXxwXM', 'yE9m8ltllxfq4', 'INDICATOR', 10);
+                        
+                        
+                        INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                        VALUES ('2019-07-26', '2019-07-26', 20,'F92ddcEUv9qFA', 'yE9m8ltllxfq5', 'INDICATOR', 10);
+                        
+                        
+                        INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                        VALUES ('2019-07-26', '2019-07-26', 21,'wWPTrs4zWUcmp', 'uLhsWqITzfk6p', 'INDICATOR', 10);
+                        
+                        
+                        INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                        VALUES ('2019-07-26', '2019-07-26', 22,'wWPsrs4zWUcmp', 'USER_ORGUNIT', 'INDICATOR', 11);
+                        
+                        
+                        INSERT INTO public.visualizationdimension(created, lastupdated, id, UID, dimension, layout, visualizationid)
+                        VALUES ('2019-07-26', '2019-07-26', 23, 'I8P9T5MJIt59', 'pe', 'rows', 4);`);
 
     await queryRunner.query(`INSERT INTO public.visualizationdimension(
                                         created, lastupdated, id, uid, dimension, layout, visualizationid)
                                         VALUES ('2019-07-26', '2019-07-26', 12, 'I89T5MJIt59', 'pe', 'rows', 4)`);
+
+    await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
+                                        created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                                        VALUES ('2019-07-26', '2019-07-26', 22,'wdPsrs4zWUcmp', 'LAST_YEAR', 'INDICATOR', 12)`);
 
     await queryRunner.query(`INSERT INTO public.dashboarditem(
                             created, lastupdated, id, uid, publicaccess, externalaccess, shape, type, dashboardid, visualizationid)
