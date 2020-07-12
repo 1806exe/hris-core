@@ -206,6 +206,92 @@ UPDATE FIELD F SET DATATYPE = D.name
             UPDATE trainingvenue t SET organisationunit = o.id
             FROM  organisationunit o
             WHERE o.name = t.district;
+
+    
+    DROP TABLE IF EXISTS reportgroupmembers;
+DROP TABLE IF EXISTS report;
+DROP TABLE IF EXISTS reportgroup;
+DROP SEQUENCE IF EXISTS report_id_seq;
+CREATE SEQUENCE report_id_seq;
+
+CREATE TABLE public.report
+(
+  created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+  lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+  id integer NOT NULL DEFAULT nextval('report_id_seq'::regclass),
+  uid character(13) NOT NULL,
+  code character varying(25) DEFAULT NULL::character varying,
+  name character varying(256) NOT NULL,
+  description text,
+  lastupdatedby character varying,
+  publicaccess character(8),
+  externalaccess boolean,
+  uri character varying(255),
+  parameters json NOT NULL,
+  type character varying(255) NOT NULL,
+  createdby character varying(255),
+  html character varying(256) NOT NULL,
+  CONSTRAINT "PK_1af82de239cf99a5ba1f66a4660" PRIMARY KEY (id),
+  CONSTRAINT "UQ_e20953580a9f370ec98c5ae94e3" UNIQUE (uid)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE public.report
+  OWNER TO postgres;
+
+DROP SEQUENCE IF EXISTS reportgroup_id_seq;
+CREATE SEQUENCE reportgroup_id_seq;
+CREATE TABLE public.reportgroup
+(
+  created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+  lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
+  id integer NOT NULL DEFAULT nextval('reportgroup_id_seq'::regclass),
+  uid character(13) NOT NULL,
+  code character varying(25) DEFAULT NULL::character varying,
+  name character varying(256) NOT NULL,
+  description text,
+  lastupdatedby character varying,
+  publicaccess character(8),
+  externalaccess boolean,
+  CONSTRAINT "PK_2a90e74adda4b6c08fe2998e262" PRIMARY KEY (id),
+  CONSTRAINT "UQ_75ad837fd6bedc91c080ab072b2" UNIQUE (uid)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE public.reportgroup
+  OWNER TO postgres;
+  
+CREATE TABLE public.reportgroupmembers
+(
+  "reportgroupId" integer NOT NULL,
+  "reportId" integer NOT NULL,
+  CONSTRAINT "PK_af814dd7950fd7741850bb071d2" PRIMARY KEY ("reportgroupId", "reportId"),
+  CONSTRAINT "FK_abb6c0c7aa6e4f7f6e084cf981e" FOREIGN KEY ("reportgroupId")
+      REFERENCES public.reportgroup (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE,
+  CONSTRAINT "FK_fb988f65c0c3a89c183afb68ee0" FOREIGN KEY ("reportId")
+      REFERENCES public.report (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE public.reportgroupmembers
+  OWNER TO postgres;
+DROP INDEX IF EXISTS "IDX_abb6c0c7aa6e4f7f6e084cf981";
+DROP INDEX IF EXISTS "IDX_fb988f65c0c3a89c183afb68ee";
+CREATE INDEX "IDX_abb6c0c7aa6e4f7f6e084cf981"
+  ON public.reportgroupmembers
+  USING btree
+  ("reportgroupId");
+  
+CREATE INDEX "IDX_fb988f65c0c3a89c183afb68ee"
+  ON public.reportgroupmembers
+  USING btree
+  ("reportId");
+
 `);
   }
   public async down(queryRunner: QueryRunner): Promise<any> {}
