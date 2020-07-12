@@ -37,11 +37,13 @@ export class Report extends EntityCoreProps {
   })
   parameters: any;
 
-  @Column({
-    nullable: false,
-    name: 'userid',
-  })
-  userid: number;
+  // ToDo: BEGIN Improve Approach
+  // @Column({
+  //   nullable: false,
+  //   name: 'userid',
+  // })
+  // userid: number;
+  // ToDo: END Improve Approach
 
   @Column('character varying', {
     nullable: false,
@@ -51,7 +53,7 @@ export class Report extends EntityCoreProps {
   type: string;
 
   @Column('character varying', {
-    nullable: false,
+    nullable: true,
     length: 255,
     name: 'createdby',
   })
