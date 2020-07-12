@@ -203,58 +203,38 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     } = createSessionDTO;
 
     const session = new TrainingSession();
-    const sections = await this.trainingSectionRepository.manager.query(
-      `SELECT id FROM trainingsections WHERE uid='${section}'`,
-    );
-
-    const sectionid = sections[0].id;
-    const units = await this.trainingUnitRepository.manager.query(
-      `SELECT id FROM trainingunit WHERE uid='${unit}'`,
-    );
-    const unitid = units[0].id;
-    const organisationunits = await this.organisationunitRepository.manager.query(
-      `SELECT id FROM organisationunit WHERE uid='${orgunit}'`,
-    );
-    const organisationunitid = organisationunits[0].id;
-    const curriculums = await this.trainingCurriculumRepository.manager.query(
-      `SELECT id FROM trainingcurriculum WHERE uid='${curriculum}'`,
-    );
-    const curriculumid = curriculums[0].id;
-    const sponsors = await this.trainingSponsorRepository.manager.query(
-      `SELECT id FROM trainingsponsor WHERE uid='${sponsor}'`,
-    );
-    const sponsorid = sponsors[0].id;
-    const venues = await this.trainingVenueRepository.manager.query(
-      ` SELECT id FROM trainingvenue WHERE uid='${venue}'`,
-    );
-    const venueid = venues[0].id;
-
-    const organizers = await this.trainingSponsorRepository.manager.query(
-      `SELECT id FROM trainingsponsor WHERE uid='${organiser}'`,
-    );
-    const orginiserid = organizers[0].id;
-
     session.uid = generateUid();
-    session.organiser = orginiserid;
-    session.venue = venueid;
+    session.organiser = await this.trainingSponsorRepository.findOne({
+      where: { uid: organiser },
+    });
+    session.venue = await this.trainingVenueRepository.findOne({
+      where: { uid: venue },
+    });
     session.deliverymode = deliveryMode;
-    session.sponsor = sponsorid;
-    session.curriculum = curriculumid;
+    session.sponsor = await this.trainingSponsorRepository.findOne({
+      where: { uid: sponsor },
+    });
+    session.curriculum = await this.trainingCurriculumRepository.findOne({
+      where: { uid: curriculum },
+    });
     session.enddate = endDate;
     session.startdate = startDate;
-    session.organisationUnit = organisationunitid;
+    session.organisationUnit = await this.organisationunitRepository.findOne({
+      where: { uid: orgunit },
+    });
     session.startdate = startDate;
     session.enddate = endDate;
+    console.log(session)
     await this.trainingSessionRepository.save(session);
 
     const savedsession = this.trainingSessionRepository.findOne({
       uid: session.uid,
     });
-    const topic = await this.trainingTopicRepository.findOne({
-      select: ['id'],
-      where: In(topics.map((topic) => topic.uid)),
-    });
-    console.log('TOPICSSS', topic);
+    // const topic = await this.trainingTopicRepository.findOne({
+    //   select: ['id'],
+    //   where: In(topics.map((topic) => topic.uid)),
+    // });
+    // console.log('TOPICSSS', topic);
     return savedsession;
   }
   async saveTopics(uid: string, saveTopicsDTO: any) {
