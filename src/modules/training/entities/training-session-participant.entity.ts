@@ -56,15 +56,15 @@ export class SessionParticipant {
 
   @OneToOne((type) => User, (user) => user.assesser, { eager: true })
   @JoinColumn({ name: 'assessedby' })
-  assesser: User[];
+  assesser: User;
 
   @OneToOne((type) => User, (user) => user.certifier, { eager: true })
   @JoinColumn({ name: 'certifiedby' })
-  certifier: User[];
+  certifier: User;
 
 
   @ManyToOne((type) => Record, (record) => record.participants, {})
-  record: Record[];
+  record: Record;
 
 
   /*@ManyToOne(
