@@ -287,7 +287,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       {
         certified: certified,
         assessed: assessed,
-        certifier:
+        certifiedby:
           certifiedby && certifiedby != ''
             ? await this.userRepository.findOne({
                 uid: certifiedby,
@@ -299,7 +299,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
             : null,
         assessmentdate:
           assessmentdate && assessmentdate != null ? assessmentdate : null,
-        assesser:
+          assessedby:
           assessedby && assessedby != ''
             ? await this.userRepository.findOne({
                 uid: assessedby,
