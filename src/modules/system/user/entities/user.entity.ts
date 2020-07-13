@@ -345,16 +345,7 @@ export class User extends UserCoreProps {
   // report: Report[];
   // ToDo: END: Improve Approach
 
-  @OneToOne((type) => SessionParticipant, (participant) => participant.assessedby)
-  assesser: SessionParticipant[];
-
-  @OneToOne(
-    (type) => SessionParticipant,
-    (participant) => participant.certifiedby,
-  )
-  certifier: SessionParticipant[];
-
-  @ManyToOne(
+   @ManyToOne(
     (type) => TrainingSessionAccess,
     (sessionaccess) => sessionaccess.user,
   )

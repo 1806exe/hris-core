@@ -291,6 +291,13 @@ export class RecordService extends BaseService<Record> {
     return {
       participationdetails: await this.participantRepository.find({
         relations: ['session'],
+        join: {
+          alias: 'sessionparticipant',
+          leftJoinAndSelect: {
+           assessedby: 'sessionparticipant.assessedby',
+           certifiedby: 'sessionparticipant.certifiedby'
+          }
+        },
         where: { recordId: recordid },
       }),
     };

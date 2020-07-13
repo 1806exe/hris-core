@@ -54,12 +54,12 @@ export class SessionParticipant {
   @Column('date', { nullable: false, name: 'assessmentdate' })
   assessmentdate: Date;
 
-  @OneToOne((type) => User, (user) => user.assesser, { eager: true })
-  @JoinColumn({ name: 'assessedby' })
+  @OneToOne((type) => User)
+  @JoinColumn({ name: 'assessedby', referencedColumnName:'id' })
   assessedby: User;
 
-  @OneToOne((type) => User, (user) => user.certifier, { eager: true })
-  @JoinColumn({ name: 'certifiedby' })
+  @OneToOne((type) => User)
+  @JoinColumn({ name: 'certifiedby', referencedColumnName:'id' })
   certifiedby: User;
 
   @ManyToOne((type) => Record, (record) => record.participants, {})
