@@ -272,7 +272,7 @@ export class RecordService extends BaseService<Record> {
           id: query[0].trainingsessionId,
         },
       });
-      return session;
+      return { sessions: session };
     }
     if (query.length > 1) {
       return {
