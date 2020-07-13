@@ -264,7 +264,7 @@ export class RecordService extends BaseService<Record> {
     });
 
     if (query.length === 0 || query == undefined) {
-      return [];
+      return { sessions: [] };
     }
     if (query.length == 1) {
       const session = await this.traainingSessionRepository.find({
@@ -275,12 +275,13 @@ export class RecordService extends BaseService<Record> {
       return session;
     }
     if (query.length > 1) {
-      const session = await this.traainingSessionRepository.find({
-        where: {
-          id: In(query.map((session) => +session.trainingsessionId)),
-        },
-      });
-      return session;
+      return {
+        sessions: await this.traainingSessionRepository.find({
+          where: {
+            id: In(query.map((session) => +session.trainingsessionId)),
+          },
+        }),
+      };
     }
   }
 }
