@@ -205,15 +205,17 @@ export class DefaultDashboardMigration1592483453928
                         
                         
                         INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
-                        VALUES ('2019-07-26', '2019-07-26', 22,'wWPsrs4zWUcmp', 'USER_ORGUNIT', 'INDICATOR', 11);
+                        VALUES ('2019-07-26', '2019-07-26', 22,'wWPsrs4zWUcmp', 'USER_ORGUNIT', 'ORG_UNIT', 11);
                         
                         
                         INSERT INTO public.visualizationdimension(created, lastupdated, id, UID, dimension, layout, visualizationid)
-                        VALUES ('2019-07-26', '2019-07-26', 23, 'I8P9T5MJIt59', 'pe', 'rows', 4);`);
+                        VALUES ('2019-07-26', '2019-07-26', 23, 'I8P9T5MJIt59', 'pe', 'columns', 4);
 
-    await queryRunner.query(`INSERT INTO public.visualizationdimension(
-                                        created, lastupdated, id, uid, dimension, layout, visualizationid)
-                                        VALUES ('2019-07-26', '2019-07-26', 12, 'I89T5MJIt59', 'pe', 'rows', 4)`);
+                        INSERT INTO public.visualizationdimensionitem(
+                                created, lastupdated, id, uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+                                VALUES ('2019-07-26', '2019-07-26', 23, 'q03CM1bhoFc4o', 'LAST_YEAR', 'PERIOD', 23);
+                        `);
+
 
     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
                                         created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)

@@ -31,7 +31,7 @@ export class RecordService extends BaseService<Record> {
     @InjectRepository(TrainingSession)
     private traainingSessionRepository: Repository<TrainingSession>,
     @InjectRepository(SessionParticipant)
-    private sessionRepository: Repository<SessionParticipant>,
+    private participantRepository: Repository<SessionParticipant>,
   ) {
     super(recordRepository, Record);
   }
@@ -258,7 +258,7 @@ export class RecordService extends BaseService<Record> {
     const record = (
       await this.recordRepository.findOne({ where: { uid: uid } })
     ).id;
-    const query = await this.sessionRepository.find({
+    const query = await this.participantRepository.find({
       select: ['trainingsessionId'],
       where: { recordId: record },
     });
@@ -283,5 +283,15 @@ export class RecordService extends BaseService<Record> {
         }),
       };
     }
+  }
+  async getParticipation(record: string) {
+    const recordid = (
+      await this.recordRepository.findOne({ where: { uid: record } })
+    ).id;
+    const participationdetails = await this.participantRepository.findOne({
+      relations: ['trainingSessions'],
+      where: { recordId: recordid },
+    });
+    return participationdetails;
   }
 }

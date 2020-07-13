@@ -55,6 +55,7 @@ export const entityTableMapper = {
   topics: 'trainingtopic',
   curriculums: 'trainingcurriculum',
   sponsors: 'trainingsponsor',
+  sponsor: 'trainingsponsor',
   sessions: 'trainingsession',
   organizer: 'trainingsponsor',
   process: 'process',
