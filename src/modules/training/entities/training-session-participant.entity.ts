@@ -62,14 +62,10 @@ export class SessionParticipant {
   @JoinColumn({ name: 'certifiedby' })
   certifier: User;
 
-
   @ManyToOne((type) => Record, (record) => record.participants, {})
   record: Record;
 
-
-  /*@ManyToOne(
-    type => TrainingSession,
-    trainingsession => trainingsession.participants,
-  )
-  trainingSessions: TrainingSession[];*/
+  @OneToOne((type) => TrainingSession)
+  @JoinColumn({ name: 'trainingsessionId', referencedColumnName: 'id' })
+  session: TrainingSession;
 }

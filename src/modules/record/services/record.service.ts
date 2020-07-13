@@ -288,10 +288,11 @@ export class RecordService extends BaseService<Record> {
     const recordid = (
       await this.recordRepository.findOne({ where: { uid: record } })
     ).id;
-    const participationdetails = await this.participantRepository.findOne({
-      relations: ['trainingSessions'],
-      where: { recordId: recordid },
-    });
-    return participationdetails;
+    return {
+      participationd: await this.participantRepository.find({
+        relations: ['session'],
+        where: { recordId: recordid },
+      }),
+    };
   }
 }
