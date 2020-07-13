@@ -663,6 +663,10 @@ export class TrainingAnalyticsService {
     let analytics = {
       headers: [
         {
+          name: 'id',
+          column: 'id',
+        },
+        {
           name: 'section',
           column: 'section',
         },
@@ -785,7 +789,7 @@ export class TrainingAnalyticsService {
     //AND curriculum.uid IN('uodfidh','difgod)
 
     query = `
-    SELECT section.name section,unit.name unit,
+    SELECT ts.uid as id,section.name section,unit.name unit,
         curriculum.name curriculum,region.name region,
         district.name district,
         venuename venue,sponsor.name sponsor,organiser.name organiser,
@@ -818,7 +822,7 @@ export class TrainingAnalyticsService {
          })
          LEFT JOIN sessionparticipant sp ON(sp."trainingsessionId" = ts.id)
         ${periodFilter}
-        GROUP BY section.name,unit.name,curriculum.name,region.name,district.name,
+        GROUP BY ts.uid,section.name,unit.name,curriculum.name,region.name,district.name,
         venuename,sponsor.name,organiser.name,ts.deliverymode,ts.startdate,ts.enddate
     `;
 
