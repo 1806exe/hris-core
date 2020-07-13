@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TrainingVenue } from '../entities/training-venue.entity';
 import { OrganisationUnit } from '../../../modules/organisation-unit/entities/organisation-unit.entity';
 import { generateUid } from '../../../core/helpers/makeuid';
+import { formatDistanceStrict } from 'date-fns';
 
 @Injectable()
 export class TrainingVenueService extends BaseService<TrainingVenue> {
@@ -28,5 +29,25 @@ export class TrainingVenueService extends BaseService<TrainingVenue> {
         where: { uid: organisationUnit },
       }),
     });
+  }
+  async updateVenue(uid: string, updateVenueDTO: TrainingVenue): Promise<any> {
+    const { name, district, region, organisationUnit } = updateVenueDTO;
+
+    await this.trainingVenueRepository.update(
+      {
+        uid: (
+          await this.trainingVenueRepository.findOne({ where: { uid: uid } })
+        ).uid,
+      },
+      {
+        name: name,
+        district: district,
+        region: region,
+        organisationUnit: await this.organisationUnitRepository.findOne({
+          where: { uid: organisationUnit },
+        }),
+      },
+    );
+    return this.trainingVenueRepository.findOne({ where: { uid: uid } });
   }
 }
