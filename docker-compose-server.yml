@@ -31,9 +31,7 @@ services:
     image: hisptz/hris-api:1.0.0
     command: npm run start
     volumes:
-      - type: bind
-        source: ./
-        target: /home/app/
+      - db-data:/var/lib/postgresql/data
     depends_on: 
       - postgres-database
     networks: 
@@ -41,3 +39,6 @@ services:
 networks:
   backend:
     driver: "bridge"
+volumes:
+  db-data:
+    driver: local
