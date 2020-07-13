@@ -114,7 +114,6 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       await this.trainingSessionRepository.findOne({ uid })
     ).id;
     const participant = new SessionParticipant();
-    participant.uid = generateUid();
     participant.trainingsessionId = trainingsession;
     participant.recordId = recordid;
     return await this.participantRepository.save(participant);
@@ -130,7 +129,6 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       await this.trainingSessionRepository.findOne({ uid })
     ).id;
     const facilitator = new SessionFacilitator();
-    facilitator.uid = generateUid();
     facilitator.trainingsessionId = trainingsession;
     facilitator.recordId = recordid;
     return await this.facilitatorRepository.save(facilitator);
@@ -145,15 +143,12 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       .id;
     const recordid = records[0].id;
     const facilitators = await this.facilitatorRepository.find({
-      select: ['id'],
       where: [{ recordId: recordid, trainingsessionId: sessionid }],
     });
     if (facilitators[0] == undefined) {
       throw new NotFoundException(`Facilitator is not available `);
     }
-    const facilitator = facilitators[0].id;
     const id = {
-      id: facilitator,
       trainingsessionId: sessionid,
       recordId: recordid,
     };
@@ -169,16 +164,13 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       .id;
     const recordid = records[0].id;
     const participants = await this.participantRepository.find({
-      select: ['id'],
       where: [{ recordId: recordid, trainingsessionId: sessionid }],
     });
 
     if (participants[0] == undefined) {
       throw new NotFoundException(`Participant is not available `);
     }
-    const participant = participants[0].id;
     const id = {
-      id: participant,
       trainingsessionId: sessionid,
       recordId: recordid,
     };

@@ -13,12 +13,12 @@ import { EntityCoreProps } from '../../../core/entities/entity-core-props';
 
 @Entity('organisationunitgroup', { schema: 'public' })
 export class OrganisationUnitGroup extends EntityCoreProps {
-
   static plural = 'organisationUnitGroups';
 
   @ManyToOne(
-    type => OrganisationUnitGroupSet,
-    organisationUnitGroupSet => organisationUnitGroupSet.organisationUnitGroups,
+    (type) => OrganisationUnitGroupSet,
+    (organisationUnitGroupSet) =>
+      organisationUnitGroupSet.organisationUnitGroups,
     { onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'organisationunitgroupsetid' })
@@ -40,9 +40,9 @@ export class OrganisationUnitGroup extends EntityCoreProps {
   //   hris_indicator_targets: hris_indicator_target[];
 
   @ManyToMany(
-    type => OrganisationUnit,
-    organisationUnit => organisationUnit.organisationUnitGroups,
-    { nullable: false },
+    (type) => OrganisationUnit,
+    (organisationUnit) => organisationUnit.organisationUnitGroups,
+    { nullable: false},
   )
   @JoinTable({ name: 'organisationunitgroupmembers' })
   organisationUnits: OrganisationUnit[];

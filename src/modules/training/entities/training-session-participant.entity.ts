@@ -16,20 +16,6 @@ import { TrainingCurriculum } from './training-curriculum.entity';
 export class SessionParticipant {
   @Column('integer', {
     nullable: false,
-    primary: true,
-    name: 'id',
-  })
-  id: number;
-
-  @Column('character varying', {
-    nullable: false,
-    length: 13,
-    name: 'uid',
-  })
-  uid: string;
-
-  @Column('integer', {
-    nullable: false,
     name: 'trainingsessionId',
     primary: true,
   })
