@@ -432,9 +432,9 @@ export class AnalyticsService {
     query = `SELECT ${allowedColumns.map(
       (column) => 'data."' + column + '"',
     )} FROM _resource_table_${formid} data
-      INNER JOIN _organisationunitstructure ous ON(ous.uid = data.ou AND ${levelquery.join(
+      INNER JOIN _organisationunitstructure ous ON(ous.uid = data.ou AND (${levelquery.join(
         ' OR ',
-      )})`;
+      )}))`;
     if (pe) {
       let periodquery = pe.map((p) => {
         let whereCondition = getWhereConditions(p);
@@ -450,7 +450,7 @@ export class AnalyticsService {
         ' OR ',
       )}) LIMIT 200000`;
     }
-    console.log(query);
+    console.log('Query:',query);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
     analytics.rows = rows.map((row) => {
