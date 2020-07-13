@@ -70,12 +70,8 @@ export class bigint1585295137513 implements MigrationInterface {
         ALTER TABLE friendlyreportcategory ALTER COLUMN fieldoptiongroupid TYPE BIGINT;
         ALTER TABLE friendlyreportrelationalfilter ALTER COLUMN friendlyreportid TYPE BIGINT;
         ALTER TABLE friendlyreportrelationalfilter ALTER COLUMN relationalfilterid TYPE BIGINT;
-        ALTER TABLE sessionfacilitator ALTER COLUMN id TYPE BIGINT;
         ALTER TABLE sessionfacilitator ALTER COLUMN sessionid TYPE BIGINT;
         ALTER TABLE sessionfacilitator ALTER COLUMN recordid TYPE BIGINT;
-        ALTER TABLE sessionparticipant ALTER COLUMN id TYPE BIGINT;
-        ALTER TABLE sessionparticipant ALTER COLUMN sessionid TYPE BIGINT;
-        ALTER TABLE sessionparticipant ALTER COLUMN recordid TYPE BIGINT;
         ALTER TABLE instancetrainer ALTER COLUMN id TYPE BIGINT;
         ALTER TABLE instancetrainer ALTER COLUMN sessionid TYPE BIGINT;
         ALTER TABLE instancetrainer ALTER COLUMN trainerid TYPE BIGINT;
@@ -142,7 +138,7 @@ export class bigint1585295137513 implements MigrationInterface {
         ALTER TABLE relationalfilter ALTER COLUMN fieldid TYPE BIGINT;
         ALTER TABLE relationalfiltermember ALTER COLUMN relationalfilterid TYPE BIGINT;
         ALTER TABLE relationalfiltermember ALTER COLUMN fieldoptionid TYPE BIGINT;
-        ALTER TABLE report ALTER COLUMN userid TYPE BIGINT;
+       -- ALTER TABLE report ALTER COLUMN userid TYPE BIGINT;
         ALTER TABLE report ALTER COLUMN id TYPE BIGINT;
         ALTER TABLE reportgroup ALTER COLUMN id TYPE BIGINT;
         ALTER TABLE reportgroupmembers ALTER COLUMN "reportgroupId" TYPE BIGINT;
@@ -210,46 +206,27 @@ export class bigint1585295137513 implements MigrationInterface {
         ALTER TABLE TRAININGSESSIONTOPICS ALTER COLUMN "trainingtopicId" TYPE BIGINT;
         ALTER TABLE TRAININGSESSIONTOPICS ALTER COLUMN "trainingsessionId" TYPE BIGINT;
 
-        CREATE SEQUENCE id_facilitators;
-        CREATE SEQUENCE id_participants;
-        CREATE TABLE participant(id bigint NOT NULL DEFAULT nextval('id_participants'::regclass),uid text,"recordId" bigint, "trainingsessionId" bigint);
-        CREATE TABLE facilitator(id bigint NOT NULL DEFAULT  nextval('id_facilitators'::regclass),uid text,"recordId" bigint, "trainingsessionId" bigint);
+      
+        CREATE TABLE participant("recordId" bigint, "trainingsessionId" bigint);
+        CREATE TABLE facilitator("recordId" bigint, "trainingsessionId" bigint);
 
 
-        ALTER TABLE participant ADD CONSTRAINT "FK_participant_sessionid" FOREIGN KEY ("trainingsessionId")
-        REFERENCES public.trainingsession (id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE;
-        ALTER TABLE facilitator ADD CONSTRAINT "FK_constraint_sessionid" FOREIGN KEY ("trainingsessionId")
-        REFERENCES public.trainingsession (id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE;
-
-        ALTER TABLE participant ADD CONSTRAINT "FK_participant_recordid" FOREIGN KEY ("recordId")
-        REFERENCES public.record (id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE;
-        ALTER TABLE facilitator ADD CONSTRAINT "FK_constraint_recordid" FOREIGN KEY ("recordId")
-        REFERENCES public.record (id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE;
-
-        INSERT INTO participant(uid, "trainingsessionId", "recordId")
-        select uid(), sessionid,recordid from sessionparticipant
+        INSERT INTO participant("trainingsessionId", "recordId")
+        select sessionid,recordid from sessionparticipant
         INNER JOIN record ON(record.id=sessionparticipant.recordid) 
         INNER JOIN trainingsession ON(trainingsession.id = sessionparticipant.sessionid);
 
-        INSERT INTO facilitator(uid, "trainingsessionId", "recordId")
-        select uid(), sessionid,recordid from sessionfacilitator
+        INSERT INTO facilitator("trainingsessionId", "recordId")
+        select sessionid,recordid from sessionfacilitator
         INNER JOIN record ON(record.id=sessionfacilitator.recordid) 
         INNER JOIN trainingsession ON(trainingsession.id = sessionfacilitator.sessionid);
         -- step 1
         CREATE TABLE facilitator_temp (LIKE facilitator);
 
         -- step 2
-        INSERT INTO facilitator_temp(id, uid, "recordId", "trainingsessionId")
+        INSERT INTO facilitator_temp("recordId", "trainingsessionId")
         SELECT 
-        DISTINCT ON ("recordId","trainingsessionId") id, uid(),"recordId", "trainingsessionId"
+        DISTINCT ON ("recordId","trainingsessionId") "recordId", "trainingsessionId"
         FROM facilitator; 
 
         -- step 3
@@ -263,9 +240,9 @@ export class bigint1585295137513 implements MigrationInterface {
         CREATE TABLE participant_temp (LIKE participant);
 
         -- step 2
-        INSERT INTO participant_temp(id, uid, "recordId", "trainingsessionId")
+        INSERT INTO participant_temp("recordId", "trainingsessionId")
         SELECT 
-        DISTINCT ON ("recordId","trainingsessionId") id, uid(),"recordId", "trainingsessionId"
+        DISTINCT ON ("recordId","trainingsessionId") "recordId", "trainingsessionId"
         FROM participant; 
 
         -- step 3
