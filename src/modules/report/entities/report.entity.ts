@@ -87,9 +87,9 @@ export class Report extends EntityCoreProps {
   })
   code: string;
 
-  @Column('character varying', {
+  @Column('char', {
     nullable: false,
-    length: 256,
+    length: 50000,
     name: 'html',
   })
   html: string;
