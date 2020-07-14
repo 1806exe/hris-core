@@ -22,7 +22,7 @@ CREATE TABLE public.report
   lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
   id integer NOT NULL DEFAULT nextval('report_id_seq'::regclass),
   uid character(13) NOT NULL,
-  code text DEFAULT NULL,
+  code  char(50000) NULL,
   name text NOT NULL,
   description text,
   lastupdatedby character varying,
@@ -32,7 +32,7 @@ CREATE TABLE public.report
   parameters json NULL,
   type character varying(255) NOT NULL,
   createdby character varying(255),
-  html character varying(256) NULL,
+  html char(50000) NULL,
   CONSTRAINT "PK_1af82de239cf99a5ba1f66a4660" PRIMARY KEY (id),
   CONSTRAINT "UQ_e20953580a9f370ec98c5ae94e3" UNIQUE (uid)
 )
