@@ -38,9 +38,9 @@ describe('Organisation Unit API', () => {
           orgUnitId = res.body.id;
           expect(res.body.code).toEqual('MOHCDGEC');
           expect(res.body.name).toEqual('Ministry Of Health');
-          expect(res.body.level).toEqual(1);
           expect(res.body.shortName).toEqual('MOHCDGEC');
           expect(res.body.active).toEqual(true);
+          expect(res.body.level).toBeUndefined();
         }
       );
   });
