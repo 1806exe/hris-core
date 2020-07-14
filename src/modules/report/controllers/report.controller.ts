@@ -19,7 +19,7 @@ export class ReportController extends MaintenanceBaseController<Report> {
    * @param res
    * @param params
    */
-  @Get('/sqlViews/:id/data')
+  @Get(':id/data')
   @UseGuards(SessionGuard)
   async getData(
     @Req() req: Request,
