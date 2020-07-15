@@ -36,7 +36,7 @@ export class bigint1585295137513 implements MigrationInterface {
         ALTER TABLE fieldinputtype ALTER COLUMN id TYPE BIGINT;
         ALTER TABLE fieldoption ALTER COLUMN id TYPE BIGINT;
         ALTER TABLE fieldoption ALTER COLUMN "fieldId" TYPE BIGINT;
-        ALTER TABLE fieldoptionchildren ALTER COLUMN "parentFieldoptionId" TYPE BIGINT;
+        -- ALTER TABLE fieldoptionchildren ALTER COLUMN "parentFieldoptionId" TYPE BIGINT;
         ALTER TABLE fieldoptionchildren ALTER COLUMN "childFieldoptionId" TYPE BIGINT;
         ALTER TABLE fieldoptionchildren ALTER COLUMN id TYPE BIGINT;
         ALTER TABLE fieldoptiongroup ALTER COLUMN id TYPE BIGINT;
