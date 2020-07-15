@@ -138,11 +138,11 @@ export class bigint1585295137513 implements MigrationInterface {
         ALTER TABLE relationalfilter ALTER COLUMN fieldid TYPE BIGINT;
         ALTER TABLE relationalfiltermember ALTER COLUMN relationalfilterid TYPE BIGINT;
         ALTER TABLE relationalfiltermember ALTER COLUMN fieldoptionid TYPE BIGINT;
-       -- ALTER TABLE report ALTER COLUMN userid TYPE BIGINT;
-        ALTER TABLE report ALTER COLUMN id TYPE BIGINT;
-        ALTER TABLE reportgroup ALTER COLUMN id TYPE BIGINT;
-        ALTER TABLE reportgroupmembers ALTER COLUMN "reportgroupId" TYPE BIGINT;
-        ALTER TABLE reportgroupmembers ALTER COLUMN "reportId" TYPE BIGINT;
+        -- ALTER TABLE report ALTER COLUMN userid TYPE BIGINT;
+        -- ALTER TABLE report ALTER COLUMN id TYPE BIGINT;
+        -- ALTER TABLE reportgroup ALTER COLUMN id TYPE BIGINT;
+        -- ALTER TABLE reportgroupmembers ALTER COLUMN "reportgroupId" TYPE BIGINT;
+        -- ALTER TABLE reportgroupmembers ALTER COLUMN "reportId" TYPE BIGINT;
         -- ALTER TABLE reporttable ALTER COLUMN id TYPE BIGINT;
         -- ALTER TABLE reporttable ALTER COLUMN userid TYPE BIGINT;
         -- ALTER TABLE reporttabledimension ALTER COLUMN id TYPE BIGINT;

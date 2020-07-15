@@ -162,25 +162,25 @@ export class sequential1585499925311 implements MigrationInterface {
     //   `ALTER SEQUENCE dashboarditem_id_seq RESTART WITH ${nextdashboarditem}`,
     // );
 
-    const report_id_seq = await queryRunner.query(
-      `SELECT id FROM report ORDER BY id DESC LIMIT 1`,
-    );
-    const nextreport = report_id_seq[0]
-      ? parseInt(report_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE report_id_seq RESTART WITH ${nextreport}`,
-    );
+    // const report_id_seq = await queryRunner.query(
+    //   `SELECT id FROM report ORDER BY id DESC LIMIT 1`,
+    // );
+    // const nextreport = report_id_seq[0]
+    //   ? parseInt(report_id_seq[0].id) + parseInt('1')
+    //   : parseInt('1');
+    // await queryRunner.query(
+    //   `ALTER SEQUENCE report_id_seq RESTART WITH ${nextreport}`,
+    // );
 
-    const reportgroup_id_seq = await queryRunner.query(
-      `SELECT id FROM reportgroup ORDER BY id DESC LIMIT 1`,
-    );
-    const nextreportgroup = reportgroup_id_seq[0]
-      ? parseInt(reportgroup_id_seq[0].id) + parseInt('1')
-      : parseInt('1');
-    await queryRunner.query(
-      `ALTER SEQUENCE reportgroup_id_seq RESTART WITH ${nextreportgroup}`,
-    );
+    // const reportgroup_id_seq = await queryRunner.query(
+    //   `SELECT id FROM reportgroup ORDER BY id DESC LIMIT 1`,
+    // );
+    // const nextreportgroup = reportgroup_id_seq[0]
+    //   ? parseInt(reportgroup_id_seq[0].id) + parseInt('1')
+    //   : parseInt('1');
+    // await queryRunner.query(
+    //   `ALTER SEQUENCE reportgroup_id_seq RESTART WITH ${nextreportgroup}`,
+    // );
 
     const trainingsession_id_seq = await queryRunner.query(
       `SELECT id FROM trainingsession ORDER BY id DESC LIMIT 1`,
