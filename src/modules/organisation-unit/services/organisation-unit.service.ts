@@ -46,52 +46,7 @@ export class OrganisationUnitService extends MaintenanceBaseService<
         },
       };
     }
-    const parent = filter.includes('parent.id:eq:');
-    // const inFilters = filter.includes(':in:')
-    
-    // if(inFilters){
-    //   console.log('FILTER:::::', filter)
-    //     const parents = await this.organisationUnitRepository.findOne({
-    //       where: { uid: filter.replace(/^parent.id:eq:+/i, '') },
-    //     });
-    //     const [response, totalCount] = await this.modelRepository.findAndCount({
-    //       select: getSelections(fields, metaData),
-    //       relations: getRelations(fields, metaData),
-    //       where: { parent: parents },
-    //       take: size,
-    //       join,
-    //       skip: page * size,
-    //     });
-    //     return [
-    //       await GetResponseSanitizer(
-    //         this.modelRepository,
-    //         response,
-    //         entityTableMapper,
-    //       ),
-    //       totalCount,
-    //     ];
-    // }
-    if (parent) {
-      const parents = await this.organisationUnitRepository.findOne({
-        where: { uid: filter.replace(/^parent.id:eq:+/i, '') },
-      });
-      const [response, totalCount] = await this.modelRepository.findAndCount({
-        select: getSelections(fields, metaData),
-        relations: getRelations(fields, metaData),
-        where: { parent: parents },
-        take: size,
-        join,
-        skip: page * size,
-      });
-      return [
-        await GetResponseSanitizer(
-          this.modelRepository,
-          response,
-          entityTableMapper,
-        ),
-        totalCount,
-      ];
-    }
+
     const [response, totalCount] = await this.modelRepository.findAndCount({
       select: getSelections(fields, metaData),
       relations: getRelations(fields, metaData),
@@ -113,5 +68,74 @@ export class OrganisationUnitService extends MaintenanceBaseService<
       ),
       totalCount,
     ];
+  }
+
+  async getParent(
+    fields,
+    filter,
+    size,
+    page,
+  ): Promise<[OrganisationUnit[], number]> {
+    const metaData = this.organisationUnitRepository.manager.connection.getMetadata(
+      OrganisationUnit,
+    );
+    console.log('Fields', fields);
+    let join: any = {};
+
+    //TODO: Find best way to join any recursive relation
+    if (metaData.tableName === 'organisationunit') {
+      join = {
+        alias: 'organisationunit',
+        leftJoinAndSelect: {
+          profile: 'organisationunit.parent',
+        },
+      };
+    }
+    const parent = filter.includes('parent.id:eq:');
+    const inFilters = filter.includes(':in:');
+
+    if (inFilters) {
+      console.log('FILTER:::::', filter);
+      const parents = await this.organisationUnitRepository.findOne({
+        where: { uid: filter.replace(/^parent.id:eq:+/i, '') },
+      });
+      const [response, totalCount] = await this.modelRepository.findAndCount({
+        select: getSelections(fields, metaData),
+        relations: getRelations(fields, metaData),
+        where: { parent: parents },
+        take: size,
+        join,
+        skip: page * size,
+      });
+      return [
+        await GetResponseSanitizer(
+          this.modelRepository,
+          response,
+          entityTableMapper,
+        ),
+        totalCount,
+      ];
+    }
+    if (parent) {
+      const parents = await this.organisationUnitRepository.findOne({
+        where: { uid: filter.replace(/^parent.id:eq:+/i, '') },
+      });
+      const [response, totalCount] = await this.modelRepository.findAndCount({
+        select: getSelections(fields, metaData),
+        relations: getRelations(fields, metaData),
+        where: { parent: parents },
+        take: size,
+        join,
+        skip: page * size,
+      });
+      return [
+        await GetResponseSanitizer(
+          this.modelRepository,
+          response,
+          entityTableMapper,
+        ),
+        totalCount,
+      ];
+    }
   }
 }
