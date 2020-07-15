@@ -1772,15 +1772,17 @@ CREATE INDEX "IDX_76bc448ca476788f7886a7569b"
       }
     }
 
-    const users = await queryRunner.manager.query('SELECT * FROM public.user');
+    /*const users = await queryRunner.manager.query('SELECT * FROM public.user');
     for (let user of users) {
       await queryRunner.manager.query(
         `UPDATE public.user SET token='${await passwordHash(
           'HRHIS2020',
         )}' WHERE id=${user.id}`,
       );
-    }
-
+    }*/
+    await queryRunner.manager.query(`UPDATE public.user SET token='${await passwordHash(
+      'HRHIS2020',
+    )}'`);
     await queryRunner.query(`
     CREATE TABLE public.organisationunitmembers
     (
