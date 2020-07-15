@@ -77,6 +77,12 @@ export class OrganisationUnit extends EntityCoreProps {
     name: 'level',
   })
   readonly level: number;
+
+  @Column('char', {
+    nullable: true,
+    name: 'path',
+  })
+  path: string;
   @Column('character varying', {
     nullable: true,
     length: 150,

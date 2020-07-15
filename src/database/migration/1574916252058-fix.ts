@@ -70,13 +70,6 @@ export class fix1574916252058 implements MigrationInterface {
     ALTER TABLE friendlyreport ALTER COLUMN created SET DEFAULT LOCALTIMESTAMP;
 
     ALTER TABLE "sessionfacilitator" OWNER TO "postgres";
-    CREATE SEQUENCE sessionfacilitator_id_seq AS BIGINT OWNED BY sessionfacilitator.id;
-    ALTER TABLE sessionfacilitator ALTER COLUMN  id SET DEFAULT nextval('sessionfacilitator_id_seq');
-    ALTER TABLE sessionfacilitator ALTER COLUMN created SET DEFAULT LOCALTIMESTAMP;
-
-    ALTER TABLE "sessionparticipant" OWNER TO "postgres";
-    CREATE SEQUENCE sessionparticipant_id_seq AS BIGINT OWNED BY sessionparticipant.id;
-    ALTER TABLE sessionparticipant ALTER COLUMN  id SET DEFAULT nextval('sessionparticipant_id_seq');
 
     ALTER TABLE "instancetrainer" OWNER TO "postgres";
     CREATE SEQUENCE instancetrainer_id_seq AS BIGINT OWNED BY instancetrainer.id;

@@ -29,6 +29,7 @@ export class organizationunit1570013088616 implements MigrationInterface {
         await queryRunner.query('ALTER TABLE "organisationunit" ADD COLUMN IF NOT EXISTS "lastupdated" timestamp without time zone');
         await queryRunner.query('ALTER TABLE "organisationunit" RENAME COLUMN "longname" TO "name"');  
         await queryRunner.query('ALTER TABLE "organisationunit" ADD COLUMN IF NOT EXISTS "lastupdatedby" character varying');
+        await queryRunner.query(`ALTER TABLE organisationunit ADD COLUMN path TEXT`);
    
         await queryRunner.query('ALTER TABLE "hris_organisationunitlevel" RENAME TO "organisationunitlevel"');
         await queryRunner.query('ALTER TABLE "organisationunitlevel" ADD COLUMN IF NOT EXISTS "uid" character varying(256)');

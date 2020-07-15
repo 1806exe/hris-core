@@ -136,6 +136,6 @@ export class RecordsController extends BaseController<Record> {
   @Get(':record/participation')
   async getParticipation(@Param() Param, @Res() res): Promise<any> {
     const record = await this.recordService.getParticipation(Param.record);
-    return getSuccessResponse(res, record);
+    return getSuccessResponse(res, sanitizeResponseObject(record));
   }
 }

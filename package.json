@@ -16,7 +16,7 @@
     "migration:revert": "ts-node node_modules/.bin/typeorm migration:revert",
     "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ormconfig.json",
     "prestart:prod": "rimraf dist && npx run build",
-    "start:prod": "node dist/main.js",
+    "start:prod": "node dist/src/main.js",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "jest",
     "test:watch": "jest --watch",

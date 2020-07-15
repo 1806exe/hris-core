@@ -156,7 +156,8 @@ export class DefaultDashboardMigration1592483453928
     //                                     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
     //                                         created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
     //                                         VALUES ('2019-07-26', '2019-07-26', 21,'wWPsrs4zWUcmp', 'USER_ORGUNIT', 'INDICATOR', 11)`);
-    await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
+    await queryRunner.query(`
+                        INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
                         VALUES ('2019-07-26', '2019-07-26', 10,'PgKpMKe9syVt5', 'yE9m8ltllxfq6', 'INDICATOR', 10);
                         
                         
@@ -202,6 +203,10 @@ export class DefaultDashboardMigration1592483453928
                         
                         INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
                         VALUES ('2019-07-26', '2019-07-26', 21,'wWPTrs4zWUcmp', 'uLhsWqITzfk6p', 'INDICATOR', 10);
+
+                        INSERT INTO public.visualizationdimension(
+                                created, lastupdated, id, uid, dimension, layout, visualizationid)
+                                VALUES ('2019-07-26', '2019-07-26', 11, 'IMLT5MJIt48', 'ou', 'filters', 3);
                         
                         
                         INSERT INTO public.visualizationdimensionitem(created, lastupdated, id, UID, dimensionitem, dimensionitemtype, visualizationdimensionid)
@@ -214,12 +219,12 @@ export class DefaultDashboardMigration1592483453928
                         INSERT INTO public.visualizationdimensionitem(
                                 created, lastupdated, id, uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
                                 VALUES ('2019-07-26', '2019-07-26', 23, 'q03CM1bhoFc4o', 'LAST_YEAR', 'PERIOD', 23);
+                        
                         `);
 
-
-    await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
-                                        created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
-                                        VALUES ('2019-07-26', '2019-07-26', 22,'wdPsrs4zWUcmp', 'LAST_YEAR', 'INDICATOR', 12)`);
+//     await queryRunner.query(`INSERT INTO public.visualizationdimensionitem(
+//                                         created, lastupdated, id,uid, dimensionitem, dimensionitemtype, visualizationdimensionid)
+//                                         VALUES ('2019-07-26', '2019-07-26', 24,'wdPsrs4zWUcmp', 'LAST_YEAR', 'PERIOD', 12)`);
 
     await queryRunner.query(`INSERT INTO public.dashboarditem(
                             created, lastupdated, id, uid, publicaccess, externalaccess, shape, type, dashboardid, visualizationid)

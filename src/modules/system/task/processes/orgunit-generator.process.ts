@@ -107,8 +107,29 @@ export class OrgUnitGenerator extends BackgroundProcess {
     const creatIndex = `CREATE INDEX orgunitindex ON _organisationunitstructure(
       uid${indexQuery});`;
     await this.connection.manager.query(creatIndex);
-    await this.connection.manager
-      .query(`UPDATE organisationunit o SET "level" = s.level
+    await this.connection.manager.query(`
+    UPDATE organisationunit o SET path='/' || s.uidlevel1 ||
+    (CASE
+        WHEN s.uidlevel2 IS NULL  THEN ''
+        ELSE '/' || s.uidlevel2 
+    END) ||
+    (CASE
+        WHEN s.uidlevel3 IS NULL  THEN ''
+        ELSE '/' || s.uidlevel3 
+    END) ||
+    (CASE
+        WHEN s.uidlevel4 IS NULL  THEN ''
+        ELSE '/' || s.uidlevel5 
+    END) || 
+    (CASE
+        WHEN s.uidlevel5 IS NULL  THEN ''
+        ELSE '/' || s.uidlevel5 
+    END)
+      
+      FROM  _organisationunitstructure s
+      WHERE o.id = s.organisationunitid;
+    
+    UPDATE organisationunit o SET "level" = s.level
     FROM  _organisationunitstructure s
     WHERE o.id = s.organisationunitid`);
   }
