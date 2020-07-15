@@ -31,7 +31,7 @@ export class RecordService extends BaseService<Record> {
     @InjectRepository(TrainingSession)
     private traainingSessionRepository: Repository<TrainingSession>,
     @InjectRepository(SessionParticipant)
-    private sessionRepository: Repository<SessionParticipant>,
+    private participantRepository: Repository<SessionParticipant>,
   ) {
     super(recordRepository, Record);
   }
@@ -258,13 +258,13 @@ export class RecordService extends BaseService<Record> {
     const record = (
       await this.recordRepository.findOne({ where: { uid: uid } })
     ).id;
-    const query = await this.sessionRepository.find({
+    const query = await this.participantRepository.find({
       select: ['trainingsessionId'],
       where: { recordId: record },
     });
 
     if (query.length === 0 || query == undefined) {
-      return [];
+      return { sessions: [] };
     }
     if (query.length == 1) {
       const session = await this.traainingSessionRepository.find({
@@ -272,15 +272,35 @@ export class RecordService extends BaseService<Record> {
           id: query[0].trainingsessionId,
         },
       });
-      return session;
+      return { sessions: session };
     }
     if (query.length > 1) {
-      const session = await this.traainingSessionRepository.find({
-        where: {
-          id: In(query.map((session) => +session.trainingsessionId)),
-        },
-      });
-      return session;
+      return {
+        sessions: await this.traainingSessionRepository.find({
+          where: {
+            id: In(query.map((session) => +session.trainingsessionId)),
+          },
+        }),
+      };
     }
+  }
+  async getParticipation(record: string) {
+    const recordid = (
+      await this.recordRepository.findOne({ where: { uid: record } })
+    ).id;
+    return {
+      recordid: record,
+      participationdetails: await this.participantRepository.find({
+        relations: ['session'],
+        join: {
+          alias: 'sessionparticipant',
+          leftJoinAndSelect: {
+            assessedby: 'sessionparticipant.assessedby',
+            certifiedby: 'sessionparticipant.certifiedby',
+          },
+        },
+        where: { recordId: recordid },
+      }),
+    };
   }
 }

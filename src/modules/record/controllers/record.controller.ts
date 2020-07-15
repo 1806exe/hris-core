@@ -8,7 +8,7 @@ import {
   Put,
   Query,
   Res,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { BaseController } from '../../../core/controllers/base.contoller';
 import { getSuccessResponse } from '../../../core/helpers/response.helper';
@@ -18,6 +18,7 @@ import { Record } from '../../record/entities/record.entity';
 import { SessionGuard } from '../../system/user/guards/session.guard';
 import { RecordValue } from '../entities/record-value.entity';
 import { RecordService } from '../services/record.service';
+import { async } from 'rxjs/internal/scheduler/async';
 
 @Controller('api/' + Record.plural)
 export class RecordsController extends BaseController<Record> {
@@ -125,11 +126,16 @@ export class RecordsController extends BaseController<Record> {
       .send(sanitizeResponseObject(recordtransfered));
   }
 
-  @Get('sessions/:record')
+  @Get(':record/sessions')
   // @UseGuards(SessionGuard)
   async getSessions(@Param() param, @Res() res): Promise<any> {
     const sessions = await this.recordService.getSessions(param.record);
-    
-    return getSuccessResponse(res, sessions);
+
+    return getSuccessResponse(res, sanitizeResponseObject(sessions));
+  }
+  @Get(':record/participation')
+  async getParticipation(@Param() Param, @Res() res): Promise<any> {
+    const record = await this.recordService.getParticipation(Param.record);
+    return getSuccessResponse(res, sanitizeResponseObject(record));
   }
 }

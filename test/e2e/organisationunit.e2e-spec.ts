@@ -140,6 +140,7 @@ describe('Organisation Unit API', () => {
       );
   });
 });
+let orgUnitGroupId;
 describe('Organisation Unit Groups API', () => {
   it(`Testing Authentication /api/organisationUnitGroups (GET)`, () => {
     return request(server.getHttpServer())
@@ -147,7 +148,6 @@ describe('Organisation Unit Groups API', () => {
       .expect(403)
       .expect('{"statusCode":403,"message":"Forbidden resource","error":"Forbidden"}');
   });
-  let orgUnitGroupId;
   it(`Adding Organisation Group /api/organisationUnitGroups (POST)`, () => {
     return addAuthentication(request(server.getHttpServer())
       .post(`/api/organisationUnitGroups`))

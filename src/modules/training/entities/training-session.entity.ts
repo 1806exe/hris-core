@@ -111,7 +111,7 @@ export class TrainingSession extends TransactionTimestamp {
     { eager: true },
   )
   @JoinColumn({ name: 'venue' })
-  venue: TrainingVenue[];
+  venue: TrainingVenue;
 
   @ManyToMany(
     (type) => TrainingSessionAccess,

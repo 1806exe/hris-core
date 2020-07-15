@@ -16,20 +16,6 @@ import { TrainingCurriculum } from './training-curriculum.entity';
 export class SessionParticipant {
   @Column('integer', {
     nullable: false,
-    primary: true,
-    name: 'id',
-  })
-  id: number;
-
-  @Column('character varying', {
-    nullable: false,
-    length: 13,
-    name: 'uid',
-  })
-  uid: string;
-
-  @Column('integer', {
-    nullable: false,
     name: 'trainingsessionId',
     primary: true,
   })
@@ -54,22 +40,18 @@ export class SessionParticipant {
   @Column('date', { nullable: false, name: 'assessmentdate' })
   assessmentdate: Date;
 
-  @OneToOne((type) => User, (user) => user.assesser, { eager: true })
-  @JoinColumn({ name: 'assessedby' })
-  assesser: User[];
+  @OneToOne((type) => User)
+  @JoinColumn({ name: 'assessedby', referencedColumnName:'id' })
+  assessedby: User;
 
-  @OneToOne((type) => User, (user) => user.certifier, { eager: true })
-  @JoinColumn({ name: 'certifiedby' })
-  certifier: User[];
-
+  @OneToOne((type) => User)
+  @JoinColumn({ name: 'certifiedby', referencedColumnName:'id' })
+  certifiedby: User;
 
   @ManyToOne((type) => Record, (record) => record.participants, {})
-  record: Record[];
+  record: Record;
 
-
-  /*@ManyToOne(
-    type => TrainingSession,
-    trainingsession => trainingsession.participants,
-  )
-  trainingSessions: TrainingSession[];*/
+  @OneToOne((type) => TrainingSession)
+  @JoinColumn({ name: 'trainingsessionId', referencedColumnName: 'id' })
+  session: TrainingSession;
 }

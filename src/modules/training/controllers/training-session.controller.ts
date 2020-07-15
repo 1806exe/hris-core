@@ -21,6 +21,7 @@ import { sanitizeResponseObject } from '../../../core/utilities/sanitize-respons
 import { SessionParticipant } from '../entities/training-session-participant.entity';
 import { getPagerDetails } from '../../../core/utilities';
 import * as _ from 'lodash';
+import { getSuccessResponse } from '../../../core/helpers/response.helper';
 
 @Controller('api/training/' + TrainingSession.plural)
 export class TrainingSessionController extends BaseController<TrainingSession> {
@@ -111,29 +112,6 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
     await this.trainingSessionService.saveTopics(Param.session, saveTopicsDTO);
     return res.status(HttpStatus.OK).send('Topics Added Successfully');
   }
-  @Put(':session/participants/:record')
-  @UseGuards(SessionGuard)
-  async updateParticipant(
-    @Param() Param,
-    @Body() updateParticipantDTO: any,
-    @Res() res,
-  ) {
-    const record = await this.trainingSessionService.findOneParticipant(
-      Param.record,
-    );
-    if (record !== undefined) {
-      const participant = await this.trainingSessionService.updateParticipant(
-        Param.record,
-        Param.session,
-        updateParticipantDTO,
-      );
-      return res
-        .status(HttpStatus.OK)
-        .send(sanitizeResponseObject(participant));
-    } else {
-      throw new NotFoundException('Participant Not Available');
-    }
-  }
   @Post(':session/sharing')
   @UseGuards(SessionGuard)
   async sessionSharing(@Param() Param, @Body() sessionSharingDTO: any) {
@@ -154,6 +132,29 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
         Param.session,
         sessionSharingDTO,
       );
+    }
+  }
+  @Put(':session/participants/:record')
+  @UseGuards(SessionGuard)
+  async certifyParticipant(
+    @Body() updateparticipantDTO,
+    @Param() param,
+    @Res() res,
+  ) {
+    const record = await this.trainingSessionService.findOneParticipant(
+      param.record,
+    );
+    if (record !== undefined) {
+      const certfication = await this.trainingSessionService.updateParticipants(
+        param.session,
+        param.record,
+        updateparticipantDTO,
+      );
+      return res
+        .status(HttpStatus.OK)
+        .send(
+          `Participant with Record id <${param.record}> update successfully`,
+        );
     }
   }
 }
