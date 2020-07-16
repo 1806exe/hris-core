@@ -132,8 +132,8 @@ export class OrganisationUnitService extends MaintenanceBaseService<
     ] = await this.organisationUnitRepository.findAndCount({
       where: {
         uid: In(
-          filter
-            .replace(/^id:eq:+/i, '')
+          /eq:(.+)/
+            .exec(filter)[1]
             .slice(1, -1)
             .split(',')
             .map((filters) => filters),
