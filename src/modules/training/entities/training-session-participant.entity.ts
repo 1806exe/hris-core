@@ -10,21 +10,24 @@ import {
 import { Record } from '../../record/entities/record.entity';
 import { TrainingSession } from './training-session.entity';
 import { User } from '../../system/user/entities/user.entity';
-import { TrainingCurriculum } from './training-curriculum.entity';
-
+import { Exclude } from 'class-transformer';
 @Entity('sessionparticipant', { schema: 'public' })
 export class SessionParticipant {
+  @Exclude()
   @Column('integer', {
     nullable: false,
     name: 'trainingsessionId',
     primary: true,
+    select: false,
   })
   trainingsessionId: number;
 
+  @Exclude()
   @Column('integer', {
     nullable: false,
     name: 'recordId',
     primary: true,
+    select: false,
   })
   recordId: number;
 
@@ -41,11 +44,11 @@ export class SessionParticipant {
   assessmentdate: Date;
 
   @OneToOne((type) => User)
-  @JoinColumn({ name: 'assessedby', referencedColumnName:'id' })
+  @JoinColumn({ name: 'assessedby', referencedColumnName: 'id' })
   assessedby: User;
 
   @OneToOne((type) => User)
-  @JoinColumn({ name: 'certifiedby', referencedColumnName:'id' })
+  @JoinColumn({ name: 'certifiedby', referencedColumnName: 'id' })
   certifiedby: User;
 
   @ManyToOne((type) => Record, (record) => record.participants, {})

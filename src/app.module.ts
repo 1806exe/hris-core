@@ -31,7 +31,10 @@ import { RecordRuleModule } from './modules/record-rule/record-rule.module';
   imports: [
     AppsModule,
     Repository,
-    TypeOrmModule.forRoot(getDataBaseConfiguration()),
+    TypeOrmModule.forRoot({
+      ...getDataBaseConfiguration(),
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    }),
     ScheduleModule.forRoot(),
     OrganisatinUnitModule,
     FormModule,
