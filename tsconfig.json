@@ -9,10 +9,7 @@
     "target": "es6",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
-    "paths": {
-      "@hris/*": ["src/*"]
-    }
+    "baseUrl": "./"
   },
   "exclude": ["node_modules", "dist"],
   "externalDependencies": [
