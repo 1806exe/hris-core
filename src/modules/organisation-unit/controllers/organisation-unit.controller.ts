@@ -20,7 +20,6 @@ export class OrganisationUnitsController extends MaintenanceBaseController<
   @UseGuards(SessionGuard)
   async findAll(@Query() query): Promise<ApiResult> {
     const filters = query.filter;
-    console.log('Query', query);
     if (_.has(query, 'paging') && query.paging === 'false') {
       const allContents: OrganisationUnit[] = await this.organisationUnitService.findAll();
       return {
@@ -32,11 +31,10 @@ export class OrganisationUnitsController extends MaintenanceBaseController<
       );
       return { [OrganisationUnit.plural]: foundName };
     } else if (query.filter && filters.includes('parent.id:eq:')) {
-       /*
+      /*
        * Get organisationunit parent filters based on find and count selections
        */
       const pagerDetails: Pager = getPagerDetails(query);
-      console.log('Here, Then');
       const [entityRes, totalCount]: [
         OrganisationUnit[],
         number,
@@ -56,9 +54,33 @@ export class OrganisationUnitsController extends MaintenanceBaseController<
         },
         [OrganisationUnit.plural]: _.map(entityRes, sanitizeResponseObject),
       };
+    } else if (query.filter && filters.includes('id:eq:')) {
+      /*
+       * Get organisationunit with In filters based on find and count selections
+       */
+      const pagerDetails: Pager = getPagerDetails(query);
+      const [entityRes, totalCount]: [
+        OrganisationUnit[],
+        number,
+      ] = await this.organisationUnitService.filterIn(
+        query?.filter,
+        pagerDetails?.pageSize,
+        +pagerDetails?.page - 1,
+      );
+      return {
+        pager: {
+          ...pagerDetails,
+          pageCount: entityRes?.length,
+          total: totalCount,
+          nextPage: `/api/${OrganisationUnit.plural}?page=${
+            +pagerDetails.page + +'1'
+          }`,
+        },
+        [OrganisationUnit.plural]: _.map(entityRes, sanitizeResponseObject),
+      };
     }
+
     const pagerDetails: Pager = getPagerDetails(query);
-    console.log('Here, Here');
     const [entityRes, totalCount]: [
       OrganisationUnit[],
       number,

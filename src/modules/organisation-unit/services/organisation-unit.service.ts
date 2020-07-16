@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import * as _ from 'lodash';
 import { UIDToIDTransformation } from '@icodebible/utils/resolvers/uid-to-id';
 
@@ -34,7 +34,6 @@ export class OrganisationUnitService extends MaintenanceBaseService<
     const metaData = this.organisationUnitRepository.manager.connection.getMetadata(
       OrganisationUnit,
     );
-    console.log('Fields', fields);
     let join: any = {};
 
     //TODO: Find best way to join any recursive relation
@@ -70,7 +69,7 @@ export class OrganisationUnitService extends MaintenanceBaseService<
     ];
   }
 
-   /*
+  /*
    * Get organisationunit parent filters based on find and count selections
    */
 
@@ -89,7 +88,6 @@ export class OrganisationUnitService extends MaintenanceBaseService<
         },
       };
     }
-    // const parent = filter.includes('parent.id:eq:');
 
     const parents = await this.organisationUnitRepository.findOne({
       where: { uid: filter.replace(/^parent.id:eq:+/i, '') },
@@ -112,8 +110,47 @@ export class OrganisationUnitService extends MaintenanceBaseService<
       ),
       totalCount,
     ];
-    // return await this.organisationUnitRepository.find({
-    //   where: { parent: parents },
-    // });
+  }
+  async filterIn(filter, size, page): Promise<any> {
+    const metaData = this.organisationUnitRepository.manager.connection.getMetadata(
+      OrganisationUnit,
+    );
+    let join: any = {};
+
+    //TODO: Find best way to join any recursive relation
+    if (metaData.tableName === 'organisationunit') {
+      join = {
+        alias: 'organisationunit',
+        leftJoinAndSelect: {
+          profile: 'organisationunit.parent',
+        },
+      };
+    }
+    const [
+      response,
+      totalCount,
+    ] = await this.organisationUnitRepository.findAndCount({
+      where: {
+        uid: In(
+          filter
+            .replace(/^id:eq:+/i, '')
+            .slice(1, -1)
+            .split(',')
+            .map((filters) => filters),
+        ),
+      },
+      take: size,
+      join,
+      skip: page * size,
+    });
+
+    return [
+      await GetResponseSanitizer(
+        this.organisationUnitRepository,
+        response,
+        entityTableMapper,
+      ),
+      totalCount,
+    ];
   }
 }
