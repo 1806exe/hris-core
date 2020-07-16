@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Res, Param, Logger, Query } from '@nestjs/common';
+import { Controller, Get, UseGuards, Param, Query } from '@nestjs/common';
 import { Process } from '../entities/process.entity';
 import { ProcessService } from '../services/process.service';
 import { SessionGuard } from '../../user/guards/session.guard';
@@ -27,7 +27,7 @@ export class ProcessController extends MaintenanceBaseController<Process> {
   @Get(':id/run')
   @UseGuards(SessionGuard)
   async run(@Param() params, @Query() query): Promise<ApiResult> {
-    const process: Process = await this.processService.findOneByUid(params.id);
+    const process: Process = await this.processService.findOneByUid(params);
     const task = await this.taskService.createEmptyTask(process.name);
     new CustomProcess(this.taskService, process, this.connetion, query).start(
       task,
@@ -38,7 +38,7 @@ export class ProcessController extends MaintenanceBaseController<Process> {
   @Get(':id/runSync')
   @UseGuards(SessionGuard)
   async runSync(@Param() params, @Query() query): Promise<ApiResult> {
-    const process: Process = await this.processService.findOneByUid(params.id);
+    const process: Process = await this.processService.findOneByUid(params);
     const task = await this.taskService.createEmptyTask(process.name);
     await new CustomProcess(
       this.taskService,
