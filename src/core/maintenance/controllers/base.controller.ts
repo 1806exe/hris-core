@@ -47,7 +47,10 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
   @Get()
   @UseGuards(SessionGuard)
   async findAll(@Query() query): Promise<ApiResult> {
-    if (_.has(query, 'paging') && query.paging === 'false') {
+    /*
+    * 
+    *TODO: Find best ways to load when paging is false
+    * if (_.has(query, 'paging') && query.paging === 'false') {
       const allContents: T[] = await this.maintenanceBaseService.findAll();
       return {
         [this.Model.plural]: _.map(allContents, sanitizeResponseObject),
@@ -57,7 +60,7 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
         query?.name,
       );
       return { [this.Model.plural]: foundName };
-    }
+    }*/
     const pagerDetails: Pager = getPagerDetails(query);
 
     const [entityRes, totalCount]: [
