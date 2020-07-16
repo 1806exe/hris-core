@@ -9,6 +9,7 @@ import {
   Query,
   Res,
   UseGuards,
+  NotFoundException,
 } from '@nestjs/common';
 import { BaseController } from '../../../core/controllers/base.contoller';
 import { getSuccessResponse } from '../../../core/helpers/response.helper';
@@ -113,21 +114,28 @@ export class RecordsController extends BaseController<Record> {
   @Put(':record/orgUnitTransfer')
   @UseGuards(SessionGuard)
   async orgUnitTransfer(
-    @Param('record') record,
+    @Param() param,
     @Body() transferRecordDto,
     @Res() res,
   ): Promise<any> {
-    const recordtransfered = await this.recordService.transferOrganisationUnit(
-      record,
-      transferRecordDto,
-    );
-    return res
-      .status(HttpStatus.OK)
-      .send(sanitizeResponseObject(recordtransfered));
+    const recordid = await this.recordService.findOneByUid(param.record);
+    if (recordid) {
+      const recordtransfered = await this.recordService.transferOrganisationUnit(
+        param.record,
+        transferRecordDto,
+      );
+      return res
+        .status(HttpStatus.OK)
+        .send(sanitizeResponseObject(recordtransfered));
+    } else {
+      throw new NotFoundException(
+        `Record ID ${param.record} does not exist in records`,
+      );
+    }
   }
 
   @Get(':record/sessions')
-  // @UseGuards(SessionGuard)
+  @UseGuards(SessionGuard)
   async getSessions(@Param() param, @Res() res): Promise<any> {
     const sessions = await this.recordService.getSessions(param.record);
 
