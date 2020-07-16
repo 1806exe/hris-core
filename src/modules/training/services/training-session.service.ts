@@ -58,7 +58,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     return (deliverymode = {
       deliverymode: [
         { id: 'Classroom Training', name: 'Classroom Training' },
-        { id: 'On Job Training', name: 'On Job Training' },
+        { id: 'On Job Training (OJT)', name: 'On Job Training (OJT)' },
         { id: 'Mentorship', name: 'Mentorship' },
         { id: 'Online', name: 'Online' },
       ],
