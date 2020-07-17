@@ -32,7 +32,6 @@ export function getWhereConditions(filter: any): any[] {
             };
           }
           if (filterSplit[0] == 'name') {
-            console.log(name);
           }
           return { [filterSplit[0]]: filterSplit[2] };
         }

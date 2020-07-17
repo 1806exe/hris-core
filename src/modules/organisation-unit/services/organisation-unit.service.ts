@@ -24,7 +24,7 @@ export class OrganisationUnitService extends MaintenanceBaseService<
   ) {
     super(organisationUnitRepository, OrganisationUnit);
   }
-  async findAndCount(
+    async findAndCount(
     fields,
     filter,
     size,
