@@ -106,12 +106,6 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
     );
     return res.status(HttpStatus.OK).send('Facilitator Deleted Successfully');
   }
-  @Post(':session/topics')
-  @UseGuards(SessionGuard)
-  async saveTopics(@Param() Param, @Body() saveTopicsDTO: any, @Res() res) {
-    await this.trainingSessionService.saveTopics(Param.session, saveTopicsDTO);
-    return res.status(HttpStatus.OK).send('Topics Added Successfully');
-  }
   @Post(':session/sharing')
   @UseGuards(SessionGuard)
   async sessionSharing(@Param() Param, @Body() sessionSharingDTO: any) {
