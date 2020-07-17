@@ -129,41 +129,29 @@ export class RecordService extends BaseService<Record> {
 
   async createRecordValue(uid: string, createRecordDto: any): Promise<any> {
     let recordValue = new RecordValue();
-    const {
-      value,
-      startDate,
-      endDate,
-      comment,
-      field,
-      entitledPayment,
-    } = createRecordDto;
-
-    const query = await this.fieldRepository.find({
-      select: ['id'],
-      where: [{ uid: field }],
-    });
-    let idfield = query[0].id;
-    let recordGot = (await this.recordRepository.findOne({ uid })).id;
-    recordValue.uid = generateUid();
-    recordValue.value = value;
-    recordValue.startDate = startDate;
-    recordValue.endDate = endDate;
-    recordValue.comment = comment;
-    recordValue.entitledPayment = entitledPayment;
-    recordValue.recordid = recordGot;
-    recordValue.fieldid = idfield;
-
-    const recordValueResponse = await this.recordValueRepository.save(
-      recordValue,
-    );
-
-    return await this.recordValueRepository.findOne({
-      where: { uid: recordValueResponse.uid },
-      join: {
-        alias: 'recordValue',
-        leftJoinAndSelect: { field: 'recordValue.field' },
-      },
-    });
+    try {
+      Object.keys(createRecordDto).forEach((key) => {
+        recordValue[key] = createRecordDto[key];
+      });
+      recordValue.field = await this.fieldRepository.findOne({
+        where: { uid: createRecordDto.field },
+      });
+      recordValue.record = await this.recordRepository.findOne({
+        where: { uid: uid },
+      });
+      const recordValueResponse = await this.recordValueRepository.save(
+        recordValue,
+      );
+      return await this.recordValueRepository.findOne({
+        where: { uid: recordValueResponse.uid },
+        join: {
+          alias: 'recordValue',
+          leftJoinAndSelect: { field: 'recordValue.field' },
+        },
+      });
+    } catch (e) {
+      return e;
+    }
   }
   async updateRecordValue(
     uid: string,
@@ -235,14 +223,16 @@ export class RecordService extends BaseService<Record> {
     uid: string,
     transferRecordDto: any,
   ): Promise<any> {
-    const record = await this.recordRepository.findOne({ uid });
     const { organisationUnit } = transferRecordDto;
-    const query = await this.formRepository.manager.query(
-      `SELECT id FROM organisationunit WHERE uid='${organisationUnit}'`,
+
+    await this.recordRepository.update(
+      { uid: uid },
+      {
+        organisationUnit: await this.organisationunitRepository.findOne({
+          where: { uid: organisationUnit },
+        }),
+      },
     );
-    const organisationUnitid = query[0].id;
-    record.organisationUnit = organisationUnitid;
-    await this.recordRepository.save(record);
     return await this.recordRepository.findOne({
       where: { uid },
       join: {

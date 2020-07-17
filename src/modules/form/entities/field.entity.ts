@@ -165,11 +165,11 @@ export class Field extends EntityCoreProps {
   // )
   // forms: Form[];
 
-  @OneToOne(
-    type => RecordValue,
-    recordValue => recordValue.field,
-    { onDelete: 'CASCADE' },
-  )
-  @JoinColumn({ name: 'recordvalueid' })
-  recordValue: RecordValue | null;
+  // @OneToOne(
+  //   type => RecordValue,
+  //   recordValue => recordValue.field,
+  //   { onDelete: 'CASCADE' },
+  // )
+  // @JoinColumn({ name: 'recordvalueid' })
+  // recordValue: RecordValue | null;
 }

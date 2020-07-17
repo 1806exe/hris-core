@@ -4,7 +4,7 @@ import { TaskService } from '../../system/task/services/task.service';
 import { AnalyticsService } from '../services/analytics.service';
 import { SessionGuard } from '../../system/user/guards/session.guard';
 import { TrainingAnalyticsService } from '../services/training.analytics.service';
-import { extractAnalytics } from '@hris/core/utilities/analytics-query-extractor';
+import { extractAnalytics } from '../../../core/utilities/analytics-query-extractor';
 
 @Controller('api/analytics')
 export class AnalyticsController {

@@ -13,22 +13,16 @@ import { Record } from './record.entity';
 import { Field } from '../../form/entities/field.entity';
 import { User } from '../../../modules/system/user/entities/user.entity';
 import { TransactionTimestamp } from '../../../core/entities/transaction-timestamp.entity';
+import { generateUid } from '../../../core/helpers/makeuid';
 
 @Entity('recordvalue', { schema: 'public' })
 export class RecordValue extends TransactionTimestamp {
   @PrimaryGeneratedColumn()
   recordvalueid: number;
 
-  @ManyToOne(
-    () => Record,
-    (record: Record) => record.recordValues,
-    {},
-  )
-  @JoinColumn({ name: 'recordid' })
+  @ManyToOne(() => Record, (record: Record) => record.recordValues, {})
+  @JoinColumn({ name: 'recordid', referencedColumnName:'id' })
   record: Record | null;
-
-  @Column()
-  recordid: number;
 
   @Column('text', {
     nullable: false,
@@ -72,20 +66,21 @@ export class RecordValue extends TransactionTimestamp {
   })
   entitledPayment: string | null;
 
-  @OneToOne(
-    () => Field,
-    field => field.recordValue,
-    { nullable: false, onDelete: 'CASCADE' },
-  )
-  @JoinColumn({ name: 'fieldid' })
+  @OneToOne(() => Field, (field) => field, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'fieldid', referencedColumnName: 'id' })
   field: Field | null;
-
-  @Column()
-  fieldid: number;
 
   @JoinColumn({ name: 'createdbyid' })
   createdBy: User;
 
   @JoinColumn({ name: 'lastupdatedbyid' })
   lastUpdatedBy: User;
+
+  @BeforeInsert()
+  beforeUpdateTransaction() {
+    this.uid = generateUid();
+  }
 }
