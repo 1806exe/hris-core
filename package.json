@@ -26,6 +26,7 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
+    "@iapps/period-utilities": "^1.0.0-beta.3",
     "@iapps/utils": "^1.0.1-alpha.5",
     "@icodebible/utils": "^1.5.9",
     "@nestjs/common": "^7.2.0",
