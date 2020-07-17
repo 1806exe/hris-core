@@ -40,7 +40,7 @@ describe('Organisation Unit API', () => {
           expect(res.body.name).toEqual('Ministry Of Health');
           expect(res.body.shortName).toEqual('MOHCDGEC');
           expect(res.body.active).toEqual(true);
-          expect(res.body.level).toBeUndefined();
+          expect(res.body.level).toBe(1);
         }
       );
   });
@@ -168,34 +168,6 @@ describe('Forms API', () => {
   });
   it(`Get form by ID /api/forms/:id (GET)`, () => {
     return addAuthentication(request(server.getHttpServer())
-      .get(`/api/forms/${formId}`))//Forms
-let formId;
-describe('Forms API', () => {
-  it(`Testing Authentication /api/forms (GET)`, () => {
-    return request(server.getHttpServer())
-      .get(`/api/forms`)
-      .expect(403)
-      .expect('{"statusCode":403,"message":"Forbidden resource","error":"Forbidden"}');
-  });
-  it(`Adding form /api/forms (POST)`, () => {
-    return addAuthentication(request(server.getHttpServer())
-      .post(`/api/forms`))
-      .send({
-        "id": "52893cd128bd2",
-        "name": "Public Employee Form",
-        "title": "Public Employee Form"
-      })
-      //.expect(200)
-      .expect(
-        (res)=>{
-          formId = res.body.id;
-          expect(res.body.name).toEqual('Public Employee Form');
-          expect(res.body.title).toEqual('Public Employee Form');
-        }
-      );
-  });
-  it(`Get form by ID /api/forms/:id (GET)`, () => {
-    return addAuthentication(request(server.getHttpServer())
       .get(`/api/forms/${formId}`))
       .expect(
         (res)=>{
@@ -205,15 +177,6 @@ describe('Forms API', () => {
       );
   });
 });
-      .expect(
-        (res)=>{
-          expect(res.body.name).toEqual('Public Employee Form');
-          expect(res.body.title).toEqual('Public Employee Form');
-        }
-      );
-  });
-});
-//Fields
 let fieldId;
 describe('Fields API', () => {
   it(`Testing Authentication /api/fields (GET)`, () => {
