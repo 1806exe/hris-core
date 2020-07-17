@@ -3,12 +3,12 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class accesses1592483454023 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`
-        CREATE SEQUENCE userroleaccess_id_seq;
-        CREATE SEQUENCE dashboardaccess_id_seq;
-        CREATE SEQUENCE dashboarditemaccess_id_seq;
-        CREATE SEQUENCE trainingsessionaccess_id_seq;
-        CREATE SEQUENCE visualizationaccess_id_seq;
-        CREATE TABLE public.userroleaccess
+        CREATE SEQUENCE IF NOT EXISTS userroleaccess_id_seq;
+        CREATE SEQUENCE IF NOT EXISTS  dashboardaccess_id_seq;
+        CREATE SEQUENCE IF NOT EXISTS  dashboarditemaccess_id_seq;
+        CREATE SEQUENCE IF NOT EXISTS  trainingsessionaccess_id_seq;
+        CREATE SEQUENCE IF NOT EXISTS  visualizationaccess_id_seq;
+        CREATE TABLE IF NOT EXISTS public.userroleaccess
             (
                 created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
                 lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
@@ -154,7 +154,7 @@ ALTER TABLE public.trainingsessionaccess
     OWNER to postgres;
 
 
-    CREATE TABLE public.sessionuseraccess
+    CREATE TABLE IF NOT EXISTS public.sessionuseraccess
     (
         "trainingsessionId" bigint NOT NULL,
         "trainingsessionaccessId" bigint NOT NULL,
@@ -177,7 +177,7 @@ ALTER TABLE public.trainingsessionaccess
     
     -- DROP INDEX public."IDX_0fae76387fb4a613f7fc2c25c1";
     
-    CREATE INDEX "IDX_0fae76387fb4a613f7fc2c25c1"
+    CREATE INDEX IF NOT EXISTS "IDX_0fae76387fb4a613f7fc2c25c1"
         ON public.sessionuseraccess USING btree
         ("trainingsessionId" ASC NULLS LAST)
         TABLESPACE pg_default;

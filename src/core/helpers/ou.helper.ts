@@ -1,5 +1,5 @@
 export function getISOOrgUnits(ou, user) {
-  ou = ou.map((o)=>o.trim());
+  ou = ou.map((o) => o.trim());
   let ouIds = ou.filter(
     (ouId) =>
       ouId.trim().indexOf('LEVEL-') === -1 &&
@@ -8,14 +8,16 @@ export function getISOOrgUnits(ou, user) {
   );
   ou.forEach((orgU) => {
     if (orgU.trim() === 'USER_ORGUNIT') {
-      ouIds = ouIds.concat(user.organisationUnits.map((orgUnit) => orgUnit.id));
+      ouIds = ouIds.concat(
+        user.organisationUnits.map((orgUnit) => orgUnit.uid),
+      );
     }
   });
   return ouIds;
 }
 
 export function generateOUFilterQuery(ousAlias, ou, orgUnitLevels, user) {
-  ou = ou.map((o)=>o.trim());
+  ou = ou.map((o) => o.trim());
   let ouIds = ou.filter(
     (ouId) =>
       ouId.indexOf('LEVEL-') === -1 &&
@@ -24,7 +26,9 @@ export function generateOUFilterQuery(ousAlias, ou, orgUnitLevels, user) {
   );
   ou.forEach((orgU) => {
     if (orgU === 'USER_ORGUNIT') {
-      ouIds = ouIds.concat(user.organisationUnits.map((orgUnit) => orgUnit.uid));
+      ouIds = ouIds.concat(
+        user.organisationUnits.map((orgUnit) => orgUnit.uid),
+      );
     }
   });
   const ouLevelIds = ou.filter((ouId) => ouId.indexOf('LEVEL-') > -1);

@@ -1,19 +1,18 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { PeriodInterface } from '@iapps/period-utilities';
+import { Injectable } from '@nestjs/common';
+import { find } from 'lodash';
+import { Connection } from 'typeorm';
 import {
   generateOUFilterQuery,
   getISOOrgUnits,
 } from '../../../core/helpers/ou.helper';
-import {
-  getISOPeriods,
-  getPeriodDetails,
-} from '../../../core/helpers/pe.helper';
-import { Analytics } from '../../analytics/interfaces/analytics.interface';
+import { getISOPeriods } from '../../../core/helpers/pe.helper';
 import { getWhereConditions } from '../../../core/utilities';
+import { Analytics } from '../../analytics/interfaces/analytics.interface';
 import { IndicatorService } from '../../indicator/services/indicator.service';
 import { OrganisationUnitLevelService } from '../../organisation-unit/services/organisation-unit-level.service';
-import { Connection } from 'typeorm';
-import { getAnalyticsHeaders } from '../helpers/get-analytics-headers.helper';
 import { OrganisationUnitService } from '../../organisation-unit/services/organisation-unit.service';
+import { getAnalyticsHeaders } from '../helpers/get-analytics-headers.helper';
 
 declare module namespace {}
 
@@ -33,11 +32,19 @@ export class AnalyticsService {
         rows: [],
       };
 
+      // Get Iso periods for the selected pes
+      const isoPeriods = getISOPeriods(pe);
+
+      const isoPeriodIds = isoPeriods.map(
+        (period: PeriodInterface) => period.id,
+      );
+
       // Get organisation unit levels
       const orgUnitLevels = await this.orgUnitLevelService.findAll();
 
       // Get indicators for use in computation
       const indicators = await this.getIndicators(dx);
+
       // Attached indicator information in analytics payload
 
       let queries = [];
@@ -71,9 +78,7 @@ export class AnalyticsService {
               indicator.uid
             }' as dx,'${orgUnit}' as ou,pe.iso as pe,COUNT(*) as value FROM _resource_table_${
               indicator.form.uid
-            } data INNER JOIN _organisationunitstructure ous ON(data.ou=ous.uid) INNER JOIN _periodstructure pe ON((${getISOPeriods(
-              pe,
-            )
+            } data INNER JOIN _organisationunitstructure ous ON(data.ou=ous.uid) INNER JOIN _periodstructure pe ON((${isoPeriodIds
               .map((p) => `pe.iso='${p}'`)
               .join(' OR ')}) ${filter} ) WHERE ${generateOUFilterQuery(
               'ous',
@@ -99,7 +104,7 @@ export class AnalyticsService {
               field.formuid
             } data
         INNER JOIN _organisationunitstructure ous ON(data.ou=ous.uid) 
-        INNER JOIN _periodstructure pe ON((${getISOPeriods(pe)
+        INNER JOIN _periodstructure pe ON((${isoPeriodIds
           .map((p) => `pe.iso='${p}'`)
           .join(' OR ')})) 
         WHERE data."${field.uid}" = '${
@@ -115,9 +120,12 @@ export class AnalyticsService {
         }
       }
       // update period in analytics metadata
-      analytics.metaData.dimensions.pe = getISOPeriods(pe);
-      analytics.metaData.dimensions.pe.forEach((pe) => {
-        analytics.metaData.items[pe] = getPeriodDetails(pe);
+      analytics.metaData.dimensions.pe = isoPeriodIds;
+      analytics.metaData.dimensions.pe.forEach((peId) => {
+        const isoPeriod: PeriodInterface = find(isoPeriods, ['id', peId]);
+        analytics.metaData.items[peId] = isoPeriod
+          ? { name: isoPeriod.name }
+          : { name: peId };
       });
 
       // Get analytics results
@@ -348,17 +356,20 @@ export class AnalyticsService {
         analyticstype: 'RECORDS',
       },
     };
-    return dx.filter((d)=>{
-      return Object.keys(indicators).includes(d);
-    }).map((d)=>{
-      return {
-        ...indicators[d],
-        uid: indicators[d].id,
-        form: {
-          uid:indicators[d].formuid
-        }
-      }
-    }).concat(await this.indicatorService.findIn({ uid: dx }));
+    return dx
+      .filter((d) => {
+        return Object.keys(indicators).includes(d);
+      })
+      .map((d) => {
+        return {
+          ...indicators[d],
+          uid: indicators[d].id,
+          form: {
+            uid: indicators[d].formuid,
+          },
+        };
+      })
+      .concat(await this.indicatorService.findIn({ uid: dx }));
     //return await this.indicatorService.findIn({ uid: dx });
   }
 
@@ -450,7 +461,7 @@ export class AnalyticsService {
         ' OR ',
       )}) LIMIT 200000`;
     }
-    console.log('Query:',query);
+    console.log('Query:', query);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
     analytics.rows = rows.map((row) => {
