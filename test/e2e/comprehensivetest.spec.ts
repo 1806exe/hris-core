@@ -167,7 +167,7 @@ describe('Forms API', () => {
         })
         //.expect(200)
         .expect((res) => {
-          console.log(res.body  );
+          console.log(res.body);
           formId = res.body.id;
           expect(res.body.name).toEqual('Public Employee Form');
           expect(res.body.title).toEqual('Public Employee Form');
@@ -261,104 +261,104 @@ describe('Records API', () => {
       );
   });
   it(`Adding record /api/records (POST)`, () => {
-    return (
-      addAuthentication(request(server.getHttpServer()).post(`/api/records`))
-        .send({
-          id: '52c005d00b8c0',
-          instance: '696b1a035eb7d7c989f0dc50df3e7bcf',
-          form: {
-            id: formId,
-          },
-          organisationUnit: {
-            id: orgUnitId
-          },
-          // recordValues: [
-          //   {
-          //     id: 'lYrXUyHLGnga8',
-          //     recordvalueid: '611626',
-          //     value: 'Nicholaus',
-          //     recordid: '55853',
-          //     fieldid: '140',
-          //     field: {
-          //       id: '5289e934ab062',
-          //     },
-          //   },
-          //   {
-          //     id: 'h4USzRcH1wOCh',
-          //     recordvalueid: '611627',
-          //     value: 'Kisandu',
-          //     recordid: '55853',
-          //     fieldid: '147',
-          //     field: {
-          //       id: '5289e934b2b33',
-          //       name: 'middlename',
-          //       description: 'Optional, Employee`s Middle name',
-          //       caption: 'Middle Name',
-          //     },
-          //   },
-          //   {
-          //     id: 'lXLxdHiLoRyRj',
-          //     recordvalueid: '611628',
-          //     value: 'Mhozya',
-          //     recordid: '55853',
-          //     fieldid: '159',
-          //     field: {
-          //       id: '5289e934c02a1',
-          //       name: 'surname',
-          //       description:
-          //         'Compulsory, Employee Surname, Surname keeps history, update it through history.',
-          //       caption: 'Surname',
-          //     },
-          //   },
-          //   {
-          //     id: 'jRHBhF56tatZS',
-          //     recordvalueid: '611629',
-          //     value: 'Male',
-          //     recordid: '55853',
-          //     fieldid: '157',
-          //     field: {
-          //       id: '5289e934bde20',
-          //       name: 'sex',
-          //       description: 'Compulsory, Gender of Employee.',
-          //       caption: 'Sex',
-          //     },
-          //   },
-          //   {
-          //     id: 'nX4ISBbYV21lo',
-          //     recordvalueid: '611631',
-          //     value: 'Primary Education',
-          //     recordid: '55853',
-          //     fieldid: '123',
-          //     field: {
-          //       id: '5289e93496216',
-          //       name: 'basic_education_level',
-          //       description: 'Compulsory. `s Education Level',
-          //       caption: 'Basic Education Level',
-          //     },
-          //   },
-          //   {
-          //     id: 'IxiWGbTnDiaZH',
-          //     recordvalueid: '611632',
-          //     value: 'Certificate',
-          //     recordid: '55853',
-          //     fieldid: '133',
-          //     field: {
-          //       id: '5289e934a36d7',
-          //       name: 'edu_evel',
-          //       description:
-          //         'Compulsory, Employee`s Highest education level, Educational level keeps history, should be updated through history.',
-          //       caption: 'Profession Education Level',
-          //     },
-          //   },
-          // ],
-        })
-        .expect((res) => {
-          recordId = res.body.id;
-          console.log(res.body)
-          expect(res.body.form.name).toEqual('Public Employee Form');
-          expect(res.body.organisationUnit.name).toEqual('Ministry Of Health');
-        })
-    );
+    return addAuthentication(
+      request(server.getHttpServer()).post(`/api/records`),
+    )
+      .send({
+        id: '52c005d00b8c0',
+        instance: '696b1a035eb7d7c989f0dc50df3e7bcf',
+        form: {
+          formId,
+        },
+        organisationUnit: {
+          orgUnitId,
+        },
+        // recordValues: [
+        //   {
+        //     id: 'lYrXUyHLGnga8',
+        //     recordvalueid: '611626',
+        //     value: 'Nicholaus',
+        //     recordid: '55853',
+        //     fieldid: '140',
+        //     field: {
+        //       id: '5289e934ab062',
+        //     },
+        //   },
+        //   {
+        //     id: 'h4USzRcH1wOCh',
+        //     recordvalueid: '611627',
+        //     value: 'Kisandu',
+        //     recordid: '55853',
+        //     fieldid: '147',
+        //     field: {
+        //       id: '5289e934b2b33',
+        //       name: 'middlename',
+        //       description: 'Optional, Employee`s Middle name',
+        //       caption: 'Middle Name',
+        //     },
+        //   },
+        //   {
+        //     id: 'lXLxdHiLoRyRj',
+        //     recordvalueid: '611628',
+        //     value: 'Mhozya',
+        //     recordid: '55853',
+        //     fieldid: '159',
+        //     field: {
+        //       id: '5289e934c02a1',
+        //       name: 'surname',
+        //       description:
+        //         'Compulsory, Employee Surname, Surname keeps history, update it through history.',
+        //       caption: 'Surname',
+        //     },
+        //   },
+        //   {
+        //     id: 'jRHBhF56tatZS',
+        //     recordvalueid: '611629',
+        //     value: 'Male',
+        //     recordid: '55853',
+        //     fieldid: '157',
+        //     field: {
+        //       id: '5289e934bde20',
+        //       name: 'sex',
+        //       description: 'Compulsory, Gender of Employee.',
+        //       caption: 'Sex',
+        //     },
+        //   },
+        //   {
+        //     id: 'nX4ISBbYV21lo',
+        //     recordvalueid: '611631',
+        //     value: 'Primary Education',
+        //     recordid: '55853',
+        //     fieldid: '123',
+        //     field: {
+        //       id: '5289e93496216',
+        //       name: 'basic_education_level',
+        //       description: 'Compulsory. `s Education Level',
+        //       caption: 'Basic Education Level',
+        //     },
+        //   },
+        //   {
+        //     id: 'IxiWGbTnDiaZH',
+        //     recordvalueid: '611632',
+        //     value: 'Certificate',
+        //     recordid: '55853',
+        //     fieldid: '133',
+        //     field: {
+        //       id: '5289e934a36d7',
+        //       name: 'edu_evel',
+        //       description:
+        //         'Compulsory, Employee`s Highest education level, Educational level keeps history, should be updated through history.',
+        //       caption: 'Profession Education Level',
+        //     },
+        //   },
+        // ],
+      })
+      .expect((res) => {
+        recordId = res.body.id;
+        console.log(res.body);
+        expect(res.body.form.name).toEqual('Public Employee Form');
+        expect(res.body.organisationUnit.name).toEqual('Ministry Of Health');
+      });
   });
   it(`Get record by ID /api/records/:id (GET)`, () => {
     return addAuthentication(
