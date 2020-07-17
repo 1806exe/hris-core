@@ -11,7 +11,7 @@ jobs:
         - echo 'Installing Dependencies'
         - npm
         - echo 'Running integration tests!'
-        - npx jest test
+        - npx jest test/e2e/
 
 script:
   - npm run build
