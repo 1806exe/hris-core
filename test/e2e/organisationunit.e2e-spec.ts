@@ -27,7 +27,7 @@ describe('Organisation Unit API', () => {
         "code": "MOHCDGEC",
         "name": "Ministry Of Health",
         "description": "Ministry of Health and Social welfare",
-        //"dhisuid": "m0frOspS7JY",
+        "dhisuid": "m0frOspS7JY",
         "shortName": "MOHCDGEC",
         "active": true,
         "level": 1
@@ -55,7 +55,7 @@ describe('Organisation Unit API', () => {
         "dhisuid": "m0frOspS7JY",
         "shortName": "MOHCDGEC",
         "active": true,
-        "level": 1
+        // "level": 1
       })
       .expect(
         (res)=>{
@@ -131,6 +131,17 @@ describe('Organisation Unit API', () => {
   it(`Get List of organisation units /api/organisationUnits?filter=shortName:eq:MOHCDGEC (GET)`, () => {
     return addAuthentication(request(server.getHttpServer())
       .get(`/api/organisationUnits?filter=shortName:eq:MOHCDGEC`))
+      .expect(
+        (res)=>{
+          expect(res.body.pager != undefined).toEqual(true);
+          expect(res.body.organisationUnits != undefined).toEqual(true);
+          expect(res.body.organisationUnits.length).toEqual(1);
+        }
+      );
+  });
+  it(`Get List of organisation units in /api/organisationUnits?filter=id:in:[id] (GET)`, () => {
+    return addAuthentication(request(server.getHttpServer())
+      .get(`/api/organisationUnits?filter=id:in:[${orgUnitId}]`))
       .expect(
         (res)=>{
           expect(res.body.pager != undefined).toEqual(true);

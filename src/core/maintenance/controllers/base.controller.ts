@@ -28,6 +28,7 @@ import {
   postSuccessResponse,
   deleteSuccessResponse,
 } from '../../../core/helpers/maintenance-response.helper';
+import { unwatchFile } from 'fs';
 
 export class MaintenanceBaseController<T extends HRISBaseEntity> {
   /**
@@ -48,39 +49,54 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
   @UseGuards(SessionGuard)
   async findAll(@Query() query): Promise<ApiResult> {
     /*
-    * 
-    *TODO: Find best ways to load when paging is false
-    * if (_.has(query, 'paging') && query.paging === 'false') {
+     *
+     *TODO: Find best ways to load when paging is false
+     *
+     */
+    if (query.paging === 'false' || '') {
+      const allContents = await this.maintenanceBaseService.getWhereNoPaging(
+        query?.filter,
+      );
+      return {
+        [this.Model.plural]: _.map(allContents, sanitizeResponseObject),
+      };
+    }
+
+    if (
+      _.has(query, 'paging') &&
+      query.paging === 'false' &&
+      query.filter == undefined
+    ) {
       const allContents: T[] = await this.maintenanceBaseService.findAll();
       return {
         [this.Model.plural]: _.map(allContents, sanitizeResponseObject),
       };
-    } else if (_.has(query, 'name')) {
-      const foundName = await this.maintenanceBaseService.findOneByName(
-        query?.name,
-      );
-      return { [this.Model.plural]: foundName };
-    }*/
-    const pagerDetails: Pager = getPagerDetails(query);
+    }
 
-    const [entityRes, totalCount]: [
-      T[],
-      number,
-    ] = await this.maintenanceBaseService.findAndCount(
-      query?.fields,
-      query?.filter,
-      pagerDetails?.pageSize,
-      +pagerDetails?.page - 1,
-    );
-    return {
-      pager: {
-        ...pagerDetails,
-        pageCount: entityRes?.length,
-        total: totalCount,
-        nextPage: `/api/${this.Model.plural}?page=${+pagerDetails.page + +'1'}`,
-      },
-      [this.Model.plural]: _.map(entityRes, sanitizeResponseObject),
-    };
+    if (query.paging === undefined) {
+      const pagerDetails: Pager = getPagerDetails(query);
+
+      const [entityRes, totalCount]: [
+        T[],
+        number,
+      ] = await this.maintenanceBaseService.findAndCount(
+        query?.fields,
+        query?.filter,
+        pagerDetails?.pageSize,
+        +pagerDetails?.page - 1,
+      );
+      return {
+        pager: {
+          ...pagerDetails,
+          pageCount: entityRes?.length,
+          total: totalCount,
+          nextPage: `/api/${this.Model.plural}?page=${
+            +pagerDetails.page + +'1'
+          }`,
+        },
+        [this.Model.plural]: _.map(entityRes, sanitizeResponseObject),
+      };
+    }
   }
 
   /**

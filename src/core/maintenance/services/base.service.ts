@@ -44,6 +44,16 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
       entityTableMapper,
     );
   }
+  async getWhereNoPaging(filter): Promise<T[]> {
+    /**
+     *
+     */
+    return await GetResponseSanitizer(
+      this.modelRepository,
+      await this.modelRepository.find({ where: getWhereConditions(filter) }),
+      entityTableMapper,
+    );
+  }
 
   // TODO: Find best way to merge all find operations in single method so dynamic filters can be used for all
   async findIn(inConditions: { [attributeName: string]: string[] }) {
