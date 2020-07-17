@@ -216,37 +216,30 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     });
     session.startdate = startDate;
     session.enddate = endDate;
-    console.log(session)
     await this.trainingSessionRepository.save(session);
 
-    const savedsession = this.trainingSessionRepository.findOne({
+    const savedsession = await this.trainingSessionRepository.findOne({
       uid: session.uid,
     });
-    // const topic = await this.trainingTopicRepository.findOne({
-    //   select: ['id'],
-    //   where: In(topics.map((topic) => topic.uid)),
-    // });
-    // console.log('TOPICSSS', topic);
+    const topic = await this.trainingTopicRepository.find({
+      where: { uid: In(topics.map((topic) => topic)) },
+    });
+    for (let topics of topic) {
+      await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into('trainingsessiontopics')
+        .values([
+          {
+            trainingsessionId: savedsession.id,
+            trainingtopicId: topics.id,
+          },
+        ])
+        .execute();
+    }
+
     return savedsession;
   }
-  async saveTopics(uid: string, saveTopicsDTO: any) {
-    const { topic } = saveTopicsDTO;
-    const session = (await this.trainingSessionRepository.findOne({ uid: uid }))
-      .id;
-    const topics = (
-      await this.trainingTopicRepository.findOne({
-        select: ['id'],
-        where: [{ uid: topic }],
-      })
-    ).id;
-    await getConnection()
-      .createQueryBuilder()
-      .insert()
-      .into('trainingsessiontopics')
-      .values([{ trainingsessionId: session, trainingtopicId: topics }])
-      .execute();
-  }
-
   async findOneParticipant(uid: string) {
     return await this.recordRepository.findOne({ uid: uid });
   }
@@ -291,7 +284,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
             : null,
         assessmentdate:
           assessmentdate && assessmentdate != null ? assessmentdate : null,
-          assessedby:
+        assessedby:
           assessedby && assessedby != ''
             ? await this.userRepository.findOne({
                 uid: assessedby,

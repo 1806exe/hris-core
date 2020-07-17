@@ -58,6 +58,16 @@ export class RecordValue extends TransactionTimestamp {
   })
   comment: string | null;
 
+  @Column('integer', {
+    name: 'recordid',
+  })
+  recordid: number;
+
+  @Column('integer', {
+    name: 'fieldid',
+  })
+  fieldid: number;
+
   @Column('character varying', {
     nullable: true,
     length: 255,
