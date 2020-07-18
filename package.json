@@ -13,6 +13,7 @@
     "start:dev": "node --max_old_space_size=5500 ./node_modules/.bin/nodemon",
     "start:debug": "node --max_old_space_size=2500 ./node_modules/.bin/nodemon --config nodemon-debug.json",
     "migration:run": "ts-node node_modules/.bin/typeorm migration:run -c development",
+    "migration:docker": "ts-node node_modules/.bin/typeorm migration:run -c docker",
     "migration:revert": "ts-node node_modules/.bin/typeorm migration:revert",
     "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ormconfig.json",
     "prestart:prod": "rimraf dist && npx run build",
