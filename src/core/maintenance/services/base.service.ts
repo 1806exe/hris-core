@@ -48,7 +48,7 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
     /*
      *
      */
-    const metaData = this.modelRepository.manager.connection.getMetadata(
+    /*const metaData = this.modelRepository.manager.connection.getMetadata(
       this.Model,
     );
     let join: any = {};
@@ -61,7 +61,7 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
           profile: 'organisationunit.parent',
         },
       };
-    }
+    }*/
     /**
      *
      */
@@ -76,7 +76,7 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
                 }),
               }
             : getWhereConditions(filter),
-        join,
+            // join,
       }),
       entityTableMapper,
     );
