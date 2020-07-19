@@ -162,24 +162,27 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
   }
 
   async deleteParticipant(uid: string, record: any) {
-    const records = await this.recordRepository.find({
-      where: [{ uid: record }],
+    const participants = await this.participantRepository.findOne({
+      where: [
+        {
+          recordId: (
+            await this.recordRepository.findOne({
+              where: { uid: record },
+            })
+          ).id,
+          trainingsessionId: (
+            await this.trainingSessionRepository.findOne({ uid })
+          ).id,
+        },
+      ],
     });
-    const sessionid = (await this.trainingSessionRepository.findOne({ uid }))
-      .id;
-    const recordid = records[0].id;
-    const participants = await this.participantRepository.find({
-      where: [{ recordId: recordid, trainingsessionId: sessionid }],
-    });
-
-    if (participants[0] == undefined) {
+    if (participants == undefined || Object.keys(participants).length < 2) {
       throw new NotFoundException(`Participant is not available `);
     }
-    const id = {
-      trainingsessionId: sessionid,
-      recordId: recordid,
-    };
-    let deletedParticipants = await this.participantRepository.delete(id);
+
+    let deletedParticipants = await this.participantRepository.delete(
+      participants,
+    );
     return deletedParticipants;
   }
   async createSession(createSessionDTO: any) {
