@@ -203,7 +203,10 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     } = createSessionDTO;
 
     const session = new TrainingSession();
-    session.uid = generateUid();
+    Object.keys(createSessionDTO).forEach((key) => {
+      session[key] = createSessionDTO[key];
+    });
+
     session.organiser = await this.trainingSponsorRepository.findOne({
       where: { uid: organiser },
     });
@@ -217,13 +220,9 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     session.curriculum = await this.trainingCurriculumRepository.findOne({
       where: { uid: curriculum },
     });
-    session.enddate = endDate;
-    session.startdate = startDate;
     session.organisationUnit = await this.organisationunitRepository.findOne({
       where: { uid: orgunit },
     });
-    session.startdate = startDate;
-    session.enddate = endDate;
     await this.trainingSessionRepository.save(session);
 
     const savedsession = await this.trainingSessionRepository.findOne({
@@ -231,6 +230,12 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     });
     const topic = await this.trainingTopicRepository.find({
       where: { uid: In(topics.map((topic) => topic)) },
+    });
+    const facilitator = await this.recordRepository.find({
+      where: { uid: In(facilitators.map((facilitator) => facilitator)) },
+    });
+    const participant = await this.recordRepository.find({
+      where: { uid: In(participants.map((participant) => participant)) },
     });
     for (let topics of topic) {
       await getConnection()
@@ -244,6 +249,20 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
           },
         ])
         .execute();
+    }
+
+    for (let facilitators of facilitator) {
+      await this.facilitatorRepository.save({
+        recordId: facilitators.id,
+        trainingsessionId: savedsession.id,
+      });
+    }
+
+    for (let participants of participant) {
+      await this.participantRepository.save({
+        recordId: participants.id,
+        trainingsessionId: savedsession.id,
+      });
     }
 
     return savedsession;
