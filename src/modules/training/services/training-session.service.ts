@@ -65,10 +65,11 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     });
   }
   async getParticipants(uid: string) {
-    const session = (await this.trainingSessionRepository.findOne({ uid })).id;
     let participants = await this.participantRepository.find({
       where: {
-        trainingsessionId: session,
+        trainingsessionId: (
+          await this.trainingSessionRepository.findOne({ uid })
+        ).id,
       },
     });
     if (participants[0] == undefined) {
@@ -85,10 +86,11 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
   }
 
   async getFacilitators(uid: string) {
-    const session = (await this.trainingSessionRepository.findOne({ uid })).id;
     let facilitators = await this.facilitatorRepository.find({
       where: {
-        trainingsessionId: session,
+        trainingsessionId: (
+          await this.trainingSessionRepository.findOne({ uid })
+        ).id,
       },
     });
     if (facilitators[0] == undefined) {
@@ -135,46 +137,52 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
   }
 
   async deleteFacilitator(uid: string, record: any) {
-    const records = await this.recordRepository.find({
-      where: [{ uid: record }],
+    const facilitators = await this.facilitatorRepository.findOne({
+      where: [
+        {
+          recordId: (
+            await this.recordRepository.findOne({
+              where: { uid: record },
+            })
+          ).id,
+          trainingsessionId: (
+            await this.trainingSessionRepository.findOne({ uid })
+          ).id,
+        },
+      ],
     });
-
-    const sessionid = (await this.trainingSessionRepository.findOne({ uid }))
-      .id;
-    const recordid = records[0].id;
-    const facilitators = await this.facilitatorRepository.find({
-      where: [{ recordId: recordid, trainingsessionId: sessionid }],
-    });
-    if (facilitators[0] == undefined) {
+    if (facilitators == undefined || Object.keys(facilitators).length < 2) {
       throw new NotFoundException(`Facilitator is not available `);
     }
-    const id = {
-      trainingsessionId: sessionid,
-      recordId: recordid,
-    };
-    let deletedFacilitator = await this.facilitatorRepository.delete(id);
+
+    let deletedFacilitator = await this.facilitatorRepository.delete(
+      facilitators,
+    );
     return deletedFacilitator;
   }
 
   async deleteParticipant(uid: string, record: any) {
-    const records = await this.recordRepository.find({
-      where: [{ uid: record }],
+    const participants = await this.participantRepository.findOne({
+      where: [
+        {
+          recordId: (
+            await this.recordRepository.findOne({
+              where: { uid: record },
+            })
+          ).id,
+          trainingsessionId: (
+            await this.trainingSessionRepository.findOne({ uid })
+          ).id,
+        },
+      ],
     });
-    const sessionid = (await this.trainingSessionRepository.findOne({ uid }))
-      .id;
-    const recordid = records[0].id;
-    const participants = await this.participantRepository.find({
-      where: [{ recordId: recordid, trainingsessionId: sessionid }],
-    });
-
-    if (participants[0] == undefined) {
+    if (participants == undefined || Object.keys(participants).length < 2) {
       throw new NotFoundException(`Participant is not available `);
     }
-    const id = {
-      trainingsessionId: sessionid,
-      recordId: recordid,
-    };
-    let deletedParticipants = await this.participantRepository.delete(id);
+
+    let deletedParticipants = await this.participantRepository.delete(
+      participants,
+    );
     return deletedParticipants;
   }
   async createSession(createSessionDTO: any) {
@@ -195,7 +203,10 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     } = createSessionDTO;
 
     const session = new TrainingSession();
-    session.uid = generateUid();
+    Object.keys(createSessionDTO).forEach((key) => {
+      session[key] = createSessionDTO[key];
+    });
+
     session.organiser = await this.trainingSponsorRepository.findOne({
       where: { uid: organiser },
     });
@@ -209,13 +220,9 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     session.curriculum = await this.trainingCurriculumRepository.findOne({
       where: { uid: curriculum },
     });
-    session.enddate = endDate;
-    session.startdate = startDate;
     session.organisationUnit = await this.organisationunitRepository.findOne({
       where: { uid: orgunit },
     });
-    session.startdate = startDate;
-    session.enddate = endDate;
     await this.trainingSessionRepository.save(session);
 
     const savedsession = await this.trainingSessionRepository.findOne({
@@ -223,6 +230,12 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     });
     const topic = await this.trainingTopicRepository.find({
       where: { uid: In(topics.map((topic) => topic)) },
+    });
+    const facilitator = await this.recordRepository.find({
+      where: { uid: In(facilitators.map((facilitator) => facilitator)) },
+    });
+    const participant = await this.recordRepository.find({
+      where: { uid: In(participants.map((participant) => participant)) },
     });
     for (let topics of topic) {
       await getConnection()
@@ -236,6 +249,20 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
           },
         ])
         .execute();
+    }
+
+    for (let facilitators of facilitator) {
+      await this.facilitatorRepository.save({
+        recordId: facilitators.id,
+        trainingsessionId: savedsession.id,
+      });
+    }
+
+    for (let participants of participant) {
+      await this.participantRepository.save({
+        recordId: participants.id,
+        trainingsessionId: savedsession.id,
+      });
     }
 
     return savedsession;
@@ -301,9 +328,15 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       await this.trainingSessionRepository.findOne({ where: { uid: uid } })
     ).id;
     const { user, access } = sessionsharingDTO;
-    const userId = (await this.userRepository.findOne({ where: { uid: user } }))
-      .id;
+    // const userId = (await this.userRepository.findOne({ where: { uid: user } }))
+    //   .id;
 
+    const saved = await this.trainingSessionAccess.save({
+      user: await this.userRepository.findOne({ where: { uid: user } }),
+      access: access,
+    });
+    console.log('Saved:::', saved);
+    /*    
     const useraccess = await getConnection()
       .createQueryBuilder()
       .insert()
@@ -328,7 +361,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
           },
         ])
         .execute();
-    }
+    } */
   }
   async sessionSharingEdit(uid: string, editSessionDTO) {
     const { user, access } = editSessionDTO;
