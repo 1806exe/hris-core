@@ -53,13 +53,13 @@ export class TrainingSession extends TransactionTimestamp {
     default: () => 'NULL::timestamp without time zone',
     name: 'startdate',
   })
-  startDate: Date | null;
+  startdate: Date | null;
   @Column('timestamp without time zone', {
     nullable: true,
     default: () => 'NULL::timestamp without time zone',
     name: 'enddate',
   })
-  endDate: Date | null;
+  enddate: Date | null;
   @Column('timestamp without time zone', {
     nullable: false,
     name: 'created',

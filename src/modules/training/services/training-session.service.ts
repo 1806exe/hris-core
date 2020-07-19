@@ -223,6 +223,8 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     session.organisationUnit = await this.organisationunitRepository.findOne({
       where: { uid: orgunit },
     });
+    session.startdate = startDate;
+    session.enddate = endDate;
     await this.trainingSessionRepository.save(session);
 
     const savedsession = await this.trainingSessionRepository.findOne({
