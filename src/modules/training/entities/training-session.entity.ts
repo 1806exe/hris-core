@@ -6,6 +6,7 @@ import {
   ManyToMany,
   ManyToOne,
   OneToOne,
+  BeforeInsert,
 } from 'typeorm';
 import { TransactionTimestamp } from '../../../core/entities/transaction-timestamp.entity';
 import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
@@ -15,6 +16,7 @@ import { TrainingTopic } from './training-topic.entity';
 import { TrainingVenue } from './training-venue.entity';
 import { TrainingSessionAccess } from './training-session-access.entity';
 import { Record } from '../../record/entities/record.entity';
+import { generateUid } from 'src/core/helpers/makeuid';
 @Entity('trainingsession', { schema: 'public' })
 export class TrainingSession extends TransactionTimestamp {
   static plural = 'sessions';
@@ -51,13 +53,13 @@ export class TrainingSession extends TransactionTimestamp {
     default: () => 'NULL::timestamp without time zone',
     name: 'startdate',
   })
-  startdate: Date | null;
+  startDate: Date | null;
   @Column('timestamp without time zone', {
     nullable: true,
     default: () => 'NULL::timestamp without time zone',
     name: 'enddate',
   })
-  enddate: Date | null;
+  endDate: Date | null;
   @Column('timestamp without time zone', {
     nullable: false,
     name: 'created',
@@ -126,4 +128,8 @@ export class TrainingSession extends TransactionTimestamp {
 
   // @ManyToMany((type) => Record, (record) => record.trainingSessions, {})
   // record: Record[];
+  @BeforeInsert()
+  beforeUpdateTransaction() {
+    this.uid = generateUid();
+  }
 }
