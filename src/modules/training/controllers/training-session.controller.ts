@@ -139,16 +139,14 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
       param.record,
     );
     if (record !== undefined) {
-      const certfication = await this.trainingSessionService.updateParticipants(
+      await this.trainingSessionService.updateParticipants(
         param.session,
         param.record,
         updateparticipantDTO,
       );
       return res
         .status(HttpStatus.OK)
-        .send(
-          `Participant with Record id <${param.record}> update successfully`,
-        );
+        .send('Participation Details Added Successfully');
     }
   }
 }
