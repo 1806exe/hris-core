@@ -139,14 +139,19 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
       param.record,
     );
     if (record !== undefined) {
-      await this.trainingSessionService.updateParticipants(
-        param.session,
-        param.record,
-        updateparticipantDTO,
-      );
-      return res
-        .status(HttpStatus.OK)
-        .send('Participation Details Added Successfully');
+      try {
+        const participation = await this.trainingSessionService.updateParticipants(
+          param.session,
+          param.record,
+          updateparticipantDTO,
+        );
+        return res.status(HttpStatus.OK).send(sanitizeResponseObject(participation));
+
+      } catch (e) {
+        return e;
+      }
+    } else {
+      throw new NotFoundException('Record doesnot exist');
     }
   }
 }
