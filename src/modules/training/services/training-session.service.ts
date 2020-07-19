@@ -229,7 +229,15 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     const savedsession = await this.trainingSessionRepository.findOne({
       uid: session.uid,
     });
-    if (topics !== undefined || topics?.length) {
+    /*
+     * TODO: ADD CHECKS FOR WHEN TOICS CONTAIN AN EMPTY ARRAY
+     */
+    if (
+      typeof topics !== undefined &&
+      topics !== null &&
+      topics.length !== null &&
+      topics.length > 0
+    ) {
       const topic = await this.trainingTopicRepository.find({
         where: { uid: In(topics ? topics.map((topic) => topic) : '') },
       });
@@ -247,8 +255,15 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
           .execute();
       }
     }
-
-    if (facilitators !== undefined || facilitators?.length) {
+    /*
+     * TODO: ADD CHECKS FOR WHEN FACILITATORS CONTAIN AN EMPTY ARRAY
+     */
+    if (
+      typeof facilitators !== undefined &&
+      facilitators !== null &&
+      facilitators.length !== null &&
+      facilitators.length > 0
+    ) {
       const facilitator = await this.recordRepository.find({
         where: { uid: In(facilitators.map((facilitator) => facilitator)) },
       });
@@ -259,7 +274,15 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
         });
       }
     }
-    if (participants !== undefined || participants?.length) {
+    /*
+     * TODO: ADD CHECKS FOR WHEN PARTICIPANTS CONTAIN AN EMPTY ARRAY
+     */
+    if (
+      typeof participants !== undefined &&
+      participants !== null &&
+      participants.length !== null &&
+      participants.length > 0
+    ) {
       const participant = await this.recordRepository.find({
         where: { uid: In(participants.map((participant) => participant)) },
       });
