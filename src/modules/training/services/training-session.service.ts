@@ -201,7 +201,6 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       startDate,
       endDate,
     } = createSessionDTO;
-
     const session = new TrainingSession();
     Object.keys(createSessionDTO).forEach((key) => {
       session[key] = createSessionDTO[key];
@@ -230,41 +229,47 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     const savedsession = await this.trainingSessionRepository.findOne({
       uid: session.uid,
     });
-    const topic = await this.trainingTopicRepository.find({
-      where: { uid: In(topics.map((topic) => topic)) },
-    });
-    const facilitator = await this.recordRepository.find({
-      where: { uid: In(facilitators.map((facilitator) => facilitator)) },
-    });
-    const participant = await this.recordRepository.find({
-      where: { uid: In(participants.map((participant) => participant)) },
-    });
-    for (let topics of topic) {
-      await getConnection()
-        .createQueryBuilder()
-        .insert()
-        .into('trainingsessiontopics')
-        .values([
-          {
-            trainingsessionId: savedsession.id,
-            trainingtopicId: topics.id,
-          },
-        ])
-        .execute();
+    if (topics !== undefined || topics?.length) {
+      const topic = await this.trainingTopicRepository.find({
+        where: { uid: In(topics ? topics.map((topic) => topic) : '') },
+      });
+      for (let topics of topic) {
+        await getConnection()
+          .createQueryBuilder()
+          .insert()
+          .into('trainingsessiontopics')
+          .values([
+            {
+              trainingsessionId: savedsession.id,
+              trainingtopicId: topics.id,
+            },
+          ])
+          .execute();
+      }
     }
 
-    for (let facilitators of facilitator) {
-      await this.facilitatorRepository.save({
-        recordId: facilitators.id,
-        trainingsessionId: savedsession.id,
+    if (facilitators !== undefined || facilitators?.length) {
+      const facilitator = await this.recordRepository.find({
+        where: { uid: In(facilitators.map((facilitator) => facilitator)) },
       });
+      for (let facilitators of facilitator) {
+        await this.facilitatorRepository.save({
+          recordId: facilitators.id,
+          trainingsessionId: savedsession.id,
+        });
+      }
     }
-
-    for (let participants of participant) {
-      await this.participantRepository.save({
-        recordId: participants.id,
-        trainingsessionId: savedsession.id,
+    if (participants !== undefined || participants?.length) {
+      const participant = await this.recordRepository.find({
+        where: { uid: In(participants.map((participant) => participant)) },
       });
+
+      for (let participants of participant) {
+        await this.participantRepository.save({
+          recordId: participants.id,
+          trainingsessionId: savedsession.id,
+        });
+      }
     }
 
     return savedsession;
