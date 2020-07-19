@@ -55,7 +55,7 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
      */
     if (query.paging === 'false' || '') {
       const allContents = await this.maintenanceBaseService.getWhereNoPaging(
-        query?.filter,
+        query?.filter, query.fields
       );
       return {
         [this.Model.plural]: _.map(allContents, sanitizeResponseObject),

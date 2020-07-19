@@ -44,13 +44,14 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
       entityTableMapper,
     );
   }
-  async getWhereNoPaging(filter): Promise<T[]> {
+  async getWhereNoPaging(filter, fields): Promise<T[]> {
     /*
      *
      */
-    /*const metaData = this.modelRepository.manager.connection.getMetadata(
+    const metaData = this.modelRepository.manager.connection.getMetadata(
       this.Model,
     );
+    /*
     let join: any = {};
 
     // TODO: Find best way to join any recursive relation
@@ -76,7 +77,9 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
                 }),
               }
             : getWhereConditions(filter),
-            // join,
+        select: getSelections(fields, metaData),
+        relations: getRelations(fields, metaData),
+        // join,
       }),
       entityTableMapper,
     );
