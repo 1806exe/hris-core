@@ -30,9 +30,9 @@ export class RecordValue extends TransactionTimestamp {
   })
   value: string;
 
-  @Generated('uuid')
-  @Column('character varying', {
+  @Column('char', {
     nullable: false,
+    length: 13
   })
   uid: string;
 

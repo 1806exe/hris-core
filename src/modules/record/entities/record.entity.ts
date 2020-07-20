@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   OneToOne,
   JoinTable,
+  BeforeInsert,
 } from 'typeorm';
 import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
 import { TrainingSession } from '../../training/entities/training-session.entity';
@@ -17,6 +18,7 @@ import { SessionParticipant } from '../../training/entities/training-session-par
 import { SessionFacilitator } from '../../training/entities/training-session-facilitatory.entity';
 import { User } from '../../system/user/entities/user.entity';
 import { TransactionTimestamp } from '../../../core/entities/transaction-timestamp.entity';
+import { generateUid } from '../../../core/helpers/makeuid';
 
 @Entity('record', { schema: 'public' })
 export class Record extends TransactionTimestamp {
@@ -25,7 +27,7 @@ export class Record extends TransactionTimestamp {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 256, unique: true })
+  @Column({ type: 'char', length: 13, unique: true })
   uid: string;
 
   @ManyToOne(
@@ -33,14 +35,14 @@ export class Record extends TransactionTimestamp {
     (organisationUnit) => organisationUnit.records,
     { nullable: false, onDelete: 'CASCADE' },
   )
-  @JoinColumn({ name: 'organisationunitid' })
+  @JoinColumn({ name: 'organisationunitid', referencedColumnName: 'id' })
   organisationUnit: OrganisationUnit | null;
 
   @ManyToOne((type) => Form, (form) => form.records, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'formid' })
+  @JoinColumn({ name: 'formid', referencedColumnName: 'id' })
   form: Form | null;
 
   @Column('character varying', {
@@ -79,8 +81,13 @@ export class Record extends TransactionTimestamp {
   facilitators: SessionFacilitator[];
 
   @JoinColumn({ name: 'createdbyid' })
-    createdBy: User;
+  createdBy: User;
 
-    @JoinColumn({ name: 'lastupdatedbyid' })
-    lastUpdatedBy: User;
+  @JoinColumn({ name: 'lastupdatedbyid' })
+  lastUpdatedBy: User;
+
+  @BeforeInsert()
+  beforeUpdateTransaction() {
+    this.uid = generateUid();
+  }
 }
