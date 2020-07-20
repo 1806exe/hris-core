@@ -8,6 +8,7 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { TrainingTopic } from './training-topic.entity';
@@ -19,10 +20,8 @@ import { SessionParticipant } from './training-session-participant.entity';
 @Entity('trainingcurriculum', { schema: 'public' })
 export class TrainingCurriculum extends EntityCoreProps {
   static plural = 'curriculums';
-  @Column('integer', {
-    nullable: false,
-    primary: true,
-    name: 'trainingcurriculumid',
+  @PrimaryGeneratedColumn({
+    name: 'id',
   })
   id: number;
 
@@ -60,7 +59,7 @@ export class TrainingCurriculum extends EntityCoreProps {
     (trainingMethod) => trainingMethod.curriculums,
     { nullable: false, eager: true },
   )
-  
+
   // @JoinTable({ name: 'trainingcurriculumtopicmember' })
   trainingTopics: TrainingTopic[];
 }

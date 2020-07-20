@@ -9,6 +9,7 @@ import { ReportModule } from '../src/modules/report/report.module';
 import { UserRoleModule } from '../src/modules/system/user-role/user-role.module';
 import { FormModule } from '../src/modules/form/form.module';
 import { RecordModule } from '../src/modules/record/record.module';
+import { TrainingModule } from '../src/modules/training/training.module';
 
 let database: any = {
   type: 'postgres',
@@ -58,6 +59,7 @@ export const setUpServer = async () => {
     UserRoleModule,
     FormModule,
     RecordModule,
+    TrainingModule,
   ];
   const moduleFixture = await Test.createTestingModule({
     imports: imports,
