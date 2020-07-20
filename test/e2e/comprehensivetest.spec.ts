@@ -1,13 +1,11 @@
 import request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   setUpServer,
   addAuthentication,
   tearDownServer,
   server,
 } from '../set-up-e2e';
+
 beforeAll(async (done) => {
   await setUpServer();
   done();
@@ -32,7 +30,6 @@ describe('Organisation Unit API', () => {
         request(server.getHttpServer()).post(`/api/organisationUnits`),
       )
         .send({
-          id: '52893cd1b8359',
           code: 'MOHCDGEC',
           name: 'Ministry Of Health',
           description: 'Ministry of Health and Social welfare',
@@ -57,7 +54,6 @@ describe('Organisation Unit API', () => {
       request(server.getHttpServer()).post(`/api/organisationUnits`),
     )
       .send({
-        id: '52893cd1b8359',
         code: 'MOHCDGEC',
         name: 'Ministry Of Health',
         description: 'Ministry of Health and Social welfare',
@@ -161,13 +157,11 @@ describe('Forms API', () => {
     return (
       addAuthentication(request(server.getHttpServer()).post(`/api/forms`))
         .send({
-          id: '52893cd128bd2',
           name: 'Public Employee Form',
           title: 'Public Employee Form',
         })
         //.expect(200)
         .expect((res) => {
-          console.log(res.body);
           formId = res.body.id;
           expect(res.body.name).toEqual('Public Employee Form');
           expect(res.body.title).toEqual('Public Employee Form');
@@ -184,6 +178,8 @@ describe('Forms API', () => {
   });
 });
 let fieldId;
+let fieldOptionId;
+let fieldGroupdId;
 describe('Fields API', () => {
   it(`Testing Authentication /api/fields (GET)`, () => {
     return request(server.getHttpServer())
@@ -197,11 +193,16 @@ describe('Fields API', () => {
     return (
       addAuthentication(request(server.getHttpServer()).post(`/api/fields`))
         .send({
-          id: '5289e934ab062',
           name: 'firstname',
           description: 'Compulsory, Employee`s Firstname',
           caption: 'First Name',
           compulsory: true,
+          skipinreport: true,
+          sort: 5,
+          hastraining: false,
+          externalaccess: true,
+          skipInReport: true,
+          hasTraining: false,
         })
         //.expect(200)
         .expect((res) => {
@@ -210,6 +211,12 @@ describe('Fields API', () => {
           expect(res.body.description).toEqual(
             'Compulsory, Employee`s Firstname',
           );
+          expect(res.body.compulsory).toBe(true);
+          expect(res.body.skipInReport).toBe(true);
+          expect(res.body.hastraining).toBe(false);
+          expect(res.body.hasTraining).toBe(false);
+          expect(res.body.externalaccess).toBe(true);
+          expect(res.body.sort).toBe(5);
         })
     );
   });
@@ -248,6 +255,46 @@ describe('Fields API', () => {
       expect(res.body.fields != undefined).toEqual(true);
     });
   });
+  it(`Add Field Options /api/fieldOptions (POST)`, () => {
+    return addAuthentication(
+      request(server.getHttpServer()).post(`/api/fieldOptions`),
+    )
+      .send({
+        value: 'Ordinary Secondary Education',
+        name: 'Secondary Education',
+        field: { id: fieldId },
+      })
+      .expect((res) => {
+        fieldOptionId = res.body.id;
+        expect(res.body.value).toEqual('Ordinary Secondary Education');
+        expect(res.body.name).toEqual('Secondary Education');
+      });
+  });
+  it(`Get one Field Option /api/fieldOptions/:id (GET)`, () => {
+    return addAuthentication(
+      request(server.getHttpServer()).get(`/api/fieldOptions/${fieldOptionId}`),
+    ).expect((res) => {
+      expect(res.body.name).toEqual('Secondary Education');
+      expect(res.body.value).toEqual(`Ordinary Secondary Education`);
+    });
+  });
+  it(`Create Field Groups /api/fielGroups (POST)`, () => {
+    return addAuthentication(
+      request(server.getHttpServer()).post(`/api/fieldGroups`),
+    )
+      .send({
+        name: 'Fields',
+        field: fieldId,
+        description: 'Fields that belong together',
+        publicAccess: false,
+      })
+      .expect((res) => {
+        fieldGroupdId = res.body.id;
+        expect(res.body.name).toEqual('Fields');
+        expect(res.body.publicAccess).toBe(false);
+        expect(res.body.description).toEqual('Fields that belong together');
+      });
+  });
 });
 //Records
 let recordId;
@@ -265,97 +312,12 @@ describe('Records API', () => {
       request(server.getHttpServer()).post(`/api/records`),
     )
       .send({
-        id: '52c005d00b8c0',
         instance: '696b1a035eb7d7c989f0dc50df3e7bcf',
-        form: {
-          formId,
-        },
-        organisationUnit: {
-          orgUnitId,
-        },
-        // recordValues: [
-        //   {
-        //     id: 'lYrXUyHLGnga8',
-        //     recordvalueid: '611626',
-        //     value: 'Nicholaus',
-        //     recordid: '55853',
-        //     fieldid: '140',
-        //     field: {
-        //       id: '5289e934ab062',
-        //     },
-        //   },
-        //   {
-        //     id: 'h4USzRcH1wOCh',
-        //     recordvalueid: '611627',
-        //     value: 'Kisandu',
-        //     recordid: '55853',
-        //     fieldid: '147',
-        //     field: {
-        //       id: '5289e934b2b33',
-        //       name: 'middlename',
-        //       description: 'Optional, Employee`s Middle name',
-        //       caption: 'Middle Name',
-        //     },
-        //   },
-        //   {
-        //     id: 'lXLxdHiLoRyRj',
-        //     recordvalueid: '611628',
-        //     value: 'Mhozya',
-        //     recordid: '55853',
-        //     fieldid: '159',
-        //     field: {
-        //       id: '5289e934c02a1',
-        //       name: 'surname',
-        //       description:
-        //         'Compulsory, Employee Surname, Surname keeps history, update it through history.',
-        //       caption: 'Surname',
-        //     },
-        //   },
-        //   {
-        //     id: 'jRHBhF56tatZS',
-        //     recordvalueid: '611629',
-        //     value: 'Male',
-        //     recordid: '55853',
-        //     fieldid: '157',
-        //     field: {
-        //       id: '5289e934bde20',
-        //       name: 'sex',
-        //       description: 'Compulsory, Gender of Employee.',
-        //       caption: 'Sex',
-        //     },
-        //   },
-        //   {
-        //     id: 'nX4ISBbYV21lo',
-        //     recordvalueid: '611631',
-        //     value: 'Primary Education',
-        //     recordid: '55853',
-        //     fieldid: '123',
-        //     field: {
-        //       id: '5289e93496216',
-        //       name: 'basic_education_level',
-        //       description: 'Compulsory. `s Education Level',
-        //       caption: 'Basic Education Level',
-        //     },
-        //   },
-        //   {
-        //     id: 'IxiWGbTnDiaZH',
-        //     recordvalueid: '611632',
-        //     value: 'Certificate',
-        //     recordid: '55853',
-        //     fieldid: '133',
-        //     field: {
-        //       id: '5289e934a36d7',
-        //       name: 'edu_evel',
-        //       description:
-        //         'Compulsory, Employee`s Highest education level, Educational level keeps history, should be updated through history.',
-        //       caption: 'Profession Education Level',
-        //     },
-        //   },
-        // ],
+        form: formId,
+        organisationUnit: orgUnitId,
       })
       .expect((res) => {
         recordId = res.body.id;
-        console.log(res.body);
         expect(res.body.form.name).toEqual('Public Employee Form');
         expect(res.body.organisationUnit.name).toEqual('Ministry Of Health');
       });
@@ -364,8 +326,27 @@ describe('Records API', () => {
     return addAuthentication(
       request(server.getHttpServer()).get(`/api/records/${recordId}`),
     ).expect((res) => {
-      expect(res.body.form).toEqual('Public Employee Form');
-      expect(res.body.organisationUnit).toEqual('Ministry Of Health');
+      expect(res.body.form.name).toEqual('Public Employee Form');
+      expect(res.body.organisationUnit.name).toEqual('Ministry Of Health');
     });
+  });
+  it(`Add Recorvalues /api/record/:id/recordValue (POST)`, () => {
+    return addAuthentication(
+      request(server.getHttpServer()).post(
+        `/api/records/${recordId}/recordValues`,
+      ),
+    )
+      .send({
+        value: 'Primary Education',
+        comment: 'Graduated in 1993',
+        entitledPayment: 'Yes',
+        field: fieldId,
+      })
+      .expect((res) => {
+        expect(res.body.value).toEqual('Primary Education');
+        expect(res.body.comment).toEqual('Graduated in 1993');
+        expect(res.body.field.name).toEqual('firstname');
+        expect(res.body.field.compulsory).toBe(true);
+      });
   });
 });
