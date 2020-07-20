@@ -231,6 +231,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
      * TODO: ADD CHECKS FOR WHEN TOICS CONTAIN AN EMPTY ARRAY
      */
     if (
+      topics &&
       typeof topics !== undefined &&
       topics !== null &&
       topics.length !== null &&
@@ -257,6 +258,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
      * TODO: ADD CHECKS FOR WHEN FACILITATORS CONTAIN AN EMPTY ARRAY
      */
     if (
+      facilitators &&
       typeof facilitators !== undefined &&
       facilitators !== null &&
       facilitators.length !== null &&
@@ -276,13 +278,16 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
      * TODO: ADD CHECKS FOR WHEN PARTICIPANTS CONTAIN AN EMPTY ARRAY
      */
     if (
+      participants &&
       typeof participants !== undefined &&
       participants !== null &&
       participants.length !== null &&
       participants.length > 0
     ) {
       const participant = await this.recordRepository.find({
-        where: { uid: In(participants.map((participant) => participant)) },
+        where: {
+          uid: In(participants.map((participant: string) => participant)),
+        },
       });
 
       for (let participants of participant) {
