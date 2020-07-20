@@ -4,8 +4,6 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TrainingVenue } from '../entities/training-venue.entity';
 import { OrganisationUnit } from '../../../modules/organisation-unit/entities/organisation-unit.entity';
-import { generateUid } from '../../../core/helpers/makeuid';
-import { formatDistanceStrict } from 'date-fns';
 
 @Injectable()
 export class TrainingVenueService extends BaseService<TrainingVenue> {
@@ -17,17 +15,18 @@ export class TrainingVenueService extends BaseService<TrainingVenue> {
   ) {
     super(trainingVenueRepository, TrainingVenue);
   }
-  async createVenue(createvenueDTO: TrainingVenue): Promise<TrainingVenue> {
-    const { name, district, region, organisationUnit } = createvenueDTO;
+  async createVenue(createvenueDTO: TrainingVenue): Promise<any> {
+    const venue = new TrainingVenue();
+    Object.keys(createvenueDTO).forEach((key) => {
+      venue[key] = createvenueDTO[key];
+    });
+    venue.organisationUnit = await this.organisationUnitRepository.findOne({
+      where: { uid: createvenueDTO.organisationUnit },
+    });
+    const venueid = await this.trainingVenueRepository.save(venue);
 
-    return await this.trainingVenueRepository.save({
-      uid: generateUid(),
-      name: name,
-      district: district,
-      region: region,
-      organisationUnit: await this.organisationUnitRepository.findOne({
-        where: { uid: organisationUnit },
-      }),
+    return await this.trainingVenueRepository.findOne({
+      where: { uid: venueid.uid },
     });
   }
   async updateVenue(uid: string, updateVenueDTO: TrainingVenue): Promise<any> {
