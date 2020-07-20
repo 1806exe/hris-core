@@ -25,7 +25,7 @@ export class bigint1585295137513 implements MigrationInterface {
         ALTER TABLE field ALTER COLUMN id TYPE BIGINT;
         ALTER TABLE field ALTER COLUMN "dataTypeId" TYPE BIGINT;
         ALTER TABLE field ALTER COLUMN "fieldInputTypeId" TYPE BIGINT;
-        ALTER TABLE field ALTER COLUMN recordvalueid TYPE BIGINT;
+        -- ALTER TABLE field ALTER COLUMN recordvalueid TYPE BIGINT;
         ALTER TABLE fielddatatype ALTER COLUMN id TYPE BIGINT;
         ALTER TABLE fieldgroup ALTER COLUMN id TYPE BIGINT;
         ALTER TABLE fieldgroupmembers ALTER COLUMN "fieldgroupId" TYPE BIGINT;
