@@ -77,7 +77,12 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     }
     return {
       participants: await this.recordRepository.find({
-        relations: ['recordValues', 'recordValues.field'],
+        relations: [
+          'recordValues',
+          'recordValues.field',
+          'organisationUnit',
+          'organisationUnit.parent',
+        ],
         where: {
           id: In(participants.map((participant) => participant.recordId)),
         },
@@ -98,7 +103,12 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     }
     return {
       facilitators: await this.recordRepository.find({
-        relations: ['recordValues', 'recordValues.field'],
+        relations: [
+          'recordValues',
+          'recordValues.field',
+          'organisationUnit',
+          'organisationUnit.parent',
+        ],
         where: {
           id: In(facilitators.map((facilitator) => facilitator.recordId)),
         },
@@ -187,8 +197,6 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
   }
   async createSession(createSessionDTO: any) {
     const {
-      section,
-      unit,
       curriculum,
       deliveryMode,
       topics,
@@ -198,8 +206,6 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       organiser,
       facilitators,
       participants,
-      startDate,
-      endDate,
     } = createSessionDTO;
     const session = new TrainingSession();
     Object.keys(createSessionDTO).forEach((key) => {
