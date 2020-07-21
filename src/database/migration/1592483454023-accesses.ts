@@ -13,7 +13,7 @@ export class accesses1592483454023 implements MigrationInterface {
                 created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
                 lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
                 id bigint NOT NULL DEFAULT nextval('userroleaccess_id_seq'::regclass),
-                uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+                uid char (13) COLLATE pg_catalog."default" NOT NULL,
                 access json NOT NULL,
                 userroleid bigint NOT NULL,
                 CONSTRAINT "PK_userroleaccess" PRIMARY KEY (id),
@@ -34,7 +34,7 @@ export class accesses1592483454023 implements MigrationInterface {
                     created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
                     lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
                     id bigint NOT NULL DEFAULT nextval('dashboardaccess_id_seq'::regclass),
-                    uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+                    uid char (13) COLLATE pg_catalog."default" NOT NULL,
                     access character varying COLLATE pg_catalog."default" NOT NULL,
                     userid bigint NOT NULL,
                     CONSTRAINT "PK_c51fbd0f74fbba0662057462344" PRIMARY KEY (id),
@@ -51,7 +51,7 @@ export class accesses1592483454023 implements MigrationInterface {
                         created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
                         lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
                         id bigint NOT NULL DEFAULT nextval('dashboarditemaccess_id_seq'::regclass),
-                        uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+                        uid char (13) COLLATE pg_catalog."default" NOT NULL,
                         access character varying COLLATE pg_catalog."default" NOT NULL,
                         userid bigint NOT NULL,
                         CONSTRAINT "PK_f118b858d479d0b7ef46e232c08" PRIMARY KEY (id),
@@ -141,7 +141,7 @@ CREATE INDEX "IDX_c3220a21f51a1dd622b2b6a3c6"
     created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
     lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
     id bigint NOT NULL DEFAULT nextval('trainingsessionaccess_id_seq'::regclass),
-    uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    uid char (13) COLLATE pg_catalog."default" NOT NULL,
     access character varying COLLATE pg_catalog."default" NOT NULL,
     userid bigint NOT NULL,
     CONSTRAINT "PK_b6a7ee04543a8d4951c96b4b4eb" PRIMARY KEY (id),
@@ -195,7 +195,7 @@ ALTER TABLE public.trainingsessionaccess
             created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
             lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
             id bigint NOT NULL DEFAULT nextval('visualizationaccess_id_seq'::regclass),
-            uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+            uid char (13) COLLATE pg_catalog."default" NOT NULL,
             access character varying COLLATE pg_catalog."default" NOT NULL,
             userid bigint NOT NULL,
             CONSTRAINT "PK_b2e31259d460dc90ca90b9656ef" PRIMARY KEY (id),
@@ -282,7 +282,7 @@ ALTER TABLE public.trainingsessionaccess
 
         ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS uid;
 
-        ALTER TABLE public.formfieldmember ADD COLUMN uid character varying(11);
+        ALTER TABLE public.formfieldmember ADD COLUMN uid char (13);
 
         DROP SEQUENCE IF EXISTS formfieldmembers_uuid_seq;
 
@@ -328,7 +328,7 @@ ALTER TABLE public.trainingsessionaccess
 
         ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS lastupdatedby;
 
-        ALTER TABLE public.formfieldmember ADD COLUMN lastupdatedby character varying(11);
+        ALTER TABLE public.formfieldmember ADD COLUMN lastupdatedby char (13);
 
         ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS publicaccess;
 
