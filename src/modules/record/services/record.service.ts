@@ -1,6 +1,7 @@
-import { Injectable, HttpStatus, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { generateUid } from '../../../core/helpers/makeuid';
+import { In, Repository } from 'typeorm';
+import { BaseService } from '../../../core/services/base.service';
 import { getWhereConditions } from '../../../core/utilities';
 import {
   getRelations,
@@ -9,12 +10,10 @@ import {
 import { Field } from '../../form/entities/field.entity';
 import { Form } from '../../form/entities/form.entity';
 import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
-import { Repository, QueryBuilder, createQueryBuilder, In } from 'typeorm';
-import { BaseService } from '../../../core/services/base.service';
+import { SessionParticipant } from '../../training/entities/training-session-participant.entity';
+import { TrainingSession } from '../../training/entities/training-session.entity';
 import { RecordValue } from '../entities/record-value.entity';
 import { Record } from '../entities/record.entity';
-import { TrainingSession } from '../../training/entities/training-session.entity';
-import { SessionParticipant } from '../../training/entities/training-session-participant.entity';
 
 @Injectable()
 export class RecordService extends BaseService<Record> {
@@ -36,23 +35,18 @@ export class RecordService extends BaseService<Record> {
     super(recordRepository, Record);
   }
 
-  async createRecord(createRecordDto: any) {
+  async createRecord(createRecordDto: any): Promise<Record> {
     let record = new Record();
-    const { organisationUnit, form, instance } = createRecordDto;
+    Object.keys(createRecordDto).forEach((key) => {
+      record[key] = createRecordDto[key];
+    });
 
-    const query = await this.organisationunitRepository.manager.query(
-      `select id from organisationunit where uid='${organisationUnit}'`,
-    );
-    const orgunitid = query[0].id;
-    const queryform = await this.formRepository.manager.query(
-      `select id from form where uid = '${form}'`,
-    );
-    const formid = queryform[0].id;
-    record.uid = generateUid();
-    record.form = formid;
-    record.organisationUnit = orgunitid;
-    record.instance = instance;
-
+    record.organisationUnit = await this.organisationunitRepository.findOne({
+      where: { uid: createRecordDto.organisationUnit },
+    });
+    record.form = await this.formRepository.findOne({
+      where: { uid: createRecordDto.form },
+    });
     await this.recordRepository.save(record);
 
     return this.findOneByUid(record.uid);
@@ -223,13 +217,11 @@ export class RecordService extends BaseService<Record> {
     uid: string,
     transferRecordDto: any,
   ): Promise<any> {
-    const { organisationUnit } = transferRecordDto;
-
     await this.recordRepository.update(
       { uid: uid },
       {
         organisationUnit: await this.organisationunitRepository.findOne({
-          where: { uid: organisationUnit },
+          where: { uid: transferRecordDto.organisationUnit },
         }),
       },
     );
