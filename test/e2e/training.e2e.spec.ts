@@ -5,7 +5,6 @@ import {
   tearDownServer,
   server,
 } from '../set-up-e2e';
-import { Logger } from '@nestjs/common';
 beforeAll(async (done) => {
   await setUpServer();
   done();
