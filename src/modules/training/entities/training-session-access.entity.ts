@@ -14,7 +14,6 @@ import { User } from '../../system/user/entities/user.entity';
 import { generateUid } from '../../../core/helpers/makeuid';
 @Entity('trainingsessionaccess', { schema: 'public' })
 export class TrainingSessionAccess extends UserIdentification {
-  static plural = 'userAccesses';
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -23,6 +22,13 @@ export class TrainingSessionAccess extends UserIdentification {
     name: 'access',
   })
   access: string;
+
+  @Column('char', {
+    nullable: false,
+    name: 'uid',
+    length: 13,
+  })
+  uid: string;
 
   @Column('integer', { nullable: false, name: 'userid' })
   userid: number;
@@ -38,8 +44,8 @@ export class TrainingSessionAccess extends UserIdentification {
   user: User;
 
   @BeforeInsert()
-  updateDates() {
-    console.log('executing before insert');
+  beforeUpdateTransaction() {
+    console.log('Before async goes here')
     this.uid = generateUid();
   }
 

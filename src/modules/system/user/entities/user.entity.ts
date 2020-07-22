@@ -350,5 +350,5 @@ export class User extends UserCoreProps {
     (sessionaccess) => sessionaccess.user,
   )
   @JoinColumn({ name: 'sessionaccessid', referencedColumnName: 'id' })
-  sessionaccess: TrainingSessionAccess[];
+  sessionaccess: TrainingSessionAccess;
 }
