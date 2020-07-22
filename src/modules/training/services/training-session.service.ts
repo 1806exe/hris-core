@@ -18,6 +18,7 @@ import { TrainingSponsor } from '../entities/training-sponsor.entity';
 import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
 import { User } from '../../system/user/entities/user.entity';
 import { TrainingSessionAccess } from '../entities/training-session-access.entity';
+import { access } from 'fs';
 
 @Injectable()
 export class TrainingSessionService extends BaseService<TrainingSession> {
@@ -363,19 +364,31 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     });
   }
   async sessionSharingCreation(uid: String, sessionsharingDTO) {
-    const session = (
-      await this.trainingSessionRepository.findOne({ where: { uid: uid } })
-    ).id;
-    const { user, access } = sessionsharingDTO;
-    // const userId = (await this.userRepository.findOne({ where: { uid: user } }))
-    //   .id;
-
-    const saved = await this.trainingSessionAccess.save({
-      user: await this.userRepository.findOne({ where: { uid: user } }),
-      access: access,
+    /* const sessionaccess = new TrainingSessionAccess();
+    sessionaccess.session = await this.trainingSessionRepository.findOne({
+      where: { uid: uid },
     });
-    console.log('Saved:::', saved);
-    /*    
+    sessionaccess.user = await this.userRepository.findOne({
+      where: { uid: sessionsharingDTO.user },
+    });
+
+    sessionaccess.access = sessionsharingDTO.access;
+    console.log('Saved:::', sessionaccess);
+
+    const saved = await this.trainingSessionAccess.save(sessionaccess);
+    return saved; */
+
+    const userId = (
+      await this.userRepository.findOne({
+        where: { uid: sessionsharingDTO.user },
+      })
+    ).id;
+    const session = (
+      await this.trainingSessionRepository.findOne({
+        where: { uid: uid },
+      })
+    ).id;
+    console.log('UserID', userId, 'session', session);
     const useraccess = await getConnection()
       .createQueryBuilder()
       .insert()
@@ -383,11 +396,13 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       .values([
         {
           userid: userId,
-          access: access,
+          access: sessionsharingDTO.access,
           uid: generateUid(),
         },
       ])
       .execute();
+
+    console.log(useraccess);
     if (useraccess !== undefined) {
       await getConnection()
         .createQueryBuilder()
@@ -400,7 +415,8 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
           },
         ])
         .execute();
-    } */
+    }
+    return useraccess;
   }
   async sessionSharingEdit(uid: string, editSessionDTO) {
     const { user, access } = editSessionDTO;
@@ -409,6 +425,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
         where: { uid: user },
       })
     ).id;
+    console.log(userId);
     const accessId = await this.trainingSessionAccess.findOne({
       where: { userid: userId },
     });
