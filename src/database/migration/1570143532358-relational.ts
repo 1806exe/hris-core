@@ -11,7 +11,7 @@ export class relational1570143532358 implements MigrationInterface {
         await queryRunner.query('ALTER TABLE "relationalfilter" RENAME COLUMN "datecreated" TO "created"');
         await queryRunner.query('ALTER TABLE "relationalfilter" ADD COLUMN IF NOT EXISTS "lastupdated" timestamp without time zone');
         await queryRunner.query('ALTER TABLE "relationalfilter" ADD COLUMN IF NOT EXISTS "name" character varying(256)');
-        await queryRunner.query('ALTER TABLE "relationalfilter" ADD COLUMN IF NOT EXISTS "uid" character varying(256)');
+        await queryRunner.query('ALTER TABLE "relationalfilter" ADD COLUMN IF NOT EXISTS uid char(13)');
         await queryRunner.query('ALTER TABLE "relationalfilter" ADD COLUMN IF NOT EXISTS "excludefieldoptions" text');   
         
         await queryRunner.query('ALTER TABLE "hris_relationalfilter_member" RENAME TO "relationalfiltermember"');

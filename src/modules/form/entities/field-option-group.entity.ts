@@ -16,14 +16,10 @@ import { FieldOptionGroupSet } from './field-option-group-set.entity';
 export class FieldOptionGroup extends EntityCoreProps {
   static plural = 'fieldOptionGroups';
 
-  @ManyToOne(
-    type => Field,
-    field => field.fieldOptionGroups,
-    {
-      onDelete: 'CASCADE',
-      onUpdate: 'CASCADE',
-    },
-  )
+  @ManyToOne((type) => Field, (field) => field.fieldOptionGroups, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ referencedColumnName: 'id' })
   field: Field | null;
 
@@ -39,8 +35,8 @@ export class FieldOptionGroup extends EntityCoreProps {
    * Many To Many Relationship: FieldOptionGroup and FieldOption Entities
    */
   @ManyToMany(
-    type => FieldOption,
-    fieldOption => fieldOption.fieldOptionGroups,
+    (type) => FieldOption,
+    (fieldOption) => fieldOption.fieldOptionGroups,
     {
       nullable: false,
       cascade: true,
@@ -60,8 +56,8 @@ export class FieldOptionGroup extends EntityCoreProps {
    * Many To Many Relationship: FieldOptionGroup and FieldOptionGroupSet Entities
    */
   @ManyToMany(
-    type => FieldOptionGroupSet,
-    fieldOptionGroupSet => fieldOptionGroupSet.fieldOptionGroups,
+    (type) => FieldOptionGroupSet,
+    (fieldOptionGroupSet) => fieldOptionGroupSet.fieldOptionGroups,
     { nullable: false, onUpdate: 'CASCADE', onDelete: 'CASCADE' },
   )
   fieldOptionGroupSets: FieldOptionGroupSet[];

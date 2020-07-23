@@ -145,7 +145,11 @@ CREATE INDEX "IDX_c3220a21f51a1dd622b2b6a3c6"
     access character varying COLLATE pg_catalog."default" NOT NULL,
     userid bigint NOT NULL,
     CONSTRAINT "PK_b6a7ee04543a8d4951c96b4b4eb" PRIMARY KEY (id),
-    CONSTRAINT "UQ_fbaec84a054fb26c59c8d88dab2" UNIQUE (uid)
+    CONSTRAINT "UQ_fbaec84a054fb26c59c8d88dab2" UNIQUE (uid),
+    CONSTRAINT user_session_access FOREIGN KEY (userid)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
 )
 
 TABLESPACE pg_default;

@@ -6,14 +6,14 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AppsService extends BaseService<App> {
-    constructor(
-        @InjectRepository(App)
-        public appsRepository: Repository<App>,
-    ) {
-        super(appsRepository, App);
-    }
+  constructor(
+    @InjectRepository(App)
+    public appsRepository: Repository<App>,
+  ) {
+    super(appsRepository, App);
+  }
 
-    async getLoginApp(): Promise<App> {
-        return await this.appsRepository.findOne();
-    }
+  async getLoginApp(): Promise<App> {
+    return await this.appsRepository.findOne();
+  }
 }

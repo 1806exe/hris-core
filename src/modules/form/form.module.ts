@@ -47,7 +47,6 @@ import { FormService } from './services/form.service';
 import { FormSectionFieldMemberService } from './services/formsection-fieldmembers.service';
 import { SqlViewService } from './services/sql-view.service';
 
-
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'basic', session: true }),

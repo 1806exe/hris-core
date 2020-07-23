@@ -6,7 +6,6 @@ import { EntityCoreProps } from '../../../core/entities/entity-core-props';
 
 @Entity('formsection', { schema: 'public' })
 export class FormSection extends EntityCoreProps {
-
   static plural = 'formSections';
 
   @Column('integer', {
@@ -16,13 +15,15 @@ export class FormSection extends EntityCoreProps {
   })
   id: number;
 
-  @ManyToOne(type => Form, form => form.formSections, { onDelete: 'CASCADE' })
+  @ManyToOne((type) => Form, (form) => form.formSections, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'formid' })
   form: Form | null;
 
   @OneToMany(
-    type => FormSectionFieldMember,
-    formSectionFieldMembers => formSectionFieldMembers.formSection,
+    (type) => FormSectionFieldMember,
+    (formSectionFieldMembers) => formSectionFieldMembers.formSection,
     { onDelete: 'CASCADE' },
   )
   formSectionFieldMembers: FormSectionFieldMember[];

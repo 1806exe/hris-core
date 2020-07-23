@@ -8,7 +8,7 @@ import { UserGroupService } from '../services/user-group.service';
 @Controller('api/' + UserGroup.plural)
 // @UseGuards(AuthGuard())
 export class UserGroupController extends BaseController<UserGroup> {
-    constructor(private readonly userGroupService: UserGroupService) {
-        super(userGroupService, UserGroup);
-    }
+  constructor(private readonly userGroupService: UserGroupService) {
+    super(userGroupService, UserGroup);
+  }
 }

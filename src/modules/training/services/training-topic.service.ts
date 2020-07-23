@@ -6,11 +6,13 @@ import { TrainingTopic } from '../entities/training-topic.entity';
 import { MaintenanceBaseService } from '../../../core/maintenance/services/base.service';
 
 @Injectable()
-export class TrainingTopicService extends MaintenanceBaseService<TrainingTopic> {
-    constructor(
-        @InjectRepository(TrainingTopic)
-        trainingMethodRepository: Repository<TrainingTopic>,
-    ) {
-        super(trainingMethodRepository, TrainingTopic);
-    }
+export class TrainingTopicService extends MaintenanceBaseService<
+  TrainingTopic
+> {
+  constructor(
+    @InjectRepository(TrainingTopic)
+    trainingMethodRepository: Repository<TrainingTopic>,
+  ) {
+    super(trainingMethodRepository, TrainingTopic);
+  }
 }

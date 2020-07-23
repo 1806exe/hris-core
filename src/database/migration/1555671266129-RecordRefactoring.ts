@@ -52,7 +52,7 @@ export class RecordRefactoring1555771266129 implements MigrationInterface {
         'created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,' +
         'lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,' +
         'recordvalueid BIGSERIAL NOT NULL,' +
-        'uid character varying(256) NOT NULL,' +
+        'uid char(13) NOT NULL,' +
         'value text COLLATE pg_catalog."default" NOT NULL,' +
         'startdate timestamp without time zone,' +
         'enddate timestamp without time zone,' +

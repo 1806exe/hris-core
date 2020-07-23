@@ -8,13 +8,13 @@ export class UserVersion3Refactoring1555771266128
     let userTable = await queryRunner.getTable('hris_user');
 
     let usersetting = `
-        CREATE SEQUENCE usersetting_id_seq;
-        CREATE TABLE public.usersetting
+        CREATE SEQUENCE IF NOT EXISTS usersetting_id_seq;
+        CREATE TABLE IF NOT EXISTS public.usersetting
         (
             created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
             lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
             id integer NOT NULL DEFAULT nextval('usersetting_id_seq'::regclass),
-            uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+            uid char(13) COLLATE pg_catalog."default" NOT NULL,
             code character varying(25) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
             name character varying(256) COLLATE pg_catalog."default" NOT NULL,
             description text COLLATE pg_catalog."default",
@@ -46,7 +46,7 @@ CREATE TABLE public.app
     created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
     lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
     id integer NOT NULL DEFAULT nextval('app_id_seq'::regclass),
-    uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    uid char(13) COLLATE pg_catalog."default" NOT NULL,
     code character varying(25) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
     name character varying(256) COLLATE pg_catalog."default" NOT NULL,
     description text COLLATE pg_catalog."default",
@@ -222,7 +222,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "form" ADD COLUMN IF NOT EXISTS "hypertext" text',
       );
       await queryRunner.query(
-        'ALTER TABLE "form" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "form" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "form" ADD COLUMN IF NOT EXISTS "description" text',
@@ -295,7 +295,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "formsection" ADD COLUMN IF NOT EXISTS "name" character varying(256)',
       );
       await queryRunner.query(
-        'ALTER TABLE "formsection" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "formsection" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "formsection" ADD COLUMN IF NOT EXISTS "lastupdatedby" character varying',
@@ -383,7 +383,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "fieldoption" ADD COLUMN IF NOT EXISTS "skipinreport" boolean',
       );
       await queryRunner.query(
-        'ALTER TABLE "fieldoption" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "fieldoption" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "fieldoption" ADD COLUMN IF NOT EXISTS "name" character varying(256)',
@@ -429,7 +429,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "fieldoptionmerge" ADD COLUMN IF NOT EXISTS "removedFieldOptionUid" character varying(255)',
       );
       await queryRunner.query(
-        'ALTER TABLE "fieldoptionmerge" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "fieldoptionmerge" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "fieldoptionmerge" ADD COLUMN IF NOT EXISTS "code" character varying(25)',
@@ -481,7 +481,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "fieldoptiongroupset" ADD COLUMN IF NOT EXISTS "name" character varying(256)',
       );
       await queryRunner.query(
-        'ALTER TABLE "fieldoptiongroupset" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "fieldoptiongroupset" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "fieldoptiongroupset" ADD COLUMN IF NOT EXISTS "code" character varying(25)',
@@ -516,7 +516,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "fieldoptiongroup" ADD COLUMN IF NOT EXISTS "name" character varying(256)',
       );
       await queryRunner.query(
-        'ALTER TABLE "fieldoptiongroup" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "fieldoptiongroup" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "fieldoptiongroup" ADD COLUMN IF NOT EXISTS "lastupdatedby" character varying',
@@ -544,7 +544,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "fieldoptionchildren" RENAME COLUMN "child_fieldoption" TO "childFieldoptionId"',
       );
       await queryRunner.query(
-        'ALTER TABLE "fieldoptionchildren" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "fieldoptionchildren" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "fieldoptionchildren" ADD COLUMN IF NOT EXISTS "code" character varying(25)',
@@ -590,7 +590,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "fieldinputtype" ADD COLUMN IF NOT EXISTS "htmlTag" text',
       );
       await queryRunner.query(
-        'ALTER TABLE "fieldinputtype" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "fieldinputtype" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "fieldinputtype" RENAME COLUMN "datecreated" TO "created"',
@@ -627,7 +627,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "fieldgroupset" ADD COLUMN IF NOT EXISTS "name" character varying(256)',
       );
       await queryRunner.query(
-        'ALTER TABLE "fieldgroupset" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "fieldgroupset" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "fieldgroupset" ADD COLUMN IF NOT EXISTS "code" character varying(25)',
@@ -662,7 +662,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "fielddatatype" ADD COLUMN IF NOT EXISTS "name" character varying(256)',
       );
       await queryRunner.query(
-        'ALTER TABLE "fielddatatype" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "fielddatatype" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "fielddatatype" ADD COLUMN IF NOT EXISTS "code" character varying(25)',
@@ -734,7 +734,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "messagemetadata" RENAME COLUMN "is_read" TO "isread"',
       );
       await queryRunner.query(
-        'ALTER TABLE "messagemetadata" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "messagemetadata" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "messagemetadata" ADD COLUMN IF NOT EXISTS "code" character varying(25)',
@@ -786,7 +786,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "messagethreadmetadata" ADD COLUMN IF NOT EXISTS "lastupdated" timestamp without time zone',
       );
       await queryRunner.query(
-        'ALTER TABLE "messagethreadmetadata" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "messagethreadmetadata" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "messagethreadmetadata" ADD COLUMN IF NOT EXISTS "lastupdatedby" character varying',
@@ -826,7 +826,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "messagethread" ADD COLUMN IF NOT EXISTS "isspam" boolean',
       );
       await queryRunner.query(
-        'ALTER TABLE "messagethread" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "messagethread" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "messagethread" DROP COLUMN "datecreated"',
@@ -867,7 +867,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "message" ADD COLUMN IF NOT EXISTS "body" text',
       );
       await queryRunner.query(
-        'ALTER TABLE "message" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "message" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "message" DROP COLUMN "datecreated"',
@@ -900,7 +900,7 @@ TABLESPACE pg_default;
             created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
             lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
             id integer NOT NULL DEFAULT nextval('userauthority_id_seq'::regclass),
-            uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+            uid char(13) COLLATE pg_catalog."default" NOT NULL,
             name character varying(255) COLLATE pg_catalog."default" NOT NULL,
             description text COLLATE pg_catalog."default",
             CONSTRAINT "PK_fe38a99dbf1752298d9ecb3d8b7" PRIMARY KEY (id),
@@ -1011,7 +1011,7 @@ CREATE INDEX "IDX_76bc448ca476788f7886a7569b"
         created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
         lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
         id integer NOT NULL DEFAULT nextval('usergroup_id_seq'::regclass),
-        uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+        uid char(13) COLLATE pg_catalog."default" NOT NULL,
         name character varying(256) COLLATE pg_catalog."default" NOT NULL,
         description text COLLATE pg_catalog."default",
         CONSTRAINT "PK_071c1b946fc2e8b501bc4465996" PRIMARY KEY (id),

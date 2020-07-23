@@ -7,7 +7,9 @@ import { FieldGroupSet } from '../entities/field-groupset.entity';
 import { MaintenanceBaseService } from '../../../core/maintenance/services/base.service';
 
 @Injectable()
-export class FieldGroupSetService extends MaintenanceBaseService<FieldGroupSet> {
+export class FieldGroupSetService extends MaintenanceBaseService<
+  FieldGroupSet
+> {
   constructor(
     @InjectRepository(FieldGroupSet)
     fieldGroupSetRepository: Repository<FieldGroupSet>,

@@ -11,14 +11,10 @@ export class FieldOptionMerge extends EntityCoreProps {
   /**
    * Many To One Relationship: FieldOptionMerge and Field Entities
    */
-  @ManyToOne(
-    type => Field,
-    field => field.fieldOptionMerges,
-    {
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-    },
-  )
+  @ManyToOne((type) => Field, (field) => field.fieldOptionMerges, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ referencedColumnName: 'id' })
   field: Field;
 
@@ -26,8 +22,8 @@ export class FieldOptionMerge extends EntityCoreProps {
    * Many To One Relationship: FieldOptionMerge and FieldOption Entities
    */
   @ManyToOne(
-    type => FieldOption,
-    fieldOption => fieldOption.fieldOptionMerges,
+    (type) => FieldOption,
+    (fieldOption) => fieldOption.fieldOptionMerges,
     { onUpdate: 'CASCADE', onDelete: 'CASCADE' },
   )
   @JoinColumn({ referencedColumnName: 'id' })

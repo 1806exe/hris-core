@@ -7,7 +7,7 @@ import { UserAuthority } from '../entities/user-authority.entity';
 @Controller('api/' + UserAuthority.plural)
 // @UseGuards(AuthGuard())
 export class UserAuthorityController extends BaseController<UserAuthority> {
-    constructor(private readonly userAuthorityService: UserAuthorityService) {
-        super(userAuthorityService, UserAuthority);
-    }
+  constructor(private readonly userAuthorityService: UserAuthorityService) {
+    super(userAuthorityService, UserAuthority);
+  }
 }

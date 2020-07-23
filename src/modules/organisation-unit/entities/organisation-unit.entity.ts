@@ -37,6 +37,14 @@ export class OrganisationUnit extends EntityCoreProps {
     name: 'active',
   })
   active: boolean | null;
+
+  @Column('char', {
+    nullable: true,
+    length: 13,
+    name: 'uid',
+  })
+  uid: string;
+
   @Column('date', {
     nullable: true,
     name: 'openingdate',

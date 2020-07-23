@@ -7,7 +7,9 @@ import { FieldOptionGroup } from '../entities/field-option-group.entity';
 import { MaintenanceBaseService } from '../../../core/maintenance/services/base.service';
 
 @Injectable()
-export class FieldOptionGroupService extends MaintenanceBaseService<FieldOptionGroup> {
+export class FieldOptionGroupService extends MaintenanceBaseService<
+  FieldOptionGroup
+> {
   constructor(
     @InjectRepository(FieldOptionGroup)
     fieldOptionGroupRepository: Repository<FieldOptionGroup>,

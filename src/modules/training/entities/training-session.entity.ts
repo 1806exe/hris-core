@@ -24,8 +24,8 @@ export class TrainingSession extends TransactionTimestamp {
     name: 'id',
   })
   id: number;
-  @Column('character varying', {
-    nullable: false,
+  @Column('char', {
+    nullable: true,
     length: 13,
     name: 'uid',
   })
@@ -115,17 +115,19 @@ export class TrainingSession extends TransactionTimestamp {
 
   @ManyToMany(
     (type) => TrainingSessionAccess,
-    (trainingsessionaccess) => trainingsessionaccess.session,
+    (trainingsessionaccess) => trainingsessionaccess,
     {
       nullable: false,
       eager: true,
     },
   )
-  @JoinTable({ name: 'sessionuseraccess' })
-  trainingsessionaccess: TrainingSessionAccess;
+  @JoinTable({
+    name: 'sessionuseraccess',
+    joinColumn: { referencedColumnName: 'id' },
+    inverseJoinColumn: { referencedColumnName: 'id' },
+  })
+  trainingsessionaccess: TrainingSessionAccess[];
 
-  // @ManyToMany((type) => Record, (record) => record.trainingSessions, {})
-  // record: Record[];
   @BeforeInsert()
   beforeUpdateTransaction() {
     this.uid = generateUid();

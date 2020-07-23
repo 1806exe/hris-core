@@ -6,18 +6,17 @@ import { OrganisationUnit } from './organisation-unit.entity';
 
 @Entity('organisationunitcompleteness', { schema: 'public' })
 export class OrganisationUnitCompleteness extends EntityCoreProps {
-
   static plural = 'organisationUnitCompletenesses';
 
   @ManyToOne(
-    type => OrganisationUnit,
-    organisationUnit => organisationUnit.organisationUnitCompletenesses,
+    (type) => OrganisationUnit,
+    (organisationUnit) => organisationUnit.organisationUnitCompletenesses,
     { onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'organisationunitid' })
   organisationUnitId: OrganisationUnit;
 
-  @ManyToOne(type => Form, form => form.organisationUnitCompletenesss, {
+  @ManyToOne((type) => Form, (form) => form.organisationUnitCompletenesss, {
     nullable: false,
   })
   @JoinColumn({ name: 'formid' })

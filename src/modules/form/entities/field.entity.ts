@@ -74,15 +74,11 @@ export class Field extends EntityCoreProps {
   /**
    * Many To Many Relationship: Field and FieldGroup
    */
-  @ManyToMany(
-    type => FieldGroup,
-    fieldGroup => fieldGroup.fields,
-    {
-      cascade: true,
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-    },
-  )
+  @ManyToMany((type) => FieldGroup, (fieldGroup) => fieldGroup.fields, {
+    cascade: true,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   fieldGroups: FieldGroup[];
 
   /**
@@ -90,8 +86,8 @@ export class Field extends EntityCoreProps {
    */
 
   @OneToMany(
-    type => FieldRelation,
-    fieldRelation => fieldRelation.childField,
+    (type) => FieldRelation,
+    (fieldRelation) => fieldRelation.childField,
     {
       onDelete: 'CASCADE',
     },
@@ -99,8 +95,8 @@ export class Field extends EntityCoreProps {
   childFieldRelations: FieldRelation[];
 
   @OneToMany(
-    type => FieldRelation,
-    fieldRelation => fieldRelation.parentField,
+    (type) => FieldRelation,
+    (fieldRelation) => fieldRelation.parentField,
     { onDelete: 'CASCADE' },
   )
   parentFieldRelations: FieldRelation[];
@@ -108,16 +104,12 @@ export class Field extends EntityCoreProps {
   /**
    * One To Many Relationship: Field and FieldOption
    */
-  @OneToMany(
-    type => FieldOption,
-    fieldOption => fieldOption.field,
-    {
-      cascade: true,
-      eager: true,
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-    },
-  )
+  @OneToMany((type) => FieldOption, (fieldOption) => fieldOption.field, {
+    cascade: true,
+    eager: true,
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+  })
   fieldOptions: FieldOption[];
 
   /**
@@ -125,15 +117,15 @@ export class Field extends EntityCoreProps {
    */
 
   @OneToMany(
-    type => FieldOptionGroup,
-    fieldOptionGroup => fieldOptionGroup.field,
+    (type) => FieldOptionGroup,
+    (fieldOptionGroup) => fieldOptionGroup.field,
     { onDelete: 'CASCADE' },
   )
   fieldOptionGroups: FieldOptionGroup[];
 
   @OneToMany(
-    type => FieldOptionMerge,
-    fieldOptionMerge => fieldOptionMerge.field,
+    (type) => FieldOptionMerge,
+    (fieldOptionMerge) => fieldOptionMerge.field,
     { onDelete: 'CASCADE' },
   )
   fieldOptionMerges: FieldOptionMerge[];
@@ -146,15 +138,15 @@ export class Field extends EntityCoreProps {
   // formFieldMembers: FormFieldMember[];
 
   @OneToMany(
-    type => FormVisibleField,
-    formVisibleField => formVisibleField.field,
+    (type) => FormVisibleField,
+    (formVisibleField) => formVisibleField.field,
     { onDelete: 'CASCADE' },
   )
   formVisibleFields: FormVisibleField[];
 
   @OneToMany(
-    type => FormSectionFieldMember,
-    formSectionFieldMember => formSectionFieldMember.field,
+    (type) => FormSectionFieldMember,
+    (formSectionFieldMember) => formSectionFieldMember.field,
     { onDelete: 'CASCADE' },
   )
   formSectionFieldMembers: FormSectionFieldMember[];

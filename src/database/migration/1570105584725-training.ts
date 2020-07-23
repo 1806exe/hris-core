@@ -27,7 +27,7 @@ export class training1570105584725 implements MigrationInterface {
         'ALTER TABLE "trainingcurriculum" ADD COLUMN IF NOT EXISTS "name" character varying(256)',
       );
       await queryRunner.query(
-        'ALTER TABLE "trainingcurriculum" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "trainingcurriculum" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "trainingcurriculum" ADD COLUMN IF NOT EXISTS "lastupdatedby" character varying',
@@ -61,7 +61,7 @@ export class training1570105584725 implements MigrationInterface {
         'ALTER TABLE "trainingtopic" ADD COLUMN IF NOT EXISTS "name" character varying(256)',
       );
       await queryRunner.query(
-        'ALTER TABLE "trainingtopic" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "trainingtopic" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "trainingtopic" ADD COLUMN IF NOT EXISTS "lastupdatedby" character varying',
@@ -92,7 +92,7 @@ export class training1570105584725 implements MigrationInterface {
         'ALTER TABLE "trainingsections" ADD COLUMN IF NOT EXISTS "name" character varying(256)',
       );
       await queryRunner.query(
-        'ALTER TABLE "trainingsections" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "trainingsections" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "trainingsections" ADD COLUMN IF NOT EXISTS "lastupdatedby" character varying',
@@ -123,7 +123,7 @@ export class training1570105584725 implements MigrationInterface {
         'ALTER TABLE "trainingsponsor" RENAME COLUMN "sponsorname" TO name',
       );
       await queryRunner.query(
-        'ALTER TABLE "trainingsponsor" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "trainingsponsor" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "trainingsponsor" ADD COLUMN IF NOT EXISTS "email" text',
@@ -163,7 +163,7 @@ export class training1570105584725 implements MigrationInterface {
         'ALTER TABLE "trainingtrainer" ADD COLUMN IF NOT EXISTS "firstname" text',
       );
       await queryRunner.query(
-        'ALTER TABLE "trainingtrainer" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "trainingtrainer" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "trainingtrainer" ADD COLUMN IF NOT EXISTS "middlename" text',
@@ -239,7 +239,7 @@ export class training1570105584725 implements MigrationInterface {
         'ALTER TABLE "trainingunit" ADD COLUMN IF NOT EXISTS "name" character varying(256)',
       );
       await queryRunner.query(
-        'ALTER TABLE "trainingunit" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "trainingunit" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "trainingunit" ADD COLUMN IF NOT EXISTS "description" text',
@@ -268,7 +268,7 @@ export class training1570105584725 implements MigrationInterface {
       );
      
       await queryRunner.query(
-        'ALTER TABLE "trainingvenue" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "trainingvenue" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "trainingvenue" RENAME COLUMN "venuename" TO name',
@@ -327,7 +327,7 @@ export class training1570105584725 implements MigrationInterface {
         'ALTER TABLE "traininginstance" ADD COLUMN IF NOT EXISTS "name" character varying(256)',
       );
       await queryRunner.query(
-        'ALTER TABLE "traininginstance" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "traininginstance" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "traininginstance" RENAME COLUMN "district" TO organisationunit',
@@ -371,7 +371,7 @@ export class training1570105584725 implements MigrationInterface {
         'ALTER TABLE "training" ADD COLUMN IF NOT EXISTS "lastupdated" timestamp without time zone',
       );
       await queryRunner.query(
-        'ALTER TABLE "training" ADD COLUMN IF NOT EXISTS "uid" character varying(256)',
+        'ALTER TABLE "training" ADD COLUMN IF NOT EXISTS uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "training" ADD COLUMN IF NOT EXISTS "coursename" text',
@@ -399,7 +399,7 @@ export class training1570105584725 implements MigrationInterface {
         created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
         lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
         id integer NOT NULL,
-        uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+        uid char(13) COLLATE pg_catalog."default" NOT NULL,
         code character varying(25) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
         name character varying(256) COLLATE pg_catalog."default" NOT NULL,
         description text COLLATE pg_catalog."default",

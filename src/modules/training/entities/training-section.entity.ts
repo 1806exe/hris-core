@@ -18,18 +18,18 @@ export class TrainingSection extends EntityCoreProps {
   @Column({
     nullable: true,
     name: 'signature',
-    type: 'text'
+    type: 'text',
   })
   signature: string;
 
   @OneToMany(
-    type => TrainingCurriculum,
-    trainingCurriculum => trainingCurriculum.section,
+    (type) => TrainingCurriculum,
+    (trainingCurriculum) => trainingCurriculum.section,
     { onDelete: 'CASCADE' },
   )
   curriculums: TrainingCurriculum[];
 
-  @OneToMany(type => TrainingUnit, trainingUnit => trainingUnit.section, {
+  @OneToMany((type) => TrainingUnit, (trainingUnit) => trainingUnit.section, {
     onDelete: 'CASCADE',
   })
   trainingUnits: TrainingUnit[];

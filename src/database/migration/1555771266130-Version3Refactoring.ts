@@ -49,7 +49,7 @@ export class Version3Refactoring1555771266128 implements MigrationInterface {
       );
 
       await queryRunner.query(
-        'ALTER TABLE "sqlview" ADD COLUMN "uid" character varying(13)',
+        'ALTER TABLE "sqlview" ADD COLUMN uid char(13)',
       );
       await queryRunner.query(
         'ALTER TABLE "sqlview" ADD CONSTRAINT "UQ_sqlView" UNIQUE (uid)',

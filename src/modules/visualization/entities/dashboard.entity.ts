@@ -43,7 +43,7 @@ export class Dashboard extends EntityCoreProps {
 
   @ManyToMany(
     () => DashboardAccess,
-    (dashboardaccess) => dashboardaccess.dashboard,
+    (dashboardaccess) => dashboardaccess.dashboard, {eager: true}
   )
   @JoinTable({ name: 'dashboarduseraccess' })
   dashboardaccess: DashboardAccess[];

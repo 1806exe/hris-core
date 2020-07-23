@@ -8,7 +8,7 @@ export class schedulemigrations1579876333525 implements MigrationInterface {
             created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
             lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
             id integer NOT NULL,
-            uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+            uid char(13) COLLATE pg_catalog."default" NOT NULL,
             name character varying(256) COLLATE pg_catalog."default" NOT NULL,
             cron text COLLATE pg_catalog."default",
             code text COLLATE pg_catalog."default",

@@ -6,10 +6,10 @@ import { TrainingSponsor } from '../entities/training-sponsor.entity';
 
 @Injectable()
 export class TrainingSponsorService extends BaseService<TrainingSponsor> {
-    constructor(
-        @InjectRepository(TrainingSponsor)
-        trainingSponsorRepository: Repository<TrainingSponsor>,
-    ) {
-        super(trainingSponsorRepository, TrainingSponsor);
-    }
+  constructor(
+    @InjectRepository(TrainingSponsor)
+    trainingSponsorRepository: Repository<TrainingSponsor>,
+  ) {
+    super(trainingSponsorRepository, TrainingSponsor);
+  }
 }

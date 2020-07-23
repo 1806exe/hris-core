@@ -1,24 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { getConnection, In, Repository } from 'typeorm';
 import { BaseService } from '../../../core/services/base.service';
-import { RecordValue } from '../../record/entities/record-value.entity';
-import { In, Repository, getConnection } from 'typeorm';
-import { generateUid } from '../../../core/helpers/makeuid';
+import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
 import { Record } from '../../record/entities/record.entity';
+import { User } from '../../system/user/entities/user.entity';
+import { TrainingCurriculum } from '../entities/training-curriculum.entity';
+import { TrainingSection } from '../entities/training-section.entity';
+import { TrainingSessionAccess } from '../entities/training-session-access.entity';
 import { SessionFacilitator } from '../entities/training-session-facilitatory.entity';
 import { SessionParticipant } from '../entities/training-session-participant.entity';
 import { TrainingSession } from '../entities/training-session.entity';
-import { TrainingSection } from '../entities/training-section.entity';
-import { Training } from '../entities/training.entity';
-import { TrainingUnit } from '../entities/training-unit.entity';
-import { TrainingCurriculum } from '../entities/training-curriculum.entity';
-import { TrainingTopic } from '../entities/training-topic.entity';
-import { TrainingVenue } from '../entities/training-venue.entity';
 import { TrainingSponsor } from '../entities/training-sponsor.entity';
-import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
-import { User } from '../../system/user/entities/user.entity';
-import { TrainingSessionAccess } from '../entities/training-session-access.entity';
-import { access } from 'fs';
+import { TrainingTopic } from '../entities/training-topic.entity';
+import { TrainingUnit } from '../entities/training-unit.entity';
+import { TrainingVenue } from '../entities/training-venue.entity';
 
 @Injectable()
 export class TrainingSessionService extends BaseService<TrainingSession> {
@@ -364,73 +360,60 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     });
   }
   async sessionSharingCreation(uid: String, sessionsharingDTO) {
-    /* const sessionaccess = new TrainingSessionAccess();
-    sessionaccess.session = await this.trainingSessionRepository.findOne({
-      where: { uid: uid },
-    });
-    sessionaccess.user = await this.userRepository.findOne({
+    const shareduser = await this.userRepository.findOne({
       where: { uid: sessionsharingDTO.user },
     });
-
-    sessionaccess.access = sessionsharingDTO.access;
-    console.log('Saved:::', sessionaccess);
-
-    const saved = await this.trainingSessionAccess.save(sessionaccess);
-    return saved; */
-
-    const userId = (
+    const sessionaccess = new TrainingSessionAccess();
+    const session = await this.trainingSessionRepository.findOne({
+      where: { uid: uid },
+    });
+    sessionaccess.userid = (
       await this.userRepository.findOne({
         where: { uid: sessionsharingDTO.user },
       })
     ).id;
-    const session = (
-      await this.trainingSessionRepository.findOne({
-        where: { uid: uid },
-      })
-    ).id;
-    console.log('UserID', userId, 'session', session);
-    const useraccess = await getConnection()
-      .createQueryBuilder()
-      .insert()
-      .into('trainingsessionaccess')
-      .values([
-        {
-          userid: userId,
-          access: sessionsharingDTO.access,
-          uid: generateUid(),
-        },
-      ])
-      .execute();
 
-    console.log(useraccess);
-    if (useraccess !== undefined) {
+    sessionaccess.access = sessionsharingDTO.access;
+
+    const sharedsession = await this.trainingSessionAccess.save(sessionaccess);
+
+    if (sharedsession !== undefined) {
       await getConnection()
         .createQueryBuilder()
         .insert()
         .into('sessionuseraccess')
         .values([
           {
-            trainingsessionId: session,
-            trainingsessionaccessId: useraccess.identifiers[0].id,
+            trainingsessionId: session.id,
+            trainingsessionaccessId: sharedsession.id,
           },
         ])
         .execute();
     }
-    return useraccess;
+    return {
+      message: `Session with ID ${uid} shared with ${shareduser.firstName}`,
+      session: sharedsession,
+    };
   }
   async sessionSharingEdit(uid: string, editSessionDTO) {
     const { user, access } = editSessionDTO;
+    const shareduser = await this.userRepository.findOne({
+      where: { uid: editSessionDTO.user },
+    });
     const userId = (
       await this.userRepository.findOne({
         where: { uid: user },
       })
     ).id;
-    console.log(userId);
     const accessId = await this.trainingSessionAccess.findOne({
       where: { userid: userId },
     });
     accessId.access = access;
     await this.trainingSessionAccess.save(accessId);
+    return {
+      message: `Session with ID ${uid} shared with ${shareduser.firstName}`,
+      sessionaccess: accessId,
+    };
   }
   async SharedUser(uid: string) {
     const user = (await this.userRepository.findOne({ where: { uid: uid } }))

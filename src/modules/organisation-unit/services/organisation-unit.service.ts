@@ -24,7 +24,7 @@ export class OrganisationUnitService extends MaintenanceBaseService<
   ) {
     super(organisationUnitRepository, OrganisationUnit);
   }
-    async findAndCount(
+  async findAndCount(
     fields,
     filter,
     size,
@@ -48,11 +48,14 @@ export class OrganisationUnitService extends MaintenanceBaseService<
     const [response, totalCount] = await this.modelRepository.findAndCount({
       select: getSelections(fields, metaData),
       relations: getRelations(fields, metaData),
-      where: filter && filter.includes('parent.id:eq')?{
-        parent: await this.organisationUnitRepository.findOne({
-          where: { uid: filter.replace(/^parent.id:eq:+/i, '') },
-        })
-      }:getWhereConditions(filter),
+      where:
+        filter && filter.includes('parent.id:eq')
+          ? {
+              parent: await this.organisationUnitRepository.findOne({
+                where: { uid: filter.replace(/^parent.id:eq:+/i, '') },
+              }),
+            }
+          : getWhereConditions(filter),
       take: size,
       join,
       skip: page * size,
@@ -71,5 +74,4 @@ export class OrganisationUnitService extends MaintenanceBaseService<
       totalCount,
     ];
   }
-  
 }

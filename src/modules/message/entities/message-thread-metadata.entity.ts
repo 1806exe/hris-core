@@ -1,9 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { MessageThread } from './message-thread.entity';
 import { User } from '../../system/user/entities/user.entity';
 import { EntityCoreProps } from '../../../core/entities/entity-core-props';
@@ -13,14 +8,14 @@ export class MessageThreadMetadata extends EntityCoreProps {
   static plural = 'messageThreadMetadatas';
 
   @ManyToOne(
-    type => MessageThread,
-    messageThread => messageThread.messageThreadMetadatas,
+    (type) => MessageThread,
+    (messageThread) => messageThread.messageThreadMetadatas,
     { onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'threadid' })
   thread: MessageThread | null;
 
-  @ManyToOne(type => User, user => user.messageThreadMetadatas, {
+  @ManyToOne((type) => User, (user) => user.messageThreadMetadatas, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'participantid' })

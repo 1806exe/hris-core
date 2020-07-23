@@ -6,10 +6,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class FormVisibleFieldService extends BaseService<FormVisibleField> {
-    constructor(
-        @InjectRepository(FormVisibleField)
-        repository: Repository<FormVisibleField>,
-    ) {
-        super(repository, FormVisibleField);
-    }
+  constructor(
+    @InjectRepository(FormVisibleField)
+    repository: Repository<FormVisibleField>,
+  ) {
+    super(repository, FormVisibleField);
+  }
 }

@@ -428,3 +428,6 @@ ormconfig.json
 config.json
 .vscode
 documentation
+
+# prettier ignore file
+.prettierignore

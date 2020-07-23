@@ -7,10 +7,10 @@ import { UserGroup } from '../entities/user-group.entity';
 
 @Injectable()
 export class UserGroupService extends BaseService<UserGroup> {
-    constructor(
-        @InjectRepository(UserGroup)
-        private readonly userGroupRepository: Repository<UserGroup>,
-    ) {
-        super(userGroupRepository, UserGroup);
-    }
+  constructor(
+    @InjectRepository(UserGroup)
+    private readonly userGroupRepository: Repository<UserGroup>,
+  ) {
+    super(userGroupRepository, UserGroup);
+  }
 }

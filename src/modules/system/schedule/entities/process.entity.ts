@@ -8,7 +8,11 @@ export class Process extends EntityCoreProps {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 256, unique: true })
+  @Column('char', {
+    nullable: true,
+    length: 13,
+    name: 'uid',
+  })
   uid: string;
 
   @Column('character varying', {
@@ -28,10 +32,8 @@ export class Process extends EntityCoreProps {
   })
   code: string;
 
-  @OneToMany(
-    type => Schedule,
-    schedule => schedule.process,
-    { onDelete: 'CASCADE' },
-  )
+  @OneToMany((type) => Schedule, (schedule) => schedule.process, {
+    onDelete: 'CASCADE',
+  })
   schedules: Schedule[];
 }
