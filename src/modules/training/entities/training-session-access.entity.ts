@@ -8,6 +8,7 @@ import {
   JoinColumn,
   OneToMany,
   BeforeInsert,
+  OneToOne,
 } from 'typeorm';
 import { TrainingSession } from './training-session.entity';
 import { User } from '../../system/user/entities/user.entity';
@@ -39,13 +40,11 @@ export class TrainingSessionAccess extends UserIdentification {
   )
   session: TrainingSession;
 
-  @OneToMany((type) => User, (user) => user.sessionaccess, {})
-  @JoinColumn({ name: 'userid', referencedColumnName: 'id' })
+  @OneToOne((type) => User, (user) => user.sessionaccess)
   user: User;
 
   @BeforeInsert()
   beforeUpdateTransaction() {
-    console.log('Before async goes here')
     this.uid = generateUid();
   }
 
