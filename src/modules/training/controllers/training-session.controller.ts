@@ -108,24 +108,38 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
   }
   @Post(':session/sharing')
   @UseGuards(SessionGuard)
-  async sessionSharing(@Param() Param, @Body() sessionSharingDTO: any) {
-    const session = await this.trainingSessionService.findOneByUid(
-      Param.session,
-    );
-    const { user } = sessionSharingDTO;
-    const sessionaccess = await this.trainingSessionService.SharedUser(user);
+  async sessionSharing(
+    @Param() Param,
+    @Body() sessionSharingDTO: any,
+    @Res() res,
+  ) {
+    try {
+      const session = await this.trainingSessionService.findOneByUid(
+        Param.session,
+      );
+      const { user } = sessionSharingDTO;
+      const sessionaccess = await this.trainingSessionService.SharedUser(user);
 
-    if (session && sessionaccess === undefined) {
-      return await this.trainingSessionService.sessionSharingCreation(
-        Param.session,
-        sessionSharingDTO,
-      );
-    }
-    if (session && sessionaccess !== undefined) {
-      return await this.trainingSessionService.sessionSharingEdit(
-        Param.session,
-        sessionSharingDTO,
-      );
+      if (session && sessionaccess === undefined) {
+        const sharedsession = await this.trainingSessionService.sessionSharingCreation(
+          Param.session,
+          sessionSharingDTO,
+        );
+        return res
+          .status(HttpStatus.CREATED)
+          .send(sanitizeResponseObject(sharedsession));
+      }
+      if (session && sessionaccess !== undefined) {
+        const sharedsession = await this.trainingSessionService.sessionSharingEdit(
+          Param.session,
+          sessionSharingDTO,
+        );
+        return res
+          .status(HttpStatus.CREATED)
+          .send(sanitizeResponseObject(sharedsession));
+      }
+    } catch (e) {
+      return e;
     }
   }
   @Put(':session/participants/:record')
@@ -145,8 +159,9 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
           param.record,
           updateparticipantDTO,
         );
-        return res.status(HttpStatus.OK).send(sanitizeResponseObject(participation));
-
+        return res
+          .status(HttpStatus.OK)
+          .send(sanitizeResponseObject(participation));
       } catch (e) {
         return e;
       }

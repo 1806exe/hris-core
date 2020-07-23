@@ -1,5 +1,12 @@
 import { EntityCoreProps } from '../../../core/entities/entity-core-props';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, ManyToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  ManyToMany,
+} from 'typeorm';
 
 import { User } from '../../system/user/entities/user.entity';
 import { MessageMetadata } from './message-metadata.entity';
@@ -16,9 +23,13 @@ export class Message extends EntityCoreProps {
   })
   id: number;
 
-  @ManyToOne(type => MessageThread, messageThread => messageThread.messages, {
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne(
+    (type) => MessageThread,
+    (messageThread) => messageThread.messages,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
   @JoinColumn({ name: 'threadid' })
   thread: MessageThread | null;
 
@@ -28,7 +39,7 @@ export class Message extends EntityCoreProps {
   // user: User | null;
   // ! Deprecated
 
-  @ManyToMany(type => User, user => user.messages)
+  @ManyToMany((type) => User, (user) => user.messages)
   user: User;
 
   @Column('text', {
@@ -38,8 +49,8 @@ export class Message extends EntityCoreProps {
   body: string;
 
   @OneToMany(
-    type => MessageMetadata,
-    messageMetadata => messageMetadata.message,
+    (type) => MessageMetadata,
+    (messageMetadata) => messageMetadata.message,
     { onDelete: 'CASCADE' },
   )
   messageMetadatas: MessageMetadata[];

@@ -42,22 +42,22 @@ export class TrainingSponsor extends EntityCoreProps {
   box: string | null;
 
   @OneToMany(
-    type => TrainingSession,
-    trainingSession => trainingSession.organiser,
+    (type) => TrainingSession,
+    (trainingSession) => trainingSession.organiser,
     { onDelete: 'CASCADE' },
   )
   organiserTrainingSessions: TrainingSession[];
 
   @OneToMany(
-    type => TrainingSession,
-    trainingSession => trainingSession.sponsor,
+    (type) => TrainingSession,
+    (trainingSession) => trainingSession.sponsor,
     { onDelete: 'CASCADE' },
   )
   sponsorTrainingSessions: TrainingSession[];
 
   @OneToMany(
-    type => TrainingSession,
-    trainingSession => trainingSession.topics,
+    (type) => TrainingSession,
+    (trainingSession) => trainingSession.topics,
   )
   trainingSessions: TrainingSession[];
 }

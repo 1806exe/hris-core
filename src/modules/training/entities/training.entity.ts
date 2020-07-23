@@ -1,26 +1,29 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { TransactionTimestamp } from '../../../core/entities/transaction-timestamp.entity';
 
-@Entity('training', {schema: 'public'})
+@Entity('training', { schema: 'public' })
 export class Training extends TransactionTimestamp {
   static plural = 'trainings';
 
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
+
+  @Column('char', {
+    nullable: true,
+    length: 13,
+    name: 'uid',
+  })
+  uid: string;
 
   @Column()
-  uid: string
+  coursename: string;
 
   @Column()
-  coursename: string
+  trainingcategory: string;
 
   @Column()
-  trainingcategory: string
+  traininginstruction: string;
 
   @Column()
-  traininginstruction: string
-
-  @Column()
-  curiculum: string
-
+  curiculum: string;
 }

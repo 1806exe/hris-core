@@ -9,7 +9,9 @@ describe('RecordRuleAction Controller', () => {
       controllers: [RecordRuleActionController],
     }).compile();
 
-    controller = module.get<RecordRuleActionController>(RecordRuleActionController);
+    controller = module.get<RecordRuleActionController>(
+      RecordRuleActionController,
+    );
   });
 
   it('should be defined', () => {

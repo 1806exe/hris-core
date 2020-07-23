@@ -16,7 +16,7 @@ export class MessageThread extends EntityCoreProps {
   })
   id: number;
 
-  @ManyToOne(type => User, user => user.messageThreads, {
+  @ManyToOne((type) => User, (user) => user.messageThreads, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'createdbyid' })
@@ -35,14 +35,14 @@ export class MessageThread extends EntityCoreProps {
   })
   isSpam: boolean;
 
-  @OneToMany(type => Message, message => message.thread, {
+  @OneToMany((type) => Message, (message) => message.thread, {
     onDelete: 'CASCADE',
   })
   messages: Message[];
 
   @OneToMany(
-    type => MessageThreadMetadata,
-    messageThreadMetadata => messageThreadMetadata.thread,
+    (type) => MessageThreadMetadata,
+    (messageThreadMetadata) => messageThreadMetadata.thread,
     { onDelete: 'CASCADE' },
   )
   messageThreadMetadatas: MessageThreadMetadata[];

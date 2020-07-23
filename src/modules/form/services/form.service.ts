@@ -7,12 +7,10 @@ import { MaintenanceBaseService } from '../../../core/maintenance/services/base.
 
 @Injectable()
 export class FormService extends MaintenanceBaseService<Form> {
-    constructor(
-        @InjectRepository(Form)
-        repository: Repository<Form>,
-    ) {
-        super(repository, Form);
-    }
+  constructor(
+    @InjectRepository(Form)
+    repository: Repository<Form>,
+  ) {
+    super(repository, Form);
+  }
 }
-
-

@@ -22,7 +22,7 @@ export class Dashboard1570022532917 implements MigrationInterface {
         created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
         lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
         id integer NOT NULL DEFAULT nextval('dashboard_id_seq'::regclass),
-        uid character(11) COLLATE pg_catalog."default" NOT NULL,
+        uid char(13) COLLATE pg_catalog."default" NOT NULL,
         code character varying(25) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
         name character varying(256) COLLATE pg_catalog."default" NOT NULL,
         description text COLLATE pg_catalog."default",
@@ -49,7 +49,7 @@ export class Dashboard1570022532917 implements MigrationInterface {
 }
 
 // ALTER TABLE chartdimension ALTER COLUMN layout DROP NOT NULL;
-// ALTER TABLE chartdimensionitem ADD COLUMN uid character varying(256) COLLATE pg_catalog."default" NOT NULL;
+// ALTER TABLE chartdimensionitem ADD COLUMN uid char(13) COLLATE pg_catalog."default" NOT NULL;
 // ALTER TABLE chartdimensionitem ADD COLUMN displayname text;
 // ALTER TABLE chartdimensionitem ALTER COLUMN dimensionitem TYPE character varying(256);
 

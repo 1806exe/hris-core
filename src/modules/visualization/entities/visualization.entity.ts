@@ -1,6 +1,14 @@
 import { EntityCoreProps } from '../../../core/entities/entity-core-props';
 import { User } from '../../system/user/entities/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { DashboardItem } from './dashboard-item.entity';
 import { VisualizationDimension } from './visualization-dimension.entity';
 import { VisualizationAccess } from './visualization-useraccess.entity';

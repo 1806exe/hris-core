@@ -13,7 +13,7 @@ export class maintenance1570090895536 implements MigrationInterface {
         await queryRunner.query('ALTER TABLE "field" ADD COLUMN IF NOT EXISTS "lastupdated" timestamp without time zone');
         await queryRunner.query('ALTER TABLE "field" ADD COLUMN IF NOT EXISTS "name" character varying(256)');
         await queryRunner.query('ALTER TABLE "field" ADD COLUMN IF NOT EXISTS "code" character varying(25)');
-        await queryRunner.query('ALTER TABLE "field" ADD COLUMN IF NOT EXISTS "uid" character varying(256)');
+        await queryRunner.query('ALTER TABLE "field" ADD COLUMN IF NOT EXISTS uid char(13)');
         await queryRunner.query('ALTER TABLE "field" ADD COLUMN IF NOT EXISTS "description" text');        
         await queryRunner.query('ALTER TABLE "field" ADD COLUMN IF NOT EXISTS "caption" text');
         await queryRunner.query('ALTER TABLE "field" ADD COLUMN IF NOT EXISTS "iscalculated" boolean');
@@ -34,7 +34,7 @@ export class maintenance1570090895536 implements MigrationInterface {
         await queryRunner.query('ALTER TABLE "fieldgroup" ADD COLUMN IF NOT EXISTS "lastupdated" timestamp without time zone');
         await queryRunner.query('ALTER TABLE "fieldgroup" ADD COLUMN IF NOT EXISTS "name" character varying(256)');
         await queryRunner.query('ALTER TABLE "fieldgroup" ADD COLUMN IF NOT EXISTS "description" text'); 
-        await queryRunner.query('ALTER TABLE "fieldgroup" ADD COLUMN IF NOT EXISTS "uid" character varying(256)');
+        await queryRunner.query('ALTER TABLE "fieldgroup" ADD COLUMN IF NOT EXISTS uid char(13)');
         await queryRunner.query('ALTER TABLE "fieldgroup" ADD COLUMN IF NOT EXISTS "code" character varying(25)');
         await queryRunner.query('ALTER TABLE "fieldgroup" ADD COLUMN IF NOT EXISTS "lastupdatedby" character varying');
         await queryRunner.query('ALTER TABLE "fieldgroup" ADD COLUMN IF NOT EXISTS "publicaccess" character varying(8)');

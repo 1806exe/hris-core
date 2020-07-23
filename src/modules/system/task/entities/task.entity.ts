@@ -8,17 +8,21 @@ export class Task extends EntityCoreProps {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Generated()
+  @Column('char', {
+    nullable: true,
+    length: 13,
+    name: 'uid',
+  })
   uid: string;
 
   @Column({
     nullable: false,
-    length: 255
+    length: 255,
   })
   name: string;
 
   @Column({
-    type:'jsonb',
+    type: 'jsonb',
     nullable: false,
   })
   log: any;

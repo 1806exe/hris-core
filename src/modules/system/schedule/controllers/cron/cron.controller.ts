@@ -5,7 +5,7 @@ import { CronService } from '../../services/cron/cron.service';
 
 @Controller('api/' + Cron.plural)
 export class CronController extends MaintenanceBaseController<Cron> {
-    constructor(cronService: CronService) {
-        super(cronService, Cron);
-    }
+  constructor(cronService: CronService) {
+    super(cronService, Cron);
+  }
 }

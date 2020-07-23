@@ -10,30 +10,22 @@ export class FieldRelation extends HRISBaseEntity {
   /**
    * Many To One Relationship: FieldRelation and Field Entities
    */
-  @ManyToOne(
-    type => Field,
-    field => field.parentFieldRelations,
-    {
-      primary: true,
-      nullable: false,
-      onDelete: 'CASCADE',
-    },
-  )
+  @ManyToOne((type) => Field, (field) => field.parentFieldRelations, {
+    primary: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ referencedColumnName: 'id' })
   parentField: Field;
 
   /**
    * Many To One Relationship: FieldRelation and Field Entities
    */
-  @ManyToOne(
-    type => Field,
-    field => field.childFieldRelations,
-    {
-      primary: true,
-      nullable: false,
-      onDelete: 'CASCADE',
-    },
-  )
+  @ManyToOne((type) => Field, (field) => field.childFieldRelations, {
+    primary: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ referencedColumnName: 'id' })
   childField: Field;
 }

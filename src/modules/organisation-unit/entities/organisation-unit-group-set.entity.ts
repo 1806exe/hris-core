@@ -4,7 +4,6 @@ import { EntityCoreProps } from '../../../core/entities/entity-core-props';
 
 @Entity('organisationunitgroupset', { schema: 'public' })
 export class OrganisationUnitGroupSet extends EntityCoreProps {
-
   static plural = 'organisationUnitGroupSets';
 
   @Column('character varying', {
@@ -22,8 +21,8 @@ export class OrganisationUnitGroupSet extends EntityCoreProps {
   compulsory: boolean;
 
   @OneToMany(
-    type => OrganisationUnitGroup,
-    organisationUnitGroup => organisationUnitGroup.organisationUnitGroupSetId,
+    (type) => OrganisationUnitGroup,
+    (organisationUnitGroup) => organisationUnitGroup.organisationUnitGroupSetId,
     { onDelete: 'CASCADE' },
   )
   organisationUnitGroups: OrganisationUnitGroup[];

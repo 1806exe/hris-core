@@ -6,7 +6,7 @@ import { UserRoleService } from '../services/user-role.service';
 @Controller('api/' + UserRole.plural)
 // @UseGuards(AuthGuard())
 export class UserRoleController extends BaseController<UserRole> {
-    constructor(private readonly userRoleService: UserRoleService) {
-        super(userRoleService, UserRole);
-    }
+  constructor(private readonly userRoleService: UserRoleService) {
+    super(userRoleService, UserRole);
+  }
 }

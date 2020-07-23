@@ -21,7 +21,7 @@ export class RecordValue extends TransactionTimestamp {
   recordvalueid: number;
 
   @ManyToOne(() => Record, (record: Record) => record.recordValues, {})
-  @JoinColumn({ name: 'recordid', referencedColumnName:'id' })
+  @JoinColumn({ name: 'recordid', referencedColumnName: 'id' })
   record: Record | null;
 
   @Column('text', {
@@ -32,7 +32,7 @@ export class RecordValue extends TransactionTimestamp {
 
   @Column('char', {
     nullable: false,
-    length: 13
+    length: 13,
   })
   uid: string;
 

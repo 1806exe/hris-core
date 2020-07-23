@@ -7,10 +7,10 @@ import { MaintenanceBaseService } from '../../../../core/maintenance/services/ba
 
 @Injectable()
 export class ProcessService extends MaintenanceBaseService<Process> {
-    constructor(
-        @InjectRepository(Process)
-        processRepository: Repository<Process>,
-    ) {
-        super(processRepository, Process);
-    }
+  constructor(
+    @InjectRepository(Process)
+    processRepository: Repository<Process>,
+  ) {
+    super(processRepository, Process);
+  }
 }

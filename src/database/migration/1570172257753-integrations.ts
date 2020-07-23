@@ -40,7 +40,7 @@ export class integrations1570172257753 implements MigrationInterface {
         await queryRunner.query('ALTER TABLE "hris_intergration_tiis_data_connection" RENAME TO "intergrationtiisdataconnection"');
         await queryRunner.query('ALTER TABLE "intergrationtiisdataconnection" RENAME COLUMN "organisationunit_id" TO "organisationunitid"');
         await queryRunner.query('ALTER TABLE "intergrationtiisdataconnection" RENAME COLUMN "host_url" TO "hosturl"');
-        await queryRunner.query('ALTER TABLE "intergrationtiisdataconnection" ADD COLUMN IF NOT EXISTS "uid" character varying(256)');
+        await queryRunner.query('ALTER TABLE "intergrationtiisdataconnection" ADD COLUMN IF NOT EXISTS uid char(13)');
         await queryRunner.query('ALTER TABLE "intergrationtiisdataconnection" ADD COLUMN IF NOT EXISTS "organisationunittablename" text');
         await queryRunner.query('ALTER TABLE "intergrationtiisdataconnection" ADD COLUMN IF NOT EXISTS "name" character varying(256)');
         await queryRunner.query('ALTER TABLE "intergrationtiisdataconnection" ADD COLUMN IF NOT EXISTS "recordstablename" text');

@@ -11,8 +11,8 @@ export class FieldOptionGroupSet extends EntityCoreProps {
    * Many To Many Relationship: FieldOptionGroupSet and FieldOptionGroup Entities
    */
   @ManyToMany(
-    type => FieldOptionGroup,
-    fieldOptionGroup => fieldOptionGroup.fieldOptionGroupSets,
+    (type) => FieldOptionGroup,
+    (fieldOptionGroup) => fieldOptionGroup.fieldOptionGroupSets,
     {
       nullable: false,
       cascade: true,

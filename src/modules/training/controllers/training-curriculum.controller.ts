@@ -1,4 +1,12 @@
-import { Controller, Post, UseGuards, Req, Res, Body, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  Req,
+  Res,
+  Body,
+  HttpStatus,
+} from '@nestjs/common';
 
 import { TrainingCurriculumService } from '../services/training-curriculum.service';
 import { TrainingCurriculum } from '../entities/training-curriculum.entity';

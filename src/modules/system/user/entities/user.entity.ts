@@ -42,6 +42,13 @@ export class User extends UserCoreProps {
   })
   firstName: string | null;
 
+  @Column('char', {
+    nullable: true,
+    length: 13,
+    name: 'uid',
+  })
+  uid: string;
+
   @Column({
     type: 'varchar',
     name: 'middlename',
@@ -311,18 +318,18 @@ export class User extends UserCoreProps {
     );
   }*/
 
-  public static async authenticateUserByToken(token: string): Promise<User> {
-    const buff = new Buffer(token, 'base64');
-    const text = buff.toString('ascii');
-    let u: User;
-    u = await User.findOne({
-      where: { token },
-    });
-    if (u) {
-      delete u.token;
-      return u;
-    }
-  }
+  // public static async authenticateUserByToken(token: string): Promise<User> {
+  //   const buff = new Buffer(token, 'base64');
+  //   const text = buff.toString('ascii');
+  //   let u: User;
+  //   u = await User.findOne({
+  //     where: { token },
+  //   });
+  //   if (u) {
+  //     delete u.token;
+  //     return u;
+  //   }
+  // }
   public static async authenticateUser(username, password): Promise<User> {
     const user: User = await User.findOne({
       where: { username },
@@ -334,9 +341,9 @@ export class User extends UserCoreProps {
     }
   }
 
-  public static getBase64(username, password) {
-    return Buffer.from(username + ':' + password).toString('base64');
-  }
+  // public static getBase64(username, password) {
+  //   return Buffer.from(username + ':' + password).toString('base64');
+  // }
 
   // ToDo: BEGIN: Improve Approach
   // @OneToMany(() => Report, (report: Report) => report.user, {
@@ -345,7 +352,7 @@ export class User extends UserCoreProps {
   // report: Report[];
   // ToDo: END: Improve Approach
 
-   @ManyToOne(
+  @OneToOne(
     (type) => TrainingSessionAccess,
     (sessionaccess) => sessionaccess.user,
   )

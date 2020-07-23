@@ -6,10 +6,10 @@ import { MaintenanceBaseService } from '../../../core/maintenance/services/base.
 
 @Injectable()
 export class ReportGroupService extends MaintenanceBaseService<ReportGroup> {
-    constructor(
-        @InjectRepository(ReportGroup)
-        reportGroupRepository: Repository<ReportGroup>,
-    ) {
-        super(reportGroupRepository, ReportGroup);
-    }
+  constructor(
+    @InjectRepository(ReportGroup)
+    reportGroupRepository: Repository<ReportGroup>,
+  ) {
+    super(reportGroupRepository, ReportGroup);
+  }
 }

@@ -15,15 +15,15 @@ export class TrainingTopic extends EntityCoreProps {
   id: number;
 
   @ManyToMany(
-    type => TrainingCurriculum,
-    trainingCurriculum => trainingCurriculum.trainingTopics,
+    (type) => TrainingCurriculum,
+    (trainingCurriculum) => trainingCurriculum.trainingTopics,
   )
   @JoinTable({ name: 'trainingcurriculumtopicmember' })
   curriculums: TrainingCurriculum[];
 
   @ManyToMany(
-    type => TrainingSession,
-    trainingSession => trainingSession.topics,
+    (type) => TrainingSession,
+    (trainingSession) => trainingSession.topics,
   )
   trainingSessions: TrainingSession[];
 }

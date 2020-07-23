@@ -7,9 +7,9 @@ export class SystemInfo {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique:true, type: 'varchar', length: 256 })
+  @Column({ unique: true, type: 'varchar', length: 256 })
   name: string;
-  
+
   @Column('bytea', {
     nullable: true,
     name: 'value',
