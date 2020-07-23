@@ -18,7 +18,7 @@ export class TaskService extends BaseService<Task> {
       name: name,
       startedat: new Date(),
       log: [],
-      status: 'Started',
+      status: "STARTED"
     });
   }
 }
