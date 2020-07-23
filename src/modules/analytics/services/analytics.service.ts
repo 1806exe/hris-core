@@ -46,7 +46,7 @@ export class AnalyticsService {
       const indicators = await this.getIndicators(dx);
 
       // Attached indicator information in analytics payload
-
+      analytics.metaData.dimensions.ou = getISOOrgUnits(ou, context.user);
       let queries = [];
       // Pass through each indicator to generate its data
       for (const indicator of indicators) {
@@ -72,7 +72,7 @@ export class AnalyticsService {
           filter = ` AND (${filter}) `;
         }
         // Pass through selected organisation units to process data by ous
-        for (let orgUnit of getISOOrgUnits(ou, context.user)) {
+        for (let orgUnit of analytics.metaData.dimensions.ou) {
           queries.push(
             `SELECT '${
               indicator.uid
@@ -82,7 +82,7 @@ export class AnalyticsService {
               .map((p) => `pe.iso='${p}'`)
               .join(' OR ')}) ${filter} ) WHERE ${generateOUFilterQuery(
               'ous',
-              ou,
+              analytics.metaData.dimensions.ou,
               orgUnitLevels,
               context.user,
             )} GROUP BY pe.iso`,
@@ -96,7 +96,7 @@ export class AnalyticsService {
         analytics.metaData.items[field.optionuid] = {
           name: field.option,
         };
-        for (const orgUnit of getISOOrgUnits(ou, context.user)) {
+        for (const orgUnit of analytics.metaData.dimensions.ou) {
           queries.push(
             `SELECT '${
               field.optionuid
@@ -111,7 +111,7 @@ export class AnalyticsService {
               field.option
             }' AND ${generateOUFilterQuery(
               'ous',
-              ou,
+              analytics.metaData.dimensions.ou,
               orgUnitLevels,
               context.user,
             )} 
@@ -135,11 +135,9 @@ export class AnalyticsService {
 
       // Attach result as analytics rows
       analytics.rows = result.map((data) => {
-        if (analytics.metaData.dimensions.ou.indexOf(data.ou) === -1) {
-          analytics.metaData.dimensions.ou.push(data.ou);
-        }
         return [data.dx, data.ou, data.pe, data.value];
       });
+
       // Find organisation units to attach in analytics payload
       const orgUnits = await this.orgUnitService.findIn({
         uid: analytics.metaData.dimensions.ou,
@@ -400,15 +398,12 @@ export class AnalyticsService {
     let query = `SELECT field.uid,field.caption FROM field 
       INNER JOIN formfieldmember ON(formfieldmember.fieldid = field.id) 
       INNER JOIN form ON(form.id = formfieldmember.formid AND form.uid ='${formid}');`;
-    console.log('Query:', query);
     let fields = await this.connetion.manager.query(query);
     fields.forEach((field) => {
-      //console.log(field);
       if (Object.keys(otherDimensions).indexOf(field.uid) > -1) {
         analytics.metaData.items[field.uid] = { name: field.caption };
       }
     });
-    console.log('Here');
     // Dealing with headers
     let headers = await this.connetion.manager.query(
       'SELECT columns.table_name,columns.column_name,' +
@@ -417,7 +412,6 @@ export class AnalyticsService {
         formid +
         "'",
     );
-    console.log('Here1');
     let allowedColumns = ['uid', 'ou'].concat(Object.keys(otherDimensions));
     analytics.headers = headers
       .filter((header) => {
@@ -449,7 +443,6 @@ export class AnalyticsService {
     if (pe) {
       let periodquery = pe.map((p) => {
         let whereCondition = getWhereConditions(p);
-        console.log('whereCondition:', p, whereCondition);
         let [dx, operator, operand] = p.split(':');
         analytics.metaData.dimensions.pe.push(operand);
         if (operator == 'lt') {
@@ -461,7 +454,6 @@ export class AnalyticsService {
         ' OR ',
       )}) LIMIT 200000`;
     }
-    console.log('Query:', query);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
     analytics.rows = rows.map((row) => {
@@ -475,13 +467,11 @@ export class AnalyticsService {
       'SELECT ou.uid,ou.name FROM  organisationunit ou WHERE (' +
       ou.map((o) => "ou.uid = '" + o + "'").join(' OR ') +
       ') ';
-    console.log(query);
     let organisationunits = await this.connetion.manager.query(query);
     organisationunits.forEach((orgUnit) => {
       analytics.metaData.items[orgUnit.uid] = orgUnit.name;
       analytics.metaData.dimensions.ou.push(orgUnit.uid);
     });
-    console.log('organisationunits:', organisationunits);
     return analytics;
   }
 
@@ -534,7 +524,6 @@ export class AnalyticsService {
       WHERE ${generateOUFilterQuery('ous', ou, orglevels, context.user)}`,
       );
     }
-    console.log(queries.join(' UNION '));
     //analytics.metaData.dimensions.pe = getISOPeriods(pe);
     let result = await this.connetion.manager.query(queries.join(' UNION '));
     analytics.rows = result.map((data) => {
@@ -546,7 +535,6 @@ export class AnalyticsService {
     query = `SELECT *  FROM organisationunit WHERE uid IN('${analytics.metaData.dimensions.ou.join(
       "','",
     )}')`;
-    console.log('Query To Load', query);
     (await this.connetion.manager.query(query)).forEach((orgUnit) => {
       analytics.metaData.items[orgUnit.uid] = {
         name: orgUnit.name,

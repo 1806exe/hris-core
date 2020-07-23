@@ -1,4 +1,7 @@
 export function getISOOrgUnits(ou, user) {
+  if(ou.length == 0){
+    ou = ['USER_ORGUNIT'];
+  }
   ou = ou.map((o) => o.trim());
   let ouIds = ou.filter(
     (ouId) =>
