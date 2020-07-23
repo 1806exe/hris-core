@@ -187,6 +187,21 @@ export class AnalyticsService {
         aggregationtype: 'SUM',
         analyticstype: 'RECORDS',
       },
+      uLhsWqITzfk6q: {
+        id: 'uLhsWqITzfk6q',
+        created: '2020-04-03T08:30:16.506Z',
+        lastupdated: '2020-04-03T08:30:16.506Z',
+        name: 'On Duty Employees',
+        shortname: 'On Duty Employees',
+        description: 'Calculates employees on duty',
+        expression: 'COUNT(*)',
+        formuid: '52893cd128bd2',
+        filter:
+          "${5289e934a6b16} IN ('On Duty','On leave','On sick leave')",
+        //"filter": "${end_of_reporting_period}>=${5289e934a9e8a}",
+        aggregationtype: 'SUM',
+        analyticstype: 'RECORDS',
+      },
       yKypqIROIO9: {
         id: 'yKypqIROIO9',
         created: '2020-04-03T08:30:16.506Z',
