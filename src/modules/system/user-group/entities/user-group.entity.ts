@@ -13,6 +13,6 @@ export class UserGroup extends UserCoreProps {
   @Column({ type: 'text', nullable: true })
   description: string | null;
 
-  @ManyToMany(type => User, user => user.userGroups)
+  @ManyToMany((type) => User, (user) => user.userGroups)
   users: User[];
 }

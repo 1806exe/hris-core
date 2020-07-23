@@ -31,16 +31,13 @@ export class FieldOption extends EntityCoreProps {
   /**
    * One To Many Relationship: Field and FieldOption
    */
-  @ManyToOne(
-    type => Field,
-    field => field.fieldOptions,
-  )
+  @ManyToOne((type) => Field, (field) => field.fieldOptions)
   @JoinColumn({ referencedColumnName: 'id' })
   field: Field;
 
   @OneToMany(
-    type => FieldOptionMerge,
-    fieldOptionMerge => fieldOptionMerge.mergedFieldOption,
+    (type) => FieldOptionMerge,
+    (fieldOptionMerge) => fieldOptionMerge.mergedFieldOption,
     { onDelete: 'CASCADE' },
   )
   fieldOptionMerges: FieldOptionMerge[];
@@ -49,8 +46,8 @@ export class FieldOption extends EntityCoreProps {
    * One To Many Relationship: FieldOption and FieldOptionGroup
    */
   @ManyToMany(
-    type => FieldOptionGroup,
-    fieldOptionGroup => fieldOptionGroup.fieldOptions,
+    (type) => FieldOptionGroup,
+    (fieldOptionGroup) => fieldOptionGroup.fieldOptions,
     { onUpdate: 'CASCADE', onDelete: 'CASCADE' },
   )
   fieldOptionGroups: FieldOptionGroup[];

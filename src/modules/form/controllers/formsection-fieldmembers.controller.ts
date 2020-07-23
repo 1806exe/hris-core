@@ -5,8 +5,10 @@ import { FormService } from '../services/form.service';
 import { FormSectionFieldMemberService } from '../services/formsection-fieldmembers.service';
 
 @Controller('api/' + FormSectionFieldMember.plural)
-export class FormSectionFieldMemberController extends BaseController<FormSectionFieldMember> {
-    constructor(service: FormSectionFieldMemberService) {
-        super(service, FormSectionFieldMember);
-    }
+export class FormSectionFieldMemberController extends BaseController<
+  FormSectionFieldMember
+> {
+  constructor(service: FormSectionFieldMemberService) {
+    super(service, FormSectionFieldMember);
+  }
 }

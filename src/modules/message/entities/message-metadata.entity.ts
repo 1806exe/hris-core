@@ -15,13 +15,13 @@ export class MessageMetadata extends EntityCoreProps {
   })
   id: number;
 
-  @ManyToOne(type => Message, message => message.messageMetadatas, {
+  @ManyToOne((type) => Message, (message) => message.messageMetadatas, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'messageid' })
   message: Message | null;
 
-  @ManyToOne(type => User, user => user.messageMetadatas, {
+  @ManyToOne((type) => User, (user) => user.messageMetadatas, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'participantid' })

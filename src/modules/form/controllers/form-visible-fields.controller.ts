@@ -4,8 +4,10 @@ import { BaseController } from '../../../core/controllers/base.contoller';
 import { FormVisibleFieldService } from '../services/form-visible-fields.service';
 
 @Controller('api/' + FormVisibleField.plural)
-export class FormVisibleFieldController extends BaseController<FormVisibleField> {
-    constructor(service: FormVisibleFieldService) {
-        super(service, FormVisibleField);
-    }
+export class FormVisibleFieldController extends BaseController<
+  FormVisibleField
+> {
+  constructor(service: FormVisibleFieldService) {
+    super(service, FormVisibleField);
+  }
 }

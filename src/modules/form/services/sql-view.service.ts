@@ -37,7 +37,7 @@ export class SqlViewService extends BaseService<SqlView> {
     let data = await this.connection.query(sqlView.query);
     console.log('Data:', data[0]);
     if (data.length > 0) {
-      results.listGrid.headers = Object.keys(data[0]).map(key => {
+      results.listGrid.headers = Object.keys(data[0]).map((key) => {
         return {
           hidden: false,
           meta: false,
@@ -46,7 +46,7 @@ export class SqlViewService extends BaseService<SqlView> {
           type: 'string',
         };
       });
-      results.listGrid.rows = data.map(row => {
+      results.listGrid.rows = data.map((row) => {
         var newRow = [];
         results.listGrid.headers.forEach((header, index) => {
           newRow[index] = row[header.name];

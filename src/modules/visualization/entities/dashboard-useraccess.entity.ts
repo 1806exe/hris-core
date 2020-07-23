@@ -16,9 +16,6 @@ export class DashboardAccess extends UserIdentification {
   @Column('integer', { nullable: false, name: 'userid' })
   userid: number;
 
-  @ManyToMany(
-    (type) => Dashboard,
-    (dashboard) => dashboard.dashboardaccess,
-  )
+  @ManyToMany((type) => Dashboard, (dashboard) => dashboard.dashboardaccess)
   dashboard: Dashboard[];
 }

@@ -17,7 +17,7 @@ import { CronService } from './services/cron/cron.service';
     PassportModule.register({ defaultStrategy: 'basic', session: true }),
     TypeOrmModule.forFeature([Schedule, Process, Cron]),
     TaskModule,
-    SchedulesModule
+    SchedulesModule,
   ],
   controllers: [ScheduleController, ProcessController, CronController],
   providers: [ScheduleService, ProcessService, CronService],

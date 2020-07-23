@@ -9,11 +9,11 @@ import { RecordRuleActionController } from './controllers/record-rule-action/rec
 import { RecordRuleActionService } from './services/record-rule-action/record-rule-action.service';
 
 @Module({
-    imports: [
-        PassportModule.register({ defaultStrategy: 'basic', session: true }),
-        TypeOrmModule.forFeature([RecordRule, RecordRuleAction]),
-    ],
-    controllers: [RecordRuleController, RecordRuleActionController],
-    providers: [RecordRuleService, RecordRuleActionService],
+  imports: [
+    PassportModule.register({ defaultStrategy: 'basic', session: true }),
+    TypeOrmModule.forFeature([RecordRule, RecordRuleAction]),
+  ],
+  controllers: [RecordRuleController, RecordRuleActionController],
+  providers: [RecordRuleService, RecordRuleActionService],
 })
-export class RecordRuleModule { }
+export class RecordRuleModule {}

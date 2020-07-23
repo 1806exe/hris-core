@@ -6,12 +6,12 @@ import { RecordRuleAction } from '../../entities/record-rule-action/record-rule-
 
 @Injectable()
 export class RecordRuleActionService extends MaintenanceBaseService<
-RecordRuleAction
+  RecordRuleAction
 > {
-    constructor(
-        @InjectRepository(RecordRuleAction)
-        recordRuleActionRepository: Repository<RecordRuleAction>,
-    ) {
-        super(recordRuleActionRepository, RecordRuleAction);
-    }
+  constructor(
+    @InjectRepository(RecordRuleAction)
+    recordRuleActionRepository: Repository<RecordRuleAction>,
+  ) {
+    super(recordRuleActionRepository, RecordRuleAction);
+  }
 }

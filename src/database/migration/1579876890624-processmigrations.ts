@@ -10,7 +10,7 @@ export class processmigrations1579876890624 implements MigrationInterface {
             created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
             lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
             id integer NOT NULL,
-            uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+            uid char(13) COLLATE pg_catalog."default" NOT NULL,
             code text COLLATE pg_catalog."default" DEFAULT NULL::character varying,
             name character varying(256) COLLATE pg_catalog."default" NOT NULL,
             description text COLLATE pg_catalog."default",

@@ -8,27 +8,19 @@ import { HRISBaseEntity } from '../../../core/entities/base-entity';
 export class FormVisibleField extends HRISBaseEntity {
   static plural = 'formVisibleFields';
 
-  @ManyToOne(
-    type => Form,
-    form => form.formVisibleFields,
-    {
-      primary: true,
-      nullable: false,
-      onDelete: 'CASCADE',
-    },
-  )
+  @ManyToOne((type) => Form, (form) => form.formVisibleFields, {
+    primary: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'formid' })
   form: Form | null;
 
-  @ManyToOne(
-    type => Field,
-    field => field.formVisibleFields,
-    {
-      primary: true,
-      nullable: false,
-      onDelete: 'CASCADE',
-    },
-  )
+  @ManyToOne((type) => Field, (field) => field.formVisibleFields, {
+    primary: true,
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'fieldid' })
   field: Field | null;
 

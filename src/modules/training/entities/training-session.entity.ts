@@ -24,8 +24,8 @@ export class TrainingSession extends TransactionTimestamp {
     name: 'id',
   })
   id: number;
-  @Column('character varying', {
-    nullable: false,
+  @Column('char', {
+    nullable: true,
     length: 13,
     name: 'uid',
   })

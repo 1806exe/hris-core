@@ -4,7 +4,6 @@ import { EntityCoreProps } from '../../../../core/entities/entity-core-props';
 
 @Entity('usersetting', { schema: 'public' })
 export class UserSettings extends EntityCoreProps {
-
   @Column({ type: 'text', nullable: true })
   description: string | null;
 
@@ -20,6 +19,6 @@ export class UserSettings extends EntityCoreProps {
   @Column({ type: 'boolean', nullable: false })
   qualityCheckAlert: boolean;
 
-  @OneToOne(type => User, user => user.userSettings)
+  @OneToOne((type) => User, (user) => user.userSettings)
   user: User;
 }

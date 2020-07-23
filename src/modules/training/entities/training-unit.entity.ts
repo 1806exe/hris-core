@@ -16,16 +16,16 @@ export class TrainingUnit extends EntityCoreProps {
   id: number;
 
   @ManyToOne(
-    type => TrainingSection,
-    trainingSection => trainingSection.trainingUnits,
+    (type) => TrainingSection,
+    (trainingSection) => trainingSection.trainingUnits,
     { onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'sectionid' })
   section: TrainingSection | null;
 
   @OneToMany(
-    type => TrainingCurriculum,
-    trainingCurriculum => trainingCurriculum.unit,
+    (type) => TrainingCurriculum,
+    (trainingCurriculum) => trainingCurriculum.unit,
     { onDelete: 'CASCADE' },
   )
   trainingCurriculums: TrainingCurriculum[];

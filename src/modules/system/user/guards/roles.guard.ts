@@ -1,4 +1,8 @@
-import { CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as passport from 'passport';
 export class AppAuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -6,15 +10,12 @@ export class AppAuthGuard implements CanActivate {
     const httpContext = context.switchToHttp();
     const [request, response] = [
       httpContext.getRequest(),
-      httpContext.getResponse()
+      httpContext.getResponse(),
     ];
     const passportFn = createPassportContext(request, response);
-    const user = await passportFn(
-      'bearer',
-      options
-    );
+    const user = await passportFn('bearer', options);
     if (user) {
-      request.login(user, (res) => { });
+      request.login(user, (res) => {});
     }
     return true;
   }
@@ -27,7 +28,7 @@ const createPassportContext = (request, response) => (type, options) =>
       } catch (err) {
         reject(err);
       }
-    })(request, response, resolve)
+    })(request, response, resolve),
   );
 const defaultOptions = {
   session: true,
@@ -37,5 +38,5 @@ const defaultOptions = {
       throw err || new UnauthorizedException();
     }
     return user;
-  }
+  },
 };

@@ -18,7 +18,11 @@ export class DashboardItem extends TransactionTimestamp {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'char', length: 11, unique: true })
+  @Column('char', {
+    nullable: true,
+    length: 13,
+    name: 'uid',
+  })
   uid: string;
 
   @Column({

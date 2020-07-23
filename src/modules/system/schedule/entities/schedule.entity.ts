@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  ManyToOne,
+} from 'typeorm';
 import { EntityCoreProps } from '../../../../core/entities/entity-core-props';
 import { Process } from './process.entity';
 @Entity('schedule', { schema: 'public' })
@@ -8,13 +14,17 @@ export class Schedule extends EntityCoreProps {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 256, unique: true })
+  @Column('char', {
+    nullable: true,
+    length: 13,
+    name: 'uid',
+  })
   uid: string;
 
   @Column('character varying', {
     nullable: false,
     length: 255,
-    unique: true
+    unique: true,
   })
   name: string;
 
@@ -30,11 +40,10 @@ export class Schedule extends EntityCoreProps {
   })
   cron: string;
 
-  @ManyToOne(
-    type => Process,
-    process => process.schedules,
-    { eager:true, onDelete: 'CASCADE' },
-  )
+  @ManyToOne((type) => Process, (process) => process.schedules, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'processid' })
   process: Process | null;
 }

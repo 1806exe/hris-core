@@ -5,9 +5,9 @@ import { RecordRuleActionService } from '../../services/record-rule-action/recor
 
 @Controller('api/' + RecordRuleAction.plural)
 export class RecordRuleActionController extends MaintenanceBaseController<
-RecordRuleAction
+  RecordRuleAction
 > {
-    constructor(recordValueActionService: RecordRuleActionService) {
-        super(recordValueActionService, RecordRuleAction);
-    }
+  constructor(recordValueActionService: RecordRuleActionService) {
+    super(recordValueActionService, RecordRuleAction);
+  }
 }

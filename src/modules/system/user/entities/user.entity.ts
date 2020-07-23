@@ -42,6 +42,13 @@ export class User extends UserCoreProps {
   })
   firstName: string | null;
 
+  @Column('char', {
+    nullable: true,
+    length: 13,
+    name: 'uid',
+  })
+  uid: string;
+
   @Column({
     type: 'varchar',
     name: 'middlename',

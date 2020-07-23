@@ -6,10 +6,10 @@ import { MaintenanceBaseService } from '../../../../../core/maintenance/services
 
 @Injectable()
 export class CronService extends MaintenanceBaseService<Cron> {
-    constructor(
-        @InjectRepository(Cron)
-        cronRepository: Repository<Cron>,
-    ) {
-        super(cronRepository, Cron);
-    }
+  constructor(
+    @InjectRepository(Cron)
+    cronRepository: Repository<Cron>,
+  ) {
+    super(cronRepository, Cron);
+  }
 }

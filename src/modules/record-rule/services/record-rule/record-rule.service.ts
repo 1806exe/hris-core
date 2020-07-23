@@ -7,10 +7,10 @@ import { RecordRule } from '../../entities/record-rule/record-rule.entity';
 
 @Injectable()
 export class RecordRuleService extends MaintenanceBaseService<RecordRule> {
-    constructor(
-        @InjectRepository(RecordRule)
-        recordRuleRepository: Repository<RecordRule>,
-    ) {
-        super(recordRuleRepository, RecordRule);
-    }
+  constructor(
+    @InjectRepository(RecordRule)
+    recordRuleRepository: Repository<RecordRule>,
+  ) {
+    super(recordRuleRepository, RecordRule);
+  }
 }

@@ -5,7 +5,7 @@ import { BaseController } from '../../../core/controllers/base.contoller';
 
 @Controller('api/' + FormSection.plural)
 export class FormSectionController extends BaseController<FormSection> {
-    constructor(service: FormSectionService) {
-        super(service, FormSection);
-    }
+  constructor(service: FormSectionService) {
+    super(service, FormSection);
+  }
 }

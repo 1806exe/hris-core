@@ -27,7 +27,7 @@ export class TrainingVenue extends TransactionTimestamp {
   })
   name: string;
   @Column('char', {
-    nullable: false,
+    nullable: true,
     length: 13,
     name: 'uid',
   })

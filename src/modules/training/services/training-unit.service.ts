@@ -7,10 +7,10 @@ import { MaintenanceBaseService } from '../../../core/maintenance/services/base.
 
 @Injectable()
 export class TrainingUnitService extends MaintenanceBaseService<TrainingUnit> {
-    constructor(
-        @InjectRepository(TrainingUnit)
-        trainingUnitRepository: Repository<TrainingUnit>,
-    ) {
-        super(trainingUnitRepository, TrainingUnit);
-    }
+  constructor(
+    @InjectRepository(TrainingUnit)
+    trainingUnitRepository: Repository<TrainingUnit>,
+  ) {
+    super(trainingUnitRepository, TrainingUnit);
+  }
 }

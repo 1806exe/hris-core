@@ -24,16 +24,16 @@ export class SqlViewController extends BaseController<SqlView> {
    * @param params
    */
   @Get(':id/data')
-    @UseGuards(SessionGuard)
-    async getData(
-        //@Req() req: Request,
-        @Res() res: Response,
-        @Param() params,
-    ): Promise<ApiResult> {
-        try {
-            return getSuccessResponse(res, await this.service.envokeSQL(params.id));
-        } catch (error) {
-            res.status(400).json({ error: error.message });
-        }
+  @UseGuards(SessionGuard)
+  async getData(
+    //@Req() req: Request,
+    @Res() res: Response,
+    @Param() params,
+  ): Promise<ApiResult> {
+    try {
+      return getSuccessResponse(res, await this.service.envokeSQL(params.id));
+    } catch (error) {
+      res.status(400).json({ error: error.message });
     }
+  }
 }

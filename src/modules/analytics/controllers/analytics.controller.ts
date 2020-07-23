@@ -17,9 +17,14 @@ export class AnalyticsController {
   @UseGuards(SessionGuard)
   async fetchAnalytics(@Query() query, @AuthenticatedUser() user) {
     let params = extractAnalytics(query);
-    return this.analyticsService.fetchAnalytics(params.dx, params.pe, params.ou, {
-      user,
-    });
+    return this.analyticsService.fetchAnalytics(
+      params.dx,
+      params.pe,
+      params.ou,
+      {
+        user,
+      },
+    );
   }
   @Get('records/:formid')
   async fetchRecordsAnalytics(

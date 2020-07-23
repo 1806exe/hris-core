@@ -24,12 +24,14 @@ export class TrainingCurriculumService extends MaintenanceBaseService<
     super(trainingCurriculumRepository, TrainingCurriculum);
   }
 
-  async createCurriculum(createCurriculumDTO: any): Promise<TrainingCurriculum> {
+  async createCurriculum(
+    createCurriculumDTO: any,
+  ): Promise<TrainingCurriculum> {
     /*TODO: Add temporary creation of training curriculum for test scenarios */
     let curriculum = new TrainingCurriculum();
     Object.keys(createCurriculumDTO).forEach((key) => {
-        curriculum[key] = createCurriculumDTO[key];
-      });
+      curriculum[key] = createCurriculumDTO[key];
+    });
     curriculum.unit = await this.trainingUnitRepository.findOne({
       where: { uid: createCurriculumDTO.unit },
     });

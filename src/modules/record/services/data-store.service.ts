@@ -7,10 +7,10 @@ import { DataStore } from '../entities/data-store.entity';
 
 @Injectable()
 export class DataStoreService extends BaseService<DataStore> {
-    constructor(
-        @InjectRepository(DataStore)
-        dataStoreRepository: Repository<DataStore>,
-    ) {
-        super(dataStoreRepository, DataStore);
-    }
+  constructor(
+    @InjectRepository(DataStore)
+    dataStoreRepository: Repository<DataStore>,
+  ) {
+    super(dataStoreRepository, DataStore);
+  }
 }

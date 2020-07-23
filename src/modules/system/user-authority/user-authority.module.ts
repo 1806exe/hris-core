@@ -6,10 +6,11 @@ import { UserAuthorityController } from './controllers/user-authority.controller
 import { UserAuthorityService } from './services/user-authority.service';
 
 @Module({
-    imports: [
-        PassportModule.register({ defaultStrategy: 'basic', session: true }),
-        TypeOrmModule.forFeature([UserAuthority]),
-    ],
-    controllers: [UserAuthorityController],
-    providers: [UserAuthorityService],
-}) export class UserAuthorityModule { }
+  imports: [
+    PassportModule.register({ defaultStrategy: 'basic', session: true }),
+    TypeOrmModule.forFeature([UserAuthority]),
+  ],
+  controllers: [UserAuthorityController],
+  providers: [UserAuthorityService],
+})
+export class UserAuthorityModule {}

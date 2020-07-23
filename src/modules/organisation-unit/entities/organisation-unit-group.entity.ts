@@ -42,7 +42,7 @@ export class OrganisationUnitGroup extends EntityCoreProps {
   @ManyToMany(
     (type) => OrganisationUnit,
     (organisationUnit) => organisationUnit.organisationUnitGroups,
-    { nullable: false},
+    { nullable: false },
   )
   @JoinTable({ name: 'organisationunitgroupmembers' })
   organisationUnits: OrganisationUnit[];
