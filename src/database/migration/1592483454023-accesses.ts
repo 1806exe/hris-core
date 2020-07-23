@@ -3,17 +3,17 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class accesses1592483454023 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`
-        CREATE SEQUENCE userroleaccess_id_seq;
-        CREATE SEQUENCE dashboardaccess_id_seq;
-        CREATE SEQUENCE dashboarditemaccess_id_seq;
-        CREATE SEQUENCE trainingsessionaccess_id_seq;
-        CREATE SEQUENCE visualizationaccess_id_seq;
-        CREATE TABLE public.userroleaccess
+        CREATE SEQUENCE IF NOT EXISTS userroleaccess_id_seq;
+        CREATE SEQUENCE IF NOT EXISTS  dashboardaccess_id_seq;
+        CREATE SEQUENCE IF NOT EXISTS  dashboarditemaccess_id_seq;
+        CREATE SEQUENCE IF NOT EXISTS  trainingsessionaccess_id_seq;
+        CREATE SEQUENCE IF NOT EXISTS  visualizationaccess_id_seq;
+        CREATE TABLE IF NOT EXISTS public.userroleaccess
             (
                 created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
                 lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
                 id bigint NOT NULL DEFAULT nextval('userroleaccess_id_seq'::regclass),
-                uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+                uid char (13) COLLATE pg_catalog."default" NOT NULL,
                 access json NOT NULL,
                 userroleid bigint NOT NULL,
                 CONSTRAINT "PK_userroleaccess" PRIMARY KEY (id),
@@ -34,7 +34,7 @@ export class accesses1592483454023 implements MigrationInterface {
                     created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
                     lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
                     id bigint NOT NULL DEFAULT nextval('dashboardaccess_id_seq'::regclass),
-                    uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+                    uid char (13) COLLATE pg_catalog."default" NOT NULL,
                     access character varying COLLATE pg_catalog."default" NOT NULL,
                     userid bigint NOT NULL,
                     CONSTRAINT "PK_c51fbd0f74fbba0662057462344" PRIMARY KEY (id),
@@ -51,7 +51,7 @@ export class accesses1592483454023 implements MigrationInterface {
                         created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
                         lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
                         id bigint NOT NULL DEFAULT nextval('dashboarditemaccess_id_seq'::regclass),
-                        uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+                        uid char (13) COLLATE pg_catalog."default" NOT NULL,
                         access character varying COLLATE pg_catalog."default" NOT NULL,
                         userid bigint NOT NULL,
                         CONSTRAINT "PK_f118b858d479d0b7ef46e232c08" PRIMARY KEY (id),
@@ -141,7 +141,7 @@ CREATE INDEX "IDX_c3220a21f51a1dd622b2b6a3c6"
     created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
     lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
     id bigint NOT NULL DEFAULT nextval('trainingsessionaccess_id_seq'::regclass),
-    uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+    uid char (13) COLLATE pg_catalog."default" NOT NULL,
     access character varying COLLATE pg_catalog."default" NOT NULL,
     userid bigint NOT NULL,
     CONSTRAINT "PK_b6a7ee04543a8d4951c96b4b4eb" PRIMARY KEY (id),
@@ -154,7 +154,7 @@ ALTER TABLE public.trainingsessionaccess
     OWNER to postgres;
 
 
-    CREATE TABLE public.sessionuseraccess
+    CREATE TABLE IF NOT EXISTS public.sessionuseraccess
     (
         "trainingsessionId" bigint NOT NULL,
         "trainingsessionaccessId" bigint NOT NULL,
@@ -177,7 +177,7 @@ ALTER TABLE public.trainingsessionaccess
     
     -- DROP INDEX public."IDX_0fae76387fb4a613f7fc2c25c1";
     
-    CREATE INDEX "IDX_0fae76387fb4a613f7fc2c25c1"
+    CREATE INDEX IF NOT EXISTS "IDX_0fae76387fb4a613f7fc2c25c1"
         ON public.sessionuseraccess USING btree
         ("trainingsessionId" ASC NULLS LAST)
         TABLESPACE pg_default;
@@ -195,7 +195,7 @@ ALTER TABLE public.trainingsessionaccess
             created timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
             lastupdated timestamp without time zone NOT NULL DEFAULT LOCALTIMESTAMP,
             id bigint NOT NULL DEFAULT nextval('visualizationaccess_id_seq'::regclass),
-            uid character varying(256) COLLATE pg_catalog."default" NOT NULL,
+            uid char (13) COLLATE pg_catalog."default" NOT NULL,
             access character varying COLLATE pg_catalog."default" NOT NULL,
             userid bigint NOT NULL,
             CONSTRAINT "PK_b2e31259d460dc90ca90b9656ef" PRIMARY KEY (id),
@@ -282,7 +282,7 @@ ALTER TABLE public.trainingsessionaccess
 
         ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS uid;
 
-        ALTER TABLE public.formfieldmember ADD COLUMN uid character varying(11);
+        ALTER TABLE public.formfieldmember ADD COLUMN uid char (13);
 
         DROP SEQUENCE IF EXISTS formfieldmembers_uuid_seq;
 
@@ -328,7 +328,7 @@ ALTER TABLE public.trainingsessionaccess
 
         ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS lastupdatedby;
 
-        ALTER TABLE public.formfieldmember ADD COLUMN lastupdatedby character varying(11);
+        ALTER TABLE public.formfieldmember ADD COLUMN lastupdatedby char (13);
 
         ALTER TABLE public.formfieldmember DROP COLUMN IF EXISTS publicaccess;
 

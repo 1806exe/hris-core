@@ -18,6 +18,7 @@ import { TrainingSponsor } from '../entities/training-sponsor.entity';
 import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
 import { User } from '../../system/user/entities/user.entity';
 import { TrainingSessionAccess } from '../entities/training-session-access.entity';
+import { access } from 'fs';
 
 @Injectable()
 export class TrainingSessionService extends BaseService<TrainingSession> {
@@ -65,10 +66,11 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     });
   }
   async getParticipants(uid: string) {
-    const session = (await this.trainingSessionRepository.findOne({ uid })).id;
     let participants = await this.participantRepository.find({
       where: {
-        trainingsessionId: session,
+        trainingsessionId: (
+          await this.trainingSessionRepository.findOne({ uid })
+        ).id,
       },
     });
     if (participants[0] == undefined) {
@@ -76,7 +78,12 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     }
     return {
       participants: await this.recordRepository.find({
-        relations: ['recordValues', 'recordValues.field'],
+        relations: [
+          'recordValues',
+          'recordValues.field',
+          'organisationUnit',
+          'organisationUnit.parent',
+        ],
         where: {
           id: In(participants.map((participant) => participant.recordId)),
         },
@@ -85,10 +92,11 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
   }
 
   async getFacilitators(uid: string) {
-    const session = (await this.trainingSessionRepository.findOne({ uid })).id;
     let facilitators = await this.facilitatorRepository.find({
       where: {
-        trainingsessionId: session,
+        trainingsessionId: (
+          await this.trainingSessionRepository.findOne({ uid })
+        ).id,
       },
     });
     if (facilitators[0] == undefined) {
@@ -96,7 +104,12 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     }
     return {
       facilitators: await this.recordRepository.find({
-        relations: ['recordValues', 'recordValues.field'],
+        relations: [
+          'recordValues',
+          'recordValues.field',
+          'organisationUnit',
+          'organisationUnit.parent',
+        ],
         where: {
           id: In(facilitators.map((facilitator) => facilitator.recordId)),
         },
@@ -135,52 +148,56 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
   }
 
   async deleteFacilitator(uid: string, record: any) {
-    const records = await this.recordRepository.find({
-      where: [{ uid: record }],
+    const facilitators = await this.facilitatorRepository.findOne({
+      where: [
+        {
+          recordId: (
+            await this.recordRepository.findOne({
+              where: { uid: record },
+            })
+          ).id,
+          trainingsessionId: (
+            await this.trainingSessionRepository.findOne({ uid })
+          ).id,
+        },
+      ],
     });
-
-    const sessionid = (await this.trainingSessionRepository.findOne({ uid }))
-      .id;
-    const recordid = records[0].id;
-    const facilitators = await this.facilitatorRepository.find({
-      where: [{ recordId: recordid, trainingsessionId: sessionid }],
-    });
-    if (facilitators[0] == undefined) {
+    if (facilitators == undefined || Object.keys(facilitators).length < 2) {
       throw new NotFoundException(`Facilitator is not available `);
     }
-    const id = {
-      trainingsessionId: sessionid,
-      recordId: recordid,
-    };
-    let deletedFacilitator = await this.facilitatorRepository.delete(id);
+
+    let deletedFacilitator = await this.facilitatorRepository.delete(
+      facilitators,
+    );
     return deletedFacilitator;
   }
 
   async deleteParticipant(uid: string, record: any) {
-    const records = await this.recordRepository.find({
-      where: [{ uid: record }],
+    const participants = await this.participantRepository.findOne({
+      where: [
+        {
+          recordId: (
+            await this.recordRepository.findOne({
+              where: { uid: record },
+            })
+          ).id,
+          trainingsessionId: (
+            await this.trainingSessionRepository.findOne({ uid })
+          ).id,
+        },
+      ],
     });
-    const sessionid = (await this.trainingSessionRepository.findOne({ uid }))
-      .id;
-    const recordid = records[0].id;
-    const participants = await this.participantRepository.find({
-      where: [{ recordId: recordid, trainingsessionId: sessionid }],
-    });
-
-    if (participants[0] == undefined) {
+    if (participants == undefined || Object.keys(participants).length < 2) {
       throw new NotFoundException(`Participant is not available `);
     }
-    const id = {
-      trainingsessionId: sessionid,
-      recordId: recordid,
-    };
-    let deletedParticipants = await this.participantRepository.delete(id);
+
+    let deletedParticipants = await this.participantRepository.delete(
+      participants,
+    );
     return deletedParticipants;
   }
   async createSession(createSessionDTO: any) {
     const {
-      section,
-      unit,
       curriculum,
       deliveryMode,
       topics,
@@ -190,12 +207,12 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       organiser,
       facilitators,
       participants,
-      startDate,
-      endDate,
     } = createSessionDTO;
-
     const session = new TrainingSession();
-    session.uid = generateUid();
+    Object.keys(createSessionDTO).forEach((key) => {
+      session[key] = createSessionDTO[key];
+    });
+
     session.organiser = await this.trainingSponsorRepository.findOne({
       where: { uid: organiser },
     });
@@ -209,33 +226,83 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     session.curriculum = await this.trainingCurriculumRepository.findOne({
       where: { uid: curriculum },
     });
-    session.enddate = endDate;
-    session.startdate = startDate;
     session.organisationUnit = await this.organisationunitRepository.findOne({
       where: { uid: orgunit },
     });
-    session.startdate = startDate;
-    session.enddate = endDate;
     await this.trainingSessionRepository.save(session);
 
     const savedsession = await this.trainingSessionRepository.findOne({
       uid: session.uid,
     });
-    const topic = await this.trainingTopicRepository.find({
-      where: { uid: In(topics.map((topic) => topic)) },
-    });
-    for (let topics of topic) {
-      await getConnection()
-        .createQueryBuilder()
-        .insert()
-        .into('trainingsessiontopics')
-        .values([
-          {
-            trainingsessionId: savedsession.id,
-            trainingtopicId: topics.id,
-          },
-        ])
-        .execute();
+    /*
+     * TODO: ADD CHECKS FOR WHEN TOICS CONTAIN AN EMPTY ARRAY
+     */
+    if (
+      topics &&
+      typeof topics !== undefined &&
+      topics !== null &&
+      topics.length !== null &&
+      topics.length > 0
+    ) {
+      const topic = await this.trainingTopicRepository.find({
+        where: { uid: In(topics ? topics.map((topic) => topic) : '') },
+      });
+      for (let topics of topic) {
+        await getConnection()
+          .createQueryBuilder()
+          .insert()
+          .into('trainingsessiontopics')
+          .values([
+            {
+              trainingsessionId: savedsession.id,
+              trainingtopicId: topics.id,
+            },
+          ])
+          .execute();
+      }
+    }
+    /*
+     * TODO: ADD CHECKS FOR WHEN FACILITATORS CONTAIN AN EMPTY ARRAY
+     */
+    if (
+      facilitators &&
+      typeof facilitators !== undefined &&
+      facilitators !== null &&
+      facilitators.length !== null &&
+      facilitators.length > 0
+    ) {
+      const facilitator = await this.recordRepository.find({
+        where: { uid: In(facilitators.map((facilitator) => facilitator)) },
+      });
+      for (let facilitators of facilitator) {
+        await this.facilitatorRepository.save({
+          recordId: facilitators.id,
+          trainingsessionId: savedsession.id,
+        });
+      }
+    }
+    /*
+     * TODO: ADD CHECKS FOR WHEN PARTICIPANTS CONTAIN AN EMPTY ARRAY
+     */
+    if (
+      participants &&
+      typeof participants !== undefined &&
+      participants !== null &&
+      participants.length !== null &&
+      participants.length > 0
+    ) {
+      const participant = await this.recordRepository.find({
+        where: {
+          uid: In(participants.map((participant: string) => participant)),
+        },
+      });
+
+      for (let participants of participant) {
+        await this.participantRepository.save({
+          recordId: participants.id,
+          trainingsessionId: savedsession.id,
+        });
+      }
     }
 
     return savedsession;
@@ -297,13 +364,31 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     });
   }
   async sessionSharingCreation(uid: String, sessionsharingDTO) {
-    const session = (
-      await this.trainingSessionRepository.findOne({ where: { uid: uid } })
-    ).id;
-    const { user, access } = sessionsharingDTO;
-    const userId = (await this.userRepository.findOne({ where: { uid: user } }))
-      .id;
+    /* const sessionaccess = new TrainingSessionAccess();
+    sessionaccess.session = await this.trainingSessionRepository.findOne({
+      where: { uid: uid },
+    });
+    sessionaccess.user = await this.userRepository.findOne({
+      where: { uid: sessionsharingDTO.user },
+    });
 
+    sessionaccess.access = sessionsharingDTO.access;
+    console.log('Saved:::', sessionaccess);
+
+    const saved = await this.trainingSessionAccess.save(sessionaccess);
+    return saved; */
+
+    const userId = (
+      await this.userRepository.findOne({
+        where: { uid: sessionsharingDTO.user },
+      })
+    ).id;
+    const session = (
+      await this.trainingSessionRepository.findOne({
+        where: { uid: uid },
+      })
+    ).id;
+    console.log('UserID', userId, 'session', session);
     const useraccess = await getConnection()
       .createQueryBuilder()
       .insert()
@@ -311,11 +396,13 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       .values([
         {
           userid: userId,
-          access: access,
+          access: sessionsharingDTO.access,
           uid: generateUid(),
         },
       ])
       .execute();
+
+    console.log(useraccess);
     if (useraccess !== undefined) {
       await getConnection()
         .createQueryBuilder()
@@ -329,6 +416,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
         ])
         .execute();
     }
+    return useraccess;
   }
   async sessionSharingEdit(uid: string, editSessionDTO) {
     const { user, access } = editSessionDTO;
@@ -337,6 +425,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
         where: { uid: user },
       })
     ).id;
+    console.log(userId);
     const accessId = await this.trainingSessionAccess.findOne({
       where: { userid: userId },
     });

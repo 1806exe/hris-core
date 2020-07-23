@@ -32,7 +32,7 @@ export class Report extends EntityCoreProps {
   uri: string;
 
   @Column('json', {
-    nullable: false,
+    nullable: true,
     name: 'parameters',
   })
   parameters: any;

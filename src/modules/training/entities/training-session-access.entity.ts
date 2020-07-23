@@ -7,12 +7,13 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
+  BeforeInsert,
 } from 'typeorm';
 import { TrainingSession } from './training-session.entity';
 import { User } from '../../system/user/entities/user.entity';
+import { generateUid } from '../../../core/helpers/makeuid';
 @Entity('trainingsessionaccess', { schema: 'public' })
 export class TrainingSessionAccess extends UserIdentification {
-  static plural = 'userAccesses';
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -21,6 +22,13 @@ export class TrainingSessionAccess extends UserIdentification {
     name: 'access',
   })
   access: string;
+
+  @Column('char', {
+    nullable: false,
+    name: 'uid',
+    length: 13,
+  })
+  uid: string;
 
   @Column('integer', { nullable: false, name: 'userid' })
   userid: number;
@@ -33,5 +41,13 @@ export class TrainingSessionAccess extends UserIdentification {
 
   @OneToMany((type) => User, (user) => user.sessionaccess, {})
   @JoinColumn({ name: 'userid', referencedColumnName: 'id' })
-  user: User[];
+  user: User;
+
+  @BeforeInsert()
+  beforeUpdateTransaction() {
+    console.log('Before async goes here')
+    this.uid = generateUid();
+  }
+
+  //generateUid
 }

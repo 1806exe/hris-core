@@ -226,7 +226,7 @@ CREATE TABLE public.report
   publicaccess character(8),
   externalaccess boolean,
   uri character varying(255),
-  parameters json NOT NULL,
+  parameters json  NULL,
   type character varying(255) NOT NULL,
   createdby character varying(255),
   html character varying(256) NOT NULL,

@@ -19,7 +19,6 @@ import { Record } from '../../record/entities/record.entity';
 import { SessionGuard } from '../../system/user/guards/session.guard';
 import { RecordValue } from '../entities/record-value.entity';
 import { RecordService } from '../services/record.service';
-import { async } from 'rxjs/internal/scheduler/async';
 
 @Controller('api/' + Record.plural)
 export class RecordsController extends BaseController<Record> {

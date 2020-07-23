@@ -44,13 +44,43 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
       entityTableMapper,
     );
   }
-  async getWhereNoPaging(filter): Promise<T[]> {
+  async getWhereNoPaging(filter, fields): Promise<T[]> {
+    /*
+     *
+     */
+    const metaData = this.modelRepository.manager.connection.getMetadata(
+      this.Model,
+    );
+    /*
+    let join: any = {};
+
+    // TODO: Find best way to join any recursive relation
+    if (metaData.tableName === 'organisationunit') {
+      join = {
+        alias: 'organisationunit',
+        leftJoinAndSelect: {
+          profile: 'organisationunit.parent',
+        },
+      };
+    }*/
     /**
      *
      */
     return await GetResponseSanitizer(
       this.modelRepository,
-      await this.modelRepository.find({ where: getWhereConditions(filter) }),
+      await this.modelRepository.find({
+        where:
+          filter && filter.includes('parent.id:eq')
+            ? {
+                parent: await this.modelRepository.findOne({
+                  where: { uid: filter.replace(/^parent.id:eq:+/i, '') },
+                }),
+              }
+            : getWhereConditions(filter),
+        select: getSelections(fields, metaData),
+        relations: getRelations(fields, metaData),
+        // join,
+      }),
       entityTableMapper,
     );
   }

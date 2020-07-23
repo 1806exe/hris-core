@@ -6,6 +6,8 @@ import {
   ManyToMany,
   ManyToOne,
   OneToOne,
+  BeforeInsert,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TransactionTimestamp } from '../../../core/entities/transaction-timestamp.entity';
 import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
@@ -14,13 +16,11 @@ import { TrainingSponsor } from './training-sponsor.entity';
 import { TrainingTopic } from './training-topic.entity';
 import { TrainingVenue } from './training-venue.entity';
 import { TrainingSessionAccess } from './training-session-access.entity';
-import { Record } from '../../record/entities/record.entity';
+import { generateUid } from '../../../core/helpers/makeuid';
 @Entity('trainingsession', { schema: 'public' })
 export class TrainingSession extends TransactionTimestamp {
   static plural = 'sessions';
-  @Column('integer', {
-    nullable: false,
-    primary: true,
+  @PrimaryGeneratedColumn({
     name: 'id',
   })
   id: number;
@@ -122,8 +122,12 @@ export class TrainingSession extends TransactionTimestamp {
     },
   )
   @JoinTable({ name: 'sessionuseraccess' })
-  trainingsessionaccess: TrainingSessionAccess[];
+  trainingsessionaccess: TrainingSessionAccess;
 
   // @ManyToMany((type) => Record, (record) => record.trainingSessions, {})
   // record: Record[];
+  @BeforeInsert()
+  beforeUpdateTransaction() {
+    this.uid = generateUid();
+  }
 }

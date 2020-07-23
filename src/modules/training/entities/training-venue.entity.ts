@@ -1,13 +1,22 @@
 import { EntityCoreProps } from '../../../core/entities/entity-core-props';
 import { OrganisationUnit } from '../../organisation-unit/entities/organisation-unit.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  BeforeInsert,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { TrainingSession } from './training-session.entity';
+import { generateUid } from '../../../core/helpers/makeuid';
+import { TransactionTimestamp } from '../../../core/entities/transaction-timestamp.entity';
+
 @Entity('trainingvenue', { schema: 'public' })
-export class TrainingVenue extends EntityCoreProps {
+export class TrainingVenue extends TransactionTimestamp {
   static plural = 'venues';
-  @Column('integer', {
-    nullable: false,
-    primary: true,
+  @PrimaryGeneratedColumn({
     name: 'id',
   })
   id: number;
@@ -17,6 +26,13 @@ export class TrainingVenue extends EntityCoreProps {
     name: 'name',
   })
   name: string;
+  @Column('char', {
+    nullable: false,
+    length: 13,
+    name: 'uid',
+  })
+  uid: string;
+
   @Column('character varying', {
     nullable: false,
     length: 255,
@@ -43,4 +59,9 @@ export class TrainingVenue extends EntityCoreProps {
     { onDelete: 'CASCADE' },
   )
   trainingSessions: TrainingSession[];
+
+  @BeforeInsert()
+  beforeUpdateTransaction() {
+    this.uid = generateUid();
+  }
 }

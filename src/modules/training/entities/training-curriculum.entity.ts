@@ -8,6 +8,7 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { TrainingTopic } from './training-topic.entity';
@@ -19,24 +20,22 @@ import { SessionParticipant } from './training-session-participant.entity';
 @Entity('trainingcurriculum', { schema: 'public' })
 export class TrainingCurriculum extends EntityCoreProps {
   static plural = 'curriculums';
-  @Column('integer', {
-    nullable: false,
-    primary: true,
-    name: 'trainingcurriculumid',
+  @PrimaryGeneratedColumn({
+    name: 'id',
   })
   id: number;
 
   @ManyToOne(
-    type => TrainingSection,
-    trainingSection => trainingSection.curriculums,
+    (type) => TrainingSection,
+    (trainingSection) => trainingSection.curriculums,
     { eager: true, onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'sectionid' })
   section: TrainingSection | null;
 
   @ManyToOne(
-    type => TrainingUnit,
-    trainingUnit => trainingUnit.trainingCurriculums,
+    (type) => TrainingUnit,
+    (trainingUnit) => trainingUnit.trainingCurriculums,
     { eager: true, onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'unitid' })
@@ -49,18 +48,18 @@ export class TrainingCurriculum extends EntityCoreProps {
   allMethodsSelected: boolean | null;
 
   @OneToMany(
-    type => TrainingSession,
-    trainingSession => trainingSession.curriculum,
+    (type) => TrainingSession,
+    (trainingSession) => trainingSession.curriculum,
     { onDelete: 'CASCADE' },
   )
   trainingSessions: TrainingSession[];
 
   @ManyToMany(
-    type => TrainingTopic,
-    trainingMethod => trainingMethod.curriculums,
-    { nullable: false },
+    (type) => TrainingTopic,
+    (trainingMethod) => trainingMethod.curriculums,
+    { nullable: false, eager: true },
   )
+
   // @JoinTable({ name: 'trainingcurriculumtopicmember' })
   trainingTopics: TrainingTopic[];
-
 }
