@@ -1,15 +1,16 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserService } from '../src/modules/system/user/services/user.service';
-import { UserModule } from '../src/modules/system/user/user.module';
 import { getBasicAuthanticationString } from '../src/core/helpers/basic-auth-token';
+import { FormModule } from '../src/modules/form/form.module';
 import { OrganisatinUnitModule } from '../src/modules/organisation-unit/organisation-unit.module';
+import { RecordModule } from '../src/modules/record/record.module';
 import { ReportModule } from '../src/modules/report/report.module';
 import { UserRoleModule } from '../src/modules/system/user-role/user-role.module';
-import { FormModule } from '../src/modules/form/form.module';
-import { RecordModule } from '../src/modules/record/record.module';
+import { UserService } from '../src/modules/system/user/services/user.service';
+import { UserModule } from '../src/modules/system/user/user.module';
 import { TrainingModule } from '../src/modules/training/training.module';
+import { VisualizationModule } from '../src/modules/visualization/visualization.module';
 
 let database: any = {
   type: 'postgres',
@@ -60,6 +61,7 @@ export const setUpServer = async () => {
     FormModule,
     RecordModule,
     TrainingModule,
+    VisualizationModule,
   ];
   const moduleFixture = await Test.createTestingModule({
     imports: imports,
