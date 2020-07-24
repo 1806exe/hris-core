@@ -292,6 +292,60 @@ CREATE INDEX "IDX_fb988f65c0c3a89c183afb68ee"
   ("reportId");
 
 `);
+    const vdID = await queryRunner.query(
+      `SELECT id FROM visualizationdimension ORDER BY id DESC LIMIT 1`,
+    );
+    const nextvdID = vdID[0]
+      ? parseInt(vdID[0].id) + parseInt('1')
+      : parseInt('1');
+    await queryRunner.query(
+      `ALTER SEQUENCE visualizationdimension_id_seq RESTART WITH ${nextvdID}`,
+    );
+
+    const vID = await queryRunner.query(
+      `SELECT id FROM visualization ORDER BY id DESC LIMIT 1`,
+    );
+    const nextvID = vID[0]
+      ? parseInt(vdID[0].id) + parseInt('1')
+      : parseInt('1');
+    await queryRunner.query(
+      `ALTER SEQUENCE visualization_id_seq RESTART WITH ${nextvID}`,
+    );
+
+    const dashboarditem = await queryRunner.query(
+      `SELECT ID FROM dashboarditem ORDER BY ID DESC LIMIT 1`,
+    );
+    const nexDashboardItem = dashboarditem[0] ? +dashboarditem[0].id + +1 : +1;
+
+    await queryRunner.query(
+      `ALTER SEQUENCE dashboarditem_id_seq RESTART WITH ${nexDashboardItem}`,
+    );
+
+    const dashboard = await queryRunner.query(
+      `SELECT ID FROM dashboard ORDER BY ID DESC LIMIT 1`,
+    );
+    const nexDashboard = dashboard[0] ? +dashboard[0].id + +1 : +1;
+
+    await queryRunner.query(
+      `ALTER SEQUENCE dashboard_id_seq RESTART WITH ${nexDashboard}`,
+    );
+    const visualizationdimension_id_seq = await queryRunner.query(
+      `SELECT ID FROM visualizationdimension ORDER BY ID DESC LIMIT 1`,
+    );
+    const visualizationdimension = visualizationdimension_id_seq[0] ? +visualizationdimension_id_seq[0].id + +1 : +1;
+
+    await queryRunner.query(
+      `ALTER SEQUENCE visualizationdimension_id_seq RESTART WITH ${visualizationdimension}`,
+    );
+
+    const visualizationdimensionitem_id_seq = await queryRunner.query(
+      `SELECT ID FROM visualizationdimensionitem ORDER BY ID DESC LIMIT 1`,
+    );
+    const visualizationdimensionitem = visualizationdimensionitem_id_seq[0] ? +visualizationdimensionitem_id_seq[0].id + +1 : +1;
+
+    await queryRunner.query(
+      `ALTER SEQUENCE visualizationdimensionitem_id_seq RESTART WITH ${visualizationdimensionitem}`,
+    );
   }
   public async down(queryRunner: QueryRunner): Promise<any> {}
 }
