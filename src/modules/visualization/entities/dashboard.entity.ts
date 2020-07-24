@@ -6,6 +6,7 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { DashboardItem } from './dashboard-item.entity';
 import { EntityCoreProps } from '../../../core/entities/entity-core-props';
@@ -14,6 +15,16 @@ import { DashboardAccess } from './dashboard-useraccess.entity';
 @Entity('dashboard', { schema: 'public' })
 export class Dashboard extends EntityCoreProps {
   static plural = 'dashboards';
+
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column('char', {
+    nullable: true,
+    length: 13,
+    name: 'uid',
+  })
+  uid: string;
 
   @Column({
     type: 'text',
@@ -43,7 +54,8 @@ export class Dashboard extends EntityCoreProps {
 
   @ManyToMany(
     () => DashboardAccess,
-    (dashboardaccess) => dashboardaccess.dashboard, {eager: true}
+    (dashboardaccess) => dashboardaccess.dashboard,
+    { eager: true },
   )
   @JoinTable({ name: 'dashboarduseraccess' })
   dashboardaccess: DashboardAccess[];

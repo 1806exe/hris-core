@@ -8,6 +8,7 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { DashboardItem } from './dashboard-item.entity';
 import { VisualizationDimension } from './visualization-dimension.entity';
@@ -16,6 +17,17 @@ import { VisualizationAccess } from './visualization-useraccess.entity';
 @Entity('visualization', { schema: 'public' })
 export class Visualization extends EntityCoreProps {
   static plural = 'visualizations';
+
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column('char', {
+    nullable: false,
+    length: 13,
+    unique: true,
+    name: 'uid',
+  })
+  uid: string;
 
   @Column('character varying', {
     nullable: true,
