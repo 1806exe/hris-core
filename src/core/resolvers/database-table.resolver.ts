@@ -10,6 +10,8 @@ export const entityTableMapper = {
   dashboards: 'dashboard',
   visualizations: 'visualization',
   visualization: 'visualization',
+  dimensions: 'visualizationdimension',
+  items: 'visualizationdimensionitem',
   maps: 'map',
   reportTables: 'reporttable',
   apps: 'app',
