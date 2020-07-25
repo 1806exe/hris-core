@@ -1,6 +1,15 @@
 import { UserIdentification } from '../../system/user/entities/user-identification';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  OneToMany,
+  JoinColumn,
+  ManyToOne,
+} from 'typeorm';
 import { Dashboard } from './dashboard.entity';
+import { User } from '../../system/user/entities/user.entity';
 @Entity('dashboardaccess', { schema: 'public' })
 export class DashboardAccess extends UserIdentification {
   static plural = 'userAccesses';
@@ -18,4 +27,8 @@ export class DashboardAccess extends UserIdentification {
 
   @ManyToMany((type) => Dashboard, (dashboard) => dashboard.dashboardaccess)
   dashboard: Dashboard[];
+
+  @ManyToOne((type) => User, (user) => user.dashboardaccess, { eager: true })
+  @JoinColumn({ name: 'userid', referencedColumnName: 'id' })
+  users: User[];
 }

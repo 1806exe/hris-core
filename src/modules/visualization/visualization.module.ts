@@ -10,11 +10,13 @@ import { Visualization } from './entities/visualization.entity';
 import { DashboardItemService } from './services/dashboard-item.service';
 import { DashboardService } from './services/dashboard.service';
 import { VisualizationService } from './services/visualization.service';
+import { User } from '../system/user/entities/user.entity';
+import { DashboardAccess } from './entities/dashboard-useraccess.entity';
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'basic', session: true }),
-    TypeOrmModule.forFeature([Dashboard, DashboardItem, Visualization]),
+    TypeOrmModule.forFeature([Dashboard, DashboardItem, Visualization, DashboardAccess, User]),
     VisualizationModule,
   ],
   controllers: [

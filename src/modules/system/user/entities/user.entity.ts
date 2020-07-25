@@ -25,6 +25,7 @@ import { TrainingSessionAccess } from '../../../training/entities/training-sessi
 import { passwordCompare } from '../../../../core/utilities/password-utilities';
 import { RecordRule } from '../../../record-rule/entities/record-rule/record-rule.entity';
 import { SessionParticipant } from '../../../../modules/training/entities/training-session-participant.entity';
+import { DashboardAccess } from '../../../visualization/entities/dashboard-useraccess.entity';
 
 @Entity('user', { schema: 'public' })
 export class User extends UserCoreProps {
@@ -358,4 +359,11 @@ export class User extends UserCoreProps {
   )
   @JoinColumn({ name: 'sessionaccessid', referencedColumnName: 'id' })
   sessionaccess: TrainingSessionAccess;
+
+  @OneToMany(
+    (type) => DashboardAccess,
+    (dashboardaccess) => dashboardaccess.users,
+  )
+  dashboardaccess: DashboardAccess;
+
 }
