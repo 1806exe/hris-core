@@ -27,6 +27,8 @@ describe('Visualization Module API', () => {
 let dashboardId: string;
 let dashboarditemId: string;
 let visualizationId: string;
+let dimensionId: string;
+let itemsId: string;
 describe(`Testing Visualizations`, () => {
   it(`Add new Visualization /api/visualizations (POST)`, () => {
     return addAuthentication(
@@ -38,14 +40,35 @@ describe(`Testing Visualizations`, () => {
           type: 'COLUMN',
           regressionType: 'NONE',
           title: 'Employments',
+          dimensions: [
+            {
+              dimension: 'dx',
+              layout: 'columns',
+              items: [
+                {
+                  id: 'ja90GDJpma9anQ',
+                  dimensionItem: 'uLhsWqITzfk6p',
+                  dimensionItemType: 'INDICATOR',
+                },
+              ],
+            },
+          ],
         })
         .expect((res) => {
           visualizationId = res.body.id;
+          dimensionId = res.body.dimensions.id;
+          dimensionId = res.body.dimensions[0].items[0].id;
           expect(res.body.name).toBeDefined();
           expect(res.body.name).toEqual('Employments');
           expect(res.body.type).toBeDefined();
           expect(res.body.type).toBe('COLUMN');
           expect(res.body.regressionType).toBeDefined();
+          expect(res.body.dimensions).toBeDefined();
+          expect(res.body.dimensions[0].layout).toEqual('columns');
+          expect(res.body.dimensions[0].items).toBeDefined();
+          expect(res.body.dimensions[0].items[0].dimensionItemType).toBe(
+            'INDICATOR',
+          );
         }),
     );
   });
@@ -234,11 +257,10 @@ describe(`Testing Dashboards`, () => {
         name: 'Employment Status',
         publicAccess: '--------',
         displayName: 'Employment Status',
-        dashboardItems: dashboarditemId,
+        dashboardItems: [{ id: dashboarditemId }],
       })
       .expect((res) => {
         dashboardId = res.body.id;
-        console.log(res.body);
         expect(res.body.name).toBeDefined();
         expect(res.body.name).toEqual('Employment Status');
         expect(res.body.publicAccess).toBeDefined();
@@ -279,6 +301,7 @@ describe(`Testing Dashboards`, () => {
           expect(res.body.displayName).toBeDefined();
           expect(res.body.displayName).toEqual('Employment Status');
           expect(res.body.dashboardItems).toBeDefined();
+          expect(res.body.dashboardItems[0].visualization).toBeDefined();
           expect(res.body.dashboardaccess).toBeDefined();
         }),
     );
@@ -318,7 +341,7 @@ describe(`Testing Dashboards`, () => {
     );
   });
 
-  it(`Update a Dashbboard /api/dashboards (PUT)`, () => {
+  it(`Update a Dashbboard /api/dashboards/:id (PUT)`, () => {
     return addAuthentication(
       request(server.getHttpServer())
         .put(`/api/dashboards/${dashboardId}`)
@@ -333,4 +356,18 @@ describe(`Testing Dashboards`, () => {
         }),
     );
   });
+
+  it(`Share a Dashbboard /api/dashboards/:id/sharing (POST)`, () => {
+    return addAuthentication(
+      request(server.getHttpServer())
+        .post(`/api/dashboards/${dashboardId}/sharing`)
+        .send({
+          user: 'New Changed Dashboard',
+          acces: 'rw',
+        })
+        .expect((res) => {
+          console.log(res.body);
+        }),
+    );
+  }); 
 });
