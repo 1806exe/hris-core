@@ -23,6 +23,8 @@ export class OrganisationUnit extends EntityCoreProps {
   )
   @JoinColumn({ name: 'parentid' })
   parent: OrganisationUnit | null;
+
+ // TODO: Fix dhisuid being treated as a relation
   /*@Column('character varying', {
     nullable: true,
     length: 11,
