@@ -23,13 +23,13 @@ export class OrganisationUnit extends EntityCoreProps {
   )
   @JoinColumn({ name: 'parentid' })
   parent: OrganisationUnit | null;
-  @Column('character varying', {
+  /*@Column('character varying', {
     nullable: true,
     length: 11,
     default: () => 'NULL::character varying',
     name: 'dhisuid',
   })
-  dhisuid: string | null;
+  dhisuid: string | null; */
   @Column({ name: 'shortname', type: 'varchar', length: 256 })
   shortName: string;
   @Column('boolean', {
