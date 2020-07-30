@@ -119,7 +119,7 @@ export class OrgUnitGenerator extends BackgroundProcess {
     END) ||
     (CASE
         WHEN s.uidlevel4 IS NULL  THEN ''
-        ELSE '/' || s.uidlevel5 
+        ELSE '/' || s.uidlevel4 
     END) || 
     (CASE
         WHEN s.uidlevel5 IS NULL  THEN ''

@@ -140,10 +140,6 @@ export class AnalyticsController {
     @Query() query,
     @AuthenticatedUser() user,
   ) {
-    console.log('query:', query);
-    let pe;
-    let ou;
-    let otherDimensions = {};
     if (!query.dimension) {
       return {
         status: 'ERROR',
@@ -156,23 +152,8 @@ export class AnalyticsController {
       console.log(query.dimension);
       query.dimension = [query.dimension];
     }
-    console.log('Here1');
-    /*if (!Array.isArray(query.pe)) {
-      pe = query.pe.split(';');
-    }*/
-    console.log('Here2');
-    query.dimension.forEach((dimension) => {
-      let split = dimension.split(':');
-      if (split[0] === 'ou') {
-        ou = split[1].split(';');
-      }
-      if (split[0] === 'pe') {
-        pe = split[1].split(';');
-      } else {
-        otherDimensions[split[0]] = split[1];
-      }
-    });
-    if (!ou || ou[0] === '') {
+    let analyticsDimensions = extractAnalytics(query);
+    if (!analyticsDimensions.ou || analyticsDimensions.ou[0] === '') {
       return {
         status: 'ERROR',
         message: 'Organisation Unit dimension not found',
@@ -180,9 +161,7 @@ export class AnalyticsController {
     }
     return await this.trainingAnalyticsService.getTrainingAnalyticsRecords(
       params.formid,
-      ou,
-      pe,
-      otherDimensions,
+      analyticsDimensions
     );
   }
 
