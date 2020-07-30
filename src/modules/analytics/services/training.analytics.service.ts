@@ -1,371 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { Connection } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
+import { AnalyticsDimensions } from '../../../core/interfaces/analytics-dimensions'
 import {
   generateOUFilterQuery,
   getISOOrgUnits,
 } from '../../../core/helpers/ou.helper';
 import * as _ from 'lodash';
+import { OrganisationUnitService } from '../../../modules/organisation-unit/services/organisation-unit.service';
+import { OrganisationUnit } from 'src/modules/organisation-unit/entities/organisation-unit.entity';
 
 @Injectable()
 export class TrainingAnalyticsService {
-  constructor(private connetion: Connection) {}
-  sampleAnalytics = {
-    wo7ITisRXeE: {
-      headers: [
-        {
-          name: 'dx',
-          column: 'Data',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'pe',
-          column: 'Period',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'ou',
-          column: 'Organisation unit',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'value',
-          column: 'Value',
-          valueType: 'NUMBER',
-          type: 'java.lang.Double',
-          hidden: false,
-          meta: false,
-        },
-      ],
-      metaData: {
-        items: {
-          '2010': { name: '2010' },
-          '2011': { name: '2011' },
-          '2012': { name: '2012' },
-          '2013': { name: '2013' },
-          '2014': { name: '2014' },
-          '2015': { name: '2015' },
-          '2016': { name: '2016' },
-          '2017': { name: '2017' },
-          '2018': { name: '2018' },
-          '2019': { name: '2019' },
-          '2020': { name: '2020' },
-          ou: { name: 'Organisation unit' },
-          dx: { name: 'Data' },
-          pe: { name: 'Period' },
-          m0frOspS7JY: { name: 'MOH - Tanzania' },
-          wo7ITisRXeE: { name: 'Number of employments' },
-        },
-        dimensions: {
-          dx: ['wo7ITisRXeE'],
-          pe: [
-            '2010',
-            '2011',
-            '2012',
-            '2013',
-            '2014',
-            '2015',
-            '2016',
-            '2017',
-            '2018',
-            '2019',
-          ],
-          ou: ['m0frOspS7JY'],
-          co: [],
-        },
-      },
-      rows: [
-        ['wo7ITisRXeE', '2010', 'm0frOspS7JY', '5275'],
-        ['wo7ITisRXeE', '2011', 'm0frOspS7JY', '3310'],
-        ['wo7ITisRXeE', '2012', 'm0frOspS7JY', '5031'],
-        ['wo7ITisRXeE', '2013', 'm0frOspS7JY', '5207'],
-        ['wo7ITisRXeE', '2014', 'm0frOspS7JY', '7437'],
-        ['wo7ITisRXeE', '2015', 'm0frOspS7JY', '7498'],
-        ['wo7ITisRXeE', '2016', 'm0frOspS7JY', '718'],
-        ['wo7ITisRXeE', '2017', 'm0frOspS7JY', '1975'],
-        ['wo7ITisRXeE', '2018', 'm0frOspS7JY', '5650'],
-        ['wo7ITisRXeE', '2019', 'm0frOspS7JY', '340'],
-      ],
-      width: 4,
-      height: 36,
-    },
-    yKypqIROIO9: {
-      headers: [
-        {
-          name: 'dx',
-          column: 'Data',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'ou',
-          column: 'Organisation unit',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'value',
-          column: 'Value',
-          valueType: 'NUMBER',
-          type: 'java.lang.Double',
-          hidden: false,
-          meta: false,
-        },
-      ],
-      metaData: {
-        items: {
-          '2010': { name: '2010' },
-          '2011': { name: '2011' },
-          '2012': { name: '2012' },
-          '2013': { name: '2013' },
-          '2014': { name: '2014' },
-          '2015': { name: '2015' },
-          '2016': { name: '2016' },
-          '2017': { name: '2017' },
-          '2018': { name: '2018' },
-          '2019': { name: '2019' },
-          '2020': { name: '2020' },
-          ou: { name: 'Organisation unit' },
-          dx: { name: 'Data' },
-          pe: { name: 'Period' },
-          m0frOspS7JY: { name: 'MOH - Tanzania' },
-          yKypqIROIO3: { name: 'Female' },
-          yKypqIROIO9: { name: 'Male' },
-        },
-        dimensions: {
-          dx: ['yKypqIROIO9', 'yKypqIROIO3'],
-          pe: [],
-          ou: ['m0frOspS7JY'],
-          co: [],
-        },
-      },
-      rows: [
-        ['yKypqIROIO9', 'm0frOspS7JY', '5275'],
-        ['yKypqIROIO3', 'm0frOspS7JY', '3310'],
-      ],
-      width: 4,
-      height: 36,
-    },
-    yKypqIROIO4: {
-      headers: [
-        {
-          name: 'dx',
-          column: 'Data',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'pe',
-          column: 'Period',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'ou',
-          column: 'Organisation unit',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'value',
-          column: 'Value',
-          valueType: 'NUMBER',
-          type: 'java.lang.Double',
-          hidden: false,
-          meta: false,
-        },
-      ],
-      metaData: {
-        items: {
-          '2010': { name: '20-24' },
-          '2011': { name: '25-29' },
-          '2012': { name: '30-34' },
-          '2013': { name: '35-39' },
-          '2014': { name: '40-44' },
-          '2015': { name: '45-49' },
-          '2016': { name: '50-54' },
-          '2017': { name: '55-59' },
-          '2018': { name: '60-64' },
-          '2019': { name: '65-69' },
-          '2020': { name: '70-74' },
-          ou: { name: 'Organisation unit' },
-          dx: { name: 'Data' },
-          pe: { name: 'Period' },
-          m0frOspS7JY: { name: 'MOH - Tanzania' },
-          wo7ITisRXeE: { name: 'Number of employees by age' },
-        },
-        dimensions: {
-          dx: ['wo7ITisRXeE'],
-          pe: [
-            '2010',
-            '2011',
-            '2012',
-            '2013',
-            '2014',
-            '2015',
-            '2016',
-            '2017',
-            '2018',
-            '2019',
-          ],
-          ou: ['m0frOspS7JY'],
-          co: [],
-        },
-      },
-      rows: [
-        ['wo7ITisRXeE', '2010', 'm0frOspS7JY', '0'],
-        ['wo7ITisRXeE', '2011', 'm0frOspS7JY', '1188'],
-        ['wo7ITisRXeE', '2012', 'm0frOspS7JY', '13714'],
-        ['wo7ITisRXeE', '2013', 'm0frOspS7JY', '16401'],
-        ['wo7ITisRXeE', '2014', 'm0frOspS7JY', '10221'],
-        ['wo7ITisRXeE', '2015', 'm0frOspS7JY', '10841'],
-        ['wo7ITisRXeE', '2016', 'm0frOspS7JY', '9725'],
-        ['wo7ITisRXeE', '2017', 'm0frOspS7JY', '10320'],
-        ['wo7ITisRXeE', '2018', 'm0frOspS7JY', '9834'],
-        ['wo7ITisRXeE', '2019', 'm0frOspS7JY', '4076'],
-      ],
-      width: 4,
-      height: 36,
-    },
-    any: {
-      headers: [
-        {
-          name: 'dx',
-          column: 'Data',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'pe',
-          column: 'Period',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'ou',
-          column: 'Organisation unit',
-          valueType: 'TEXT',
-          type: 'java.lang.String',
-          hidden: false,
-          meta: true,
-        },
-        {
-          name: 'value',
-          column: 'Value',
-          valueType: 'NUMBER',
-          type: 'java.lang.Double',
-          hidden: false,
-          meta: false,
-        },
-      ],
-      metaData: {
-        items: {
-          '201907': { name: 'July 2019' },
-          MqMQnGOqLuY: { name: 'KE' },
-          '201906': { name: 'June 2019' },
-          '201909': { name: 'September 2019' },
-          '201908': { name: 'August 2019' },
-          '201903': { name: 'March 2019' },
-          '201902': { name: 'February 2019' },
-          yKypqIROIO9: { name: 'Watoto Waliopatiwa LLIN' },
-          '201905': { name: 'May 2019' },
-          ou: { name: 'Organisation unit' },
-          '201904': { name: 'April 2019' },
-          '201910': { name: 'October 2019' },
-          '201901': { name: 'January 2019' },
-          '201912': { name: 'December 2019' },
-          '201911': { name: 'November 2019' },
-          X0Me7ygpiUT: { name: 'ME' },
-          dx: { name: 'Data' },
-          pe: { name: 'Period' },
-          Kl9MzjQI3ms: { name: 'Expected children Under 1 Year' },
-          m0frOspS7JY: { name: 'MOH - Tanzania' },
-          wo7ITisRXeE: { name: 'Measles/Rubella 1 doses given' },
-        },
-        dimensions: {
-          dx: ['Kl9MzjQI3ms', 'wo7ITisRXeE', 'yKypqIROIO9'],
-          pe: [
-            '201901',
-            '201902',
-            '201903',
-            '201904',
-            '201905',
-            '201906',
-            '201907',
-            '201908',
-            '201909',
-            '201910',
-            '201911',
-            '201912',
-          ],
-          ou: ['m0frOspS7JY'],
-          co: ['MqMQnGOqLuY', 'X0Me7ygpiUT'],
-        },
-      },
-      rows: [
-        ['Kl9MzjQI3ms', '201901', 'm0frOspS7JY', '2.36250253E7'],
-        ['Kl9MzjQI3ms', '201902', 'm0frOspS7JY', '2.6156278E7'],
-        ['Kl9MzjQI3ms', '201903', 'm0frOspS7JY', '2.36250253E7'],
-        ['Kl9MzjQI3ms', '201904', 'm0frOspS7JY', '2.44125262E7'],
-        ['Kl9MzjQI3ms', '201905', 'm0frOspS7JY', '2.36250253E7'],
-        ['Kl9MzjQI3ms', '201906', 'm0frOspS7JY', '2.44125262E7'],
-        ['Kl9MzjQI3ms', '201907', 'm0frOspS7JY', '2.36250253E7'],
-        ['Kl9MzjQI3ms', '201908', 'm0frOspS7JY', '2.36250253E7'],
-        ['Kl9MzjQI3ms', '201909', 'm0frOspS7JY', '2.44125262E7'],
-        ['Kl9MzjQI3ms', '201910', 'm0frOspS7JY', '2.36250253E7'],
-        ['Kl9MzjQI3ms', '201911', 'm0frOspS7JY', '2.44125262E7'],
-        ['Kl9MzjQI3ms', '201912', 'm0frOspS7JY', '2.36250253E7'],
-        ['wo7ITisRXeE', '201901', 'm0frOspS7JY', '172808.0'],
-        ['wo7ITisRXeE', '201902', 'm0frOspS7JY', '164532.0'],
-        ['wo7ITisRXeE', '201903', 'm0frOspS7JY', '171820.0'],
-        ['wo7ITisRXeE', '201904', 'm0frOspS7JY', '162847.0'],
-        ['wo7ITisRXeE', '201905', 'm0frOspS7JY', '181111.0'],
-        ['wo7ITisRXeE', '201906', 'm0frOspS7JY', '167957.0'],
-        ['wo7ITisRXeE', '201907', 'm0frOspS7JY', '177640.0'],
-        ['wo7ITisRXeE', '201908', 'm0frOspS7JY', '181368.0'],
-        ['wo7ITisRXeE', '201909', 'm0frOspS7JY', '177983.0'],
-        ['wo7ITisRXeE', '201910', 'm0frOspS7JY', '204312.0'],
-        ['wo7ITisRXeE', '201911', 'm0frOspS7JY', '155853.0'],
-        ['wo7ITisRXeE', '201912', 'm0frOspS7JY', '139938.0'],
-        ['yKypqIROIO9', '201910', 'm0frOspS7JY', '134130.0'],
-        ['yKypqIROIO9', '201911', 'm0frOspS7JY', '126009.0'],
-        ['yKypqIROIO9', '201902', 'm0frOspS7JY', '127274.0'],
-        ['yKypqIROIO9', '201909', 'm0frOspS7JY', '146883.0'],
-        ['yKypqIROIO9', '201901', 'm0frOspS7JY', '134887.0'],
-        ['yKypqIROIO9', '201903', 'm0frOspS7JY', '135008.0'],
-        ['yKypqIROIO9', '201912', 'm0frOspS7JY', '105449.0'],
-        ['yKypqIROIO9', '201906', 'm0frOspS7JY', '133842.0'],
-        ['yKypqIROIO9', '201905', 'm0frOspS7JY', '140172.0'],
-        ['yKypqIROIO9', '201907', 'm0frOspS7JY', '146057.0'],
-        ['yKypqIROIO9', '201908', 'm0frOspS7JY', '149497.0'],
-        ['yKypqIROIO9', '201904', 'm0frOspS7JY', '126747.0'],
-      ],
-      width: 4,
-      height: 36,
-    },
-  };
+  constructor(
+    //private orgUnitRepository: Repository<OrganisationUnit>,
+    private connetion: Connection) {}
   async getTrainingCoverageRecords(ou, pe, otherDimensions, context: any) {
     let analytics = {
       headers: [],
@@ -565,7 +213,7 @@ export class TrainingAnalyticsService {
     }
     return filter;
   }
-  async getTrainingAnalyticsRecords(formid, ou, pe, otherDimensions) {
+  async getTrainingAnalyticsRecords(formid, dimensions: AnalyticsDimensions) {
     let analytics = {
       headers: [],
       metaData: {
@@ -584,7 +232,7 @@ export class TrainingAnalyticsService {
       INNER JOIN form ON(form.id = formfieldmember.formid AND form.uid ='${formid}');`;
     let fields = await this.connetion.manager.query(query);
     fields.forEach((field) => {
-      if (Object.keys(otherDimensions).indexOf(field.uid) > -1) {
+      if (Object.keys(dimensions.other).indexOf(field.uid) > -1) {
         analytics.metaData.items[field.uid] = { name: field.caption };
       }
     });
@@ -596,7 +244,7 @@ export class TrainingAnalyticsService {
         formid +
         "'",
     );
-    let allowedColumns = ['uid', 'ou'].concat(Object.keys(otherDimensions));
+    let allowedColumns = ['uid', 'ou'].concat(Object.keys(dimensions.other));
     analytics.headers = headers
       .filter((header) => {
         return allowedColumns.indexOf(header.column_name) > -1;
@@ -614,7 +262,11 @@ export class TrainingAnalyticsService {
     let orglevels = await this.connetion.manager.query(query);
     let levelquery = orglevels.map(
       (orglevel) =>
-        'ous.uidlevel' + orglevel.level + " IN ('" + ou.join("','") + "')",
+        'ous.uidlevel' +
+        orglevel.level +
+        " IN ('" +
+        dimensions.ou.join("','") +
+        "')",
     );
 
     //TODO improve performance for fetching alot of data
@@ -648,16 +300,55 @@ export class TrainingAnalyticsService {
       });
       return newRow;
     });
+    await this.addMetaData(analytics, dimensions);
+    return analytics;
+  }
+  async addMetaData(analytics, dimensions: AnalyticsDimensions) {
+    /*let orgUnits = await this.orgUnitRepository.find(
+      {
+        select:['uid','name'],
+        relations:['parent', 'organisationUnitGroups'],
+        where:{
+          "uid": dimensions.ou
+        }
+      }
+    );*/
+    let query = 'SELECT level FROM organisationunitlevel';
+    let orglevels = await this.connetion.manager.query(query);
+    let levelquery = orglevels.map(
+      (orglevel) =>
+        'ous.uidlevel' +
+        orglevel.level +
+        " IN ('" +
+        dimensions.ou.join("','") +
+        "')",
+    );
     query =
+      `
+      SELECT 
+        ou.uid as id,ou.name,
+        json_agg(json_build_object('name',ancestor.name,'level',ancestor.level)) ancestors,
+        json_agg(json_build_object('name',ougroup.name,'id',ougroup.uid,'goupSet',ougroupset)) groups 
+      FROM  organisationunit ou
+      INNER JOIN _organisationunitstructure ous ON(ous.organisationunitid = ou.id AND (${levelquery.join(
+        ' OR ',
+      )}))
+      LEFT JOIN organisationunit ancestor ON(ou.path like '%'||ancestor.uid||'%' AND ancestor.id <> ou.id)
+      INNER JOIN organisationunitgroupmembers member ON(member."organisationunitId" = ou.id)
+      LEFT JOIN organisationunitgroup ougroup ON(ougroup.id = member."organisationunitgroupId")
+      LEFT JOIN organisationunitgroupset ougroupset ON(ougroupset.id = ougroup.organisationunitgroupsetid)
+      GROUP BY ou.uid,ou.name
+      `;
+    /*let query =
       'SELECT ou.uid,ou.name FROM  organisationunit ou WHERE (' +
-      ou.map((o) => "ou.uid = '" + o + "'").join(' OR ') +
-      ') ';
+      dimensions.ou.map((o) => "ou.uid = '" + o + "'").join(' OR ') +
+      ') ';*/
+    console.log(query);
     let organisationunits = await this.connetion.manager.query(query);
     organisationunits.forEach((orgUnit) => {
-      analytics.metaData.items[orgUnit.uid] = orgUnit.name;
-      analytics.metaData.dimensions.ou.push(orgUnit.uid);
+      analytics.metaData.items[orgUnit.id] = orgUnit;
+      analytics.metaData.dimensions.ou.push(orgUnit.id);
     });
-    return analytics;
   }
   async getTrainingSessions(ou, pe, otherDimensions, context: any) {
     let analytics = {
