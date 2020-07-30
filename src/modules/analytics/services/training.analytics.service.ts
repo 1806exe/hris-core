@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Connection, Repository } from 'typeorm';
-import { AnalyticsDimensions } from '../../../core/interfaces/analytics-dimensions'
+import { AnalyticsDimensions } from '../../../core/interfaces/analytics-dimensions';
 import {
   generateOUFilterQuery,
   getISOOrgUnits,
@@ -13,7 +13,8 @@ import { OrganisationUnit } from 'src/modules/organisation-unit/entities/organis
 export class TrainingAnalyticsService {
   constructor(
     //private orgUnitRepository: Repository<OrganisationUnit>,
-    private connetion: Connection) {}
+    private connetion: Connection,
+  ) {}
   async getTrainingCoverageRecords(ou, pe, otherDimensions, context: any) {
     let analytics = {
       headers: [],
@@ -323,12 +324,11 @@ export class TrainingAnalyticsService {
         dimensions.ou.join("','") +
         "')",
     );
-    query =
-      `
+    query = `
       SELECT 
         ou.uid as id,ou.name,
         json_agg(json_build_object('name',ancestor.name,'level',ancestor.level)) ancestors,
-        json_agg(json_build_object('name',ougroup.name,'id',ougroup.uid,'goupSet',ougroupset)) groups 
+        json_agg(json_build_object('name',ougroup.name,'id',ougroup.uid,'groupSet',ougroupset)) groups 
       FROM  organisationunit ou
       INNER JOIN _organisationunitstructure ous ON(ous.organisationunitid = ou.id AND (${levelquery.join(
         ' OR ',
