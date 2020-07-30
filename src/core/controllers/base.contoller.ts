@@ -140,8 +140,8 @@ export class BaseController<T extends HRISBaseEntity> {
         if (createdEntity !== undefined) {
           const isPropExcluded = delete createdEntity.id;
           return isPropExcluded
-            ? postSuccessResponse(res, createdEntity)
-            : postSuccessResponse(res, createdEntity);
+            ? postSuccessResponse(res, sanitizeResponseObject(createdEntity))
+            : postSuccessResponse(res, sanitizeResponseObject(createdEntity));
         } else {
           return genericFailureResponse(res);
         }
