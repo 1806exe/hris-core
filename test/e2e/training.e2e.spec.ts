@@ -236,7 +236,7 @@ describe('Training Module API', () => {
           })
 
           .expect((res) => {
-            organiserId = res.body.uid;
+            organiserId = res.body.id; 
             expect(res.body.name).toBeDefined();
             expect(res.body.name).toEqual('CEDHA');
             expect(res.body.description).toBeDefined();
@@ -254,7 +254,7 @@ describe('Training Module API', () => {
           })
 
           .expect((res) => {
-            sponsorId = res.body.uid;
+            sponsorId = res.body.id;              
             expect(res.body.name).toBeDefined();
             expect(res.body.name).toEqual('Intrahealth  International');
             expect(res.body.description).toBeDefined();
