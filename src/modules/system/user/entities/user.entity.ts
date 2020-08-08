@@ -343,6 +343,7 @@ export class User extends UserCoreProps {
       where: { username },
     });
     if (user && (await passwordCompare(password, user.password))) {
+      delete user.password;
       return user;
     } else {
       return null;
