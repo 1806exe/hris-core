@@ -7,7 +7,6 @@ export class SessionGuard implements CanActivate {
     const httpContext = context.switchToHttp();
     const request = httpContext.getRequest();
     try {
-      console.log('request.session',request.session);
       if (request.session && request.session.user) {
         request.session.previousPath = request.path;
         return true;
