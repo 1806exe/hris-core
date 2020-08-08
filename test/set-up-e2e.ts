@@ -66,7 +66,6 @@ export const setUpServer = async () => {
   const moduleFixture = await Test.createTestingModule({
     imports: imports,
   }).compile();
-
   let app: INestApplication = moduleFixture.createNestApplication();
 
   await app.init();
@@ -89,7 +88,11 @@ export const setUpServer = async () => {
     organisationUnits: [],
     userSettings: null,
   };
-  await userService.create(user);
+  try{
+    await userService.create(user);
+  }catch(e){
+
+  }
   global['app'] = app;
   server = app;
   return app;

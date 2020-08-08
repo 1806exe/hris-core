@@ -16,7 +16,7 @@ export class AuthService {
   constructor(private readonly userService: UserService) {}
   async login(username, password): Promise<User> {
     const user: User = await User.findOne({ where: { username } });
-    const hashedPassword = await passwordCompare(password, user.token);
+    const hashedPassword = await passwordCompare(password, user.password);
     if (hashedPassword) {
       return user;
     } else {

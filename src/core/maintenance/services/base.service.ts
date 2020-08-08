@@ -170,12 +170,12 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
    *
    * @param entity
    */
-  async findOneByUid(param: any): Promise<T> {
+  async findOneByUid(param: string | {id:string}): Promise<T> {
     /**
      *
      */
     return await this.modelRepository.findOne({
-      where: { uid: _.has(param, 'id') ? param.id : undefined },
+      where: { uid: _.has(param, 'id') ? (param as {id:string}).id : param },
     });
   }
 

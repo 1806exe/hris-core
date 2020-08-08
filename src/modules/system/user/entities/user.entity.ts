@@ -7,6 +7,8 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
 import { UserCoreProps } from '../../../../core/entities/user-core-props.entity';
 import { MessageMetadata } from '../../../message/entities/message-metadata.entity';
@@ -22,7 +24,7 @@ import { UserGroup } from '../../user-group/entities/user-group.entity';
 import { UserRole } from '../../user-role/entities/user-role.entity';
 import { UserSettings } from './user-settings.entity';
 import { TrainingSessionAccess } from '../../../training/entities/training-session-access.entity';
-import { passwordCompare } from '../../../../core/utilities/password-utilities';
+import { passwordCompare, passwordHash } from '../../../../core/utilities/password-utilities';
 import { RecordRule } from '../../../record-rule/entities/record-rule/record-rule.entity';
 import { SessionParticipant } from '../../../../modules/training/entities/training-session-participant.entity';
 
@@ -69,7 +71,13 @@ export class User extends UserCoreProps {
   @Column({ type: 'varchar', length: 255, unique: true })
   email: string;
 
-  password: string;
+  @Column({
+    type: 'varchar',
+    nullable: true,
+    length: 255,
+    default: () => 'NULL::varchar',
+  })
+  password: string | null;
 
   @Column({
     type: 'varchar',
@@ -116,13 +124,13 @@ export class User extends UserCoreProps {
   @Column({ type: 'boolean', nullable: true })
   enabled: boolean;
 
-  @Column({
+  /*@Column({
     type: 'varchar',
     nullable: true,
     length: 255,
     default: () => 'NULL::varchar',
   })
-  token: string | null;
+  token: string | null;*/
 
   /**
    * Many To Many Relationship: User and UserRole Entities
@@ -334,10 +342,21 @@ export class User extends UserCoreProps {
     const user: User = await User.findOne({
       where: { username },
     });
-    if (user && (await passwordCompare(password, user.token))) {
+    if (user && (await passwordCompare(password, user.password))) {
       return user;
     } else {
       return null;
+    }
+  }
+
+  @BeforeInsert()
+  async encrypt() {
+    this.password = await passwordHash(this.password);
+  }
+  @BeforeUpdate()
+  async encryptOnUpdate() {
+    if(this.password){
+      this.password = await passwordHash(this.password);
     }
   }
 
