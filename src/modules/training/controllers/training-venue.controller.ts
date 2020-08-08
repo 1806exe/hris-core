@@ -32,7 +32,6 @@ export class TrainingVenueController extends BaseController<TrainingVenue> {
   @UseGuards(SessionGuard)
   async updateVenue(@Body() updateVenueDTO, @Param() param, @Res() res) {
     const venue = await this.trainingVenueService.findOneByUid(param.venue);
-    console.log(venue);
     if (venue !== undefined) {
       return await this.trainingVenueService.updateVenue(
         param.venue,

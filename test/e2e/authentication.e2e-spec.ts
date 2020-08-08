@@ -15,16 +15,26 @@ afterAll(async (done) => {
 });
 describe('Authentication API', () => {
   it(`Testing login /api/login (POST)`, () => {
-    return addAuthentication(request(server.getHttpServer()).post(`/api/login`))
+    return request(server.getHttpServer()).post(`/api/login`)
       .send({
-        id: '573usnbdldi',
-        name: 'test',
+        username: 'test',
         password: 'HRHIS2020',
       })
       .expect((res) => {
-        expect(res.body.name).toEqual('test');
-        expect(res.body.email).toBeNull;
-        expect(res.body.surname).toBeNull;
+        expect(res.body.username).toEqual('test');
+        expect(res.body.email).toEqual('anonymous@example.com');
+        expect(res.body.surname).toEqual('Anonymous');
+        expect(res.body.password).toBeUndefined();
+      });
+  });
+  it(`Testing Session creation /api/me (GET)`, () => {
+    return request(server.getHttpServer()).get(`/api/me`)
+      .expect((res) => {
+        console.log(res.body);
+        expect(res.body.username).toEqual('test');
+        expect(res.body.email).toEqual('anonymous@example.com');
+        expect(res.body.surname).toEqual('Anonymous');
+        expect(res.body.password).toBeUndefined();
       });
   });
 });

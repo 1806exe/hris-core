@@ -24,6 +24,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --runInBand --detectOpenHandles --config ./test/jest-e2e.json",
+    "test:e2e:all": "npm run test:e2e -- organisationunit.e2e-spec.ts && npm run test:e2e -- comprehensivetest.e2e-spec.ts && npm run test:e2e -- report.e2e-spec.ts && npm run test:e2e -- training.e2e-spec.ts && npm run test:e2e -- user.e2e-spec.ts && npm run test:e2e -- visualization.e2e-spec.ts && npm run test:e2e -- authentication.e2e-spec.ts",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {

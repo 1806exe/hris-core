@@ -88,6 +88,9 @@ export class AuthController {
   async login(@Req() request, @Body() params, @Res() res): Promise<ApiResult> {
     const user = await this.authService.login(params.username, params.password);
     if (user) {
+      if(!request.session){
+        request.session = {};
+      }
       request.session.user = user;
       return getSuccessResponse(res, sanitizeResponseObject(user));
     } else {

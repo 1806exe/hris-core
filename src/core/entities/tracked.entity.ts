@@ -23,7 +23,6 @@ export class Tracked {
 
   @BeforeInsert()
   updateDates() {
-    console.log('executing before insert');
     this.datecreated = new Date();
     this.lastupdated = new Date();
     this.uid = 'qwreyuwgstyw13';
