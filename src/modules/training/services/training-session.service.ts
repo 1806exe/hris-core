@@ -359,6 +359,119 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       where: { recordId: recordid, trainingsessionId: sessionid },
     });
   }
+  async editSession(uid: string, upateSessionDTO: any) {
+    const {
+      curriculum,
+      deliveryMode,
+      topics,
+      orgunit,
+      venue,
+      sponsor,
+      organiser,
+      facilitators,
+      participants,
+    } = upateSessionDTO;
+    const session = await this.trainingSessionRepository.findOne({
+      where: { uid },
+    });
+    Object.keys(upateSessionDTO).forEach((key) => {
+      session[key] = upateSessionDTO[key];
+    });
+
+    session.organiser = await this.trainingSponsorRepository.findOne({
+      where: { uid: organiser },
+    });
+    session.venue = await this.trainingVenueRepository.findOne({
+      where: { uid: venue },
+    });
+    session.deliverymode = deliveryMode;
+    session.sponsor = await this.trainingSponsorRepository.findOne({
+      where: { uid: sponsor },
+    });
+    session.curriculum = await this.trainingCurriculumRepository.findOne({
+      where: { uid: curriculum },
+    });
+    session.organisationUnit = await this.organisationunitRepository.findOne({
+      where: { uid: orgunit },
+    });
+    await this.trainingSessionRepository.save(session);
+
+    const savedsession = await this.trainingSessionRepository.findOne({
+      uid: session.uid,
+    });
+    /*
+     * TODO: ADD CHECKS FOR WHEN TOICS CONTAIN AN EMPTY ARRAY
+     */
+    if (
+      topics &&
+      typeof topics !== undefined &&
+      topics !== null &&
+      topics.length !== null &&
+      topics.length > 0
+    ) {
+      const topic = await this.trainingTopicRepository.find({
+        where: { uid: In(topics ? topics.map((topic) => topic) : '') },
+      });
+      for (let topics of topic) {
+        await getConnection()
+          .createQueryBuilder()
+          .insert()
+          .into('trainingsessiontopics')
+          .values([
+            {
+              trainingsessionId: savedsession.id,
+              trainingtopicId: topics.id,
+            },
+          ])
+          .execute();
+      }
+    }
+    /*
+     * TODO: ADD CHECKS FOR WHEN FACILITATORS CONTAIN AN EMPTY ARRAY
+     */
+    if (
+      facilitators &&
+      typeof facilitators !== undefined &&
+      facilitators !== null &&
+      facilitators.length !== null &&
+      facilitators.length > 0
+    ) {
+      const facilitator = await this.recordRepository.find({
+        where: { uid: In(facilitators.map((facilitator) => facilitator)) },
+      });
+      for (let facilitators of facilitator) {
+        await this.facilitatorRepository.save({
+          recordId: facilitators.id,
+          trainingsessionId: savedsession.id,
+        });
+      }
+    }
+    /*
+     * TODO: ADD CHECKS FOR WHEN PARTICIPANTS CONTAIN AN EMPTY ARRAY
+     */
+    if (
+      participants &&
+      typeof participants !== undefined &&
+      participants !== null &&
+      participants.length !== null &&
+      participants.length > 0
+    ) {
+      const participant = await this.recordRepository.find({
+        where: {
+          uid: In(participants.map((participant: string) => participant)),
+        },
+      });
+
+      for (let participants of participant) {
+        await this.participantRepository.save({
+          recordId: participants.id,
+          trainingsessionId: savedsession.id,
+        });
+      }
+    }
+
+    return savedsession;
+  }
   async sessionSharingCreation(uid: String, sessionsharingDTO) {
     const shareduser = await this.userRepository.findOne({
       where: { uid: sessionsharingDTO.user },
