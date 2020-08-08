@@ -305,10 +305,10 @@ describe('Training Module API', () => {
         request(server.getHttpServer())
           .get(`/api/training/venues`)
           .expect((res) => {
-            venueId = res.body.id;
-            expect(res.body.name).toBeDefined();
-            expect(res.body.name).toEqual('CoICT');
-            expect(res.body.organisationUnit).toBeDefined();
+            venueId = res.body.venues[0].id;
+            expect(res.body.venues[0].name).toBeDefined();
+            expect(res.body.venues[0].name).toEqual('CoICT');
+            expect(res.body.venues[0].organisationUnit).toBeDefined();
           }),
       );
     });
@@ -318,7 +318,6 @@ describe('Training Module API', () => {
         request(server.getHttpServer())
           .get(`/api/training/venues/${venueId}`)
           .expect((res) => {
-            venueId = res.body.id;
             expect(res.body.name).toBeDefined();
             expect(res.body.name).toEqual('CoICT');
             expect(res.body.organisationUnit).toBeDefined();
@@ -330,10 +329,9 @@ describe('Training Module API', () => {
         request(server.getHttpServer())
           .get(`/api/training/venues?filter=name:eq:CoICT`)
           .expect((res) => {
-            venueId = res.body.id;
-            expect(res.body.name).toBeDefined();
-            expect(res.body.name).toEqual('CoICT');
-            expect(res.body.organisationUnit).toBeDefined();
+            expect(res.body.venues[0].name).toBeDefined();
+            expect(res.body.venues[0].name).toEqual('CoICT');
+            expect(res.body.venues[0].organisationUnit).toBeDefined();
           }),
       );
     });
