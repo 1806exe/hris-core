@@ -26,6 +26,7 @@ import { UserModule } from './modules/system/user/user.module';
 import { TrainingModule } from './modules/training/training.module';
 import { VisualizationModule } from './modules/visualization/visualization.module';
 import { RecordRuleModule } from './modules/record-rule/record-rule.module';
+import { SessionModule } from 'nestjs-session';
 
 @Module({
   imports: [
@@ -37,6 +38,14 @@ import { RecordRuleModule } from './modules/record-rule/record-rule.module';
     }),
     ScheduleModule.forRoot(),
     OrganisatinUnitModule,
+    SessionModule.forRoot({
+      session: {
+        secret: 'secret-key',
+        name: 'sess',
+        resave: false,
+        saveUninitialized: true,
+      },
+    }),
     FormModule,
     RecordRuleModule,
     UserModule,
