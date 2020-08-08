@@ -62,7 +62,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     });
   }
   async getParticipants(uid: string) {
-    let participants = await this.participantRepository.find({
+    const participants = await this.participantRepository.find({
       where: {
         trainingsessionId: (
           await this.trainingSessionRepository.findOne({ uid })
@@ -88,7 +88,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
   }
 
   async getFacilitators(uid: string) {
-    let facilitators = await this.facilitatorRepository.find({
+    const facilitators = await this.facilitatorRepository.find({
       where: {
         trainingsessionId: (
           await this.trainingSessionRepository.findOne({ uid })
@@ -162,7 +162,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       throw new NotFoundException(`Facilitator is not available `);
     }
 
-    let deletedFacilitator = await this.facilitatorRepository.delete(
+    const deletedFacilitator = await this.facilitatorRepository.delete(
       facilitators,
     );
     return deletedFacilitator;
@@ -187,7 +187,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       throw new NotFoundException(`Participant is not available `);
     }
 
-    let deletedParticipants = await this.participantRepository.delete(
+    const deletedParticipants = await this.participantRepository.delete(
       participants,
     );
     return deletedParticipants;
@@ -243,7 +243,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       const topic = await this.trainingTopicRepository.find({
         where: { uid: In(topics ? topics.map((topic) => topic) : '') },
       });
-      for (let topics of topic) {
+      for (const topics of topic) {
         await getConnection()
           .createQueryBuilder()
           .insert()
@@ -270,7 +270,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       const facilitator = await this.recordRepository.find({
         where: { uid: In(facilitators.map((facilitator) => facilitator)) },
       });
-      for (let facilitators of facilitator) {
+      for (const facilitators of facilitator) {
         await this.facilitatorRepository.save({
           recordId: facilitators.id,
           trainingsessionId: savedsession.id,
@@ -293,7 +293,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
         },
       });
 
-      for (let participants of participant) {
+      for (const participants of participant) {
         await this.participantRepository.save({
           recordId: participants.id,
           trainingsessionId: savedsession.id,
@@ -304,7 +304,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     return savedsession;
   }
   async findOneParticipant(uid: string) {
-    return await this.recordRepository.findOne({ uid: uid });
+    return await this.recordRepository.findOne({ uid });
   }
   async updateParticipants(
     session: string,
@@ -333,8 +333,8 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     await this.participantRepository.update(
       { recordId: recordid, trainingsessionId: sessionid },
       {
-        certified: certified,
-        assessed: assessed,
+        certified,
+        assessed,
         certifiedby:
           certifiedby && certifiedby != ''
             ? await this.userRepository.findOne({
@@ -410,9 +410,11 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       topics.length > 0
     ) {
       const topic = await this.trainingTopicRepository.find({
-        where: { uid: In(topics ? topics.map((topic) => topic) : '') },
+        where: {
+          uid: In(topics ? topics.map((topicObject) => topicObject) : ''),
+        },
       });
-      for (let topics of topic) {
+      for (const topics of topic) {
         await getConnection()
           .createQueryBuilder()
           .insert()
@@ -439,7 +441,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       const facilitator = await this.recordRepository.find({
         where: { uid: In(facilitators.map((facilitator) => facilitator)) },
       });
-      for (let facilitators of facilitator) {
+      for (const facilitators of facilitator) {
         await this.facilitatorRepository.save({
           recordId: facilitators.id,
           trainingsessionId: savedsession.id,
@@ -462,7 +464,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
         },
       });
 
-      for (let participants of participant) {
+      for (const participants of participant) {
         await this.participantRepository.save({
           recordId: participants.id,
           trainingsessionId: savedsession.id,
@@ -478,7 +480,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     });
     const sessionaccess = new TrainingSessionAccess();
     const session = await this.trainingSessionRepository.findOne({
-      where: { uid: uid },
+      where: { uid },
     });
     sessionaccess.userid = (
       await this.userRepository.findOne({
@@ -529,8 +531,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     };
   }
   async SharedUser(uid: string) {
-    const user = (await this.userRepository.findOne({ where: { uid: uid } }))
-      .id;
+    const user = (await this.userRepository.findOne({ where: { uid } })).id;
 
     const sessionaccessuser = await this.trainingSessionAccess.findOne({
       where: { userid: user },
