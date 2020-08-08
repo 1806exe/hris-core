@@ -5,9 +5,10 @@ import { Repository } from 'typeorm';
 import { BaseService } from '../../../../core/services/base.service';
 import { User } from '../entities/user.entity';
 import { passwordHash } from '../../../../core/utilities/password-utilities';
+import { MaintenanceBaseService } from '../../../../core/maintenance/services/base.service';
 
 @Injectable()
-export class UserService extends BaseService<User> {
+export class UserService extends MaintenanceBaseService<User> {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -28,7 +29,8 @@ export class UserService extends BaseService<User> {
   }
 
   async create(entity: User): Promise<any> {
-    entity.token = await passwordHash(entity.password);
-    return await super.create(entity);
+    const user = await super.create(entity);
+    delete user.password;
+    return user;
   }
 }

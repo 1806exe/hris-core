@@ -173,7 +173,6 @@ export class BaseController<T extends HRISBaseEntity> {
       // ! Removed Update Based By UID params and update automatically
       // ! By following the criteria if the uid exist the it will update
       // ! The item but if it is new then it will create new item
-      console.log(resolvedEntityDTO);
       const payload = await this.baseService.update(resolvedEntityDTO);
       if (payload) {
         return res

@@ -19,6 +19,7 @@ import { ApiResult } from '../../../../core/interfaces';
 import { AuthenticatedUser } from '../../../../core/helpers/user-decorator.helper';
 import { getSuccessResponse } from '../../../../core/helpers/response.helper';
 import { sanitizeResponseObject } from '../../../../core/utilities/sanitize-response-object';
+import { AuthGuard } from '../guards/auth.guard';
 
 @Controller('api')
 export class AuthController {
@@ -85,11 +86,12 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Req() request, @Body() params, @Res() res): Promise<ApiResult> {
-    const user = await this.authService.login(params.username, params.password);
-    if (user) {
-      request.session.user = user;
-      return getSuccessResponse(res, sanitizeResponseObject(user));
+  @UseGuards(AuthGuard)
+  async login(@Req() request, @Body() params, @Res() res,@Session() session): Promise<ApiResult> {
+    
+    console.log(session.user);
+    if (session.user) {
+      return getSuccessResponse(res, sanitizeResponseObject(session.user));
     } else {
       return {
         httpStatus: 'Unauthorized',

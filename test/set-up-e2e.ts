@@ -11,6 +11,7 @@ import { UserService } from '../src/modules/system/user/services/user.service';
 import { UserModule } from '../src/modules/system/user/user.module';
 import { TrainingModule } from '../src/modules/training/training.module';
 import { VisualizationModule } from '../src/modules/visualization/visualization.module';
+import { SessionModule } from 'nestjs-session';
 
 let database: any = {
   type: 'postgres',
@@ -54,6 +55,14 @@ export const setUpServer = async () => {
   await client.query(`CREATE DATABASE ${database.database};`);
   let imports: any[] = [
     TypeOrmModule.forRoot(database),
+    SessionModule.forRoot({
+      session: {
+        secret: 'secret-key',
+        name: 'sess',
+        resave: true,
+        saveUninitialized: true,
+      },
+    }),
     OrganisatinUnitModule,
     UserModule,
     ReportModule,
@@ -66,7 +75,6 @@ export const setUpServer = async () => {
   const moduleFixture = await Test.createTestingModule({
     imports: imports,
   }).compile();
-
   let app: INestApplication = moduleFixture.createNestApplication();
 
   await app.init();
@@ -89,7 +97,11 @@ export const setUpServer = async () => {
     organisationUnits: [],
     userSettings: null,
   };
-  await userService.create(user);
+  try{
+    await userService.create(user);
+  }catch(e){
+
+  }
   global['app'] = app;
   server = app;
   return app;

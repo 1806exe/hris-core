@@ -13,8 +13,6 @@ export const convertIdToUid: any = (responseObject: any) => {
         if (isArray(attributeValue)) {
           newResponseObject[attributeKey] = map(attributeValue, convertIdToUid);
         } else {
-          console.log(attributeKey);
-          console.log(attributeValue);
           if (isNaN(Date.parse(attributeValue))) {
             newResponseObject[attributeKey] = convertIdToUid(attributeValue);
           } else {

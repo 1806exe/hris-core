@@ -1,7 +1,4 @@
 import request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { setUpServer, addAuthentication, tearDownServer, server } from '../set-up-e2e';
 beforeAll(async (done) => {
   await setUpServer();

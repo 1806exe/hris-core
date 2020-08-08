@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import Compression from 'compression';
-import Session from 'express-session';
+import * as Session from 'express-session';
 import Helmet from 'helmet';
 import bodyParser from 'body-parser';
 
@@ -31,15 +31,6 @@ async function bootstrap() {
   app.use(bodyParser.urlencoded({ limit: '50mb' }));
   app.use(bodyParser.json({ limit: '50mb' }));
   app.enableCors();
-
-  app.use(
-    Session({
-      secret: 'secret-key',
-      name: 'sess-tutorial',
-      resave: false,
-      saveUninitialized: false,
-    }),
-  );
 
   // app.use(csurf());
   /*app.use(

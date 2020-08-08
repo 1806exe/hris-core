@@ -37,7 +37,6 @@ describe('User Role API', () => {
       .expect(
         (res)=>{
           userRoleId = res.body.id;
-          console.log(res.body);
           expect(res.body.name).toEqual('Update Completeness');
           expect(res.body.description).toEqual('Users with Ability to update completeness of organisation units through completeness report.');
           expect(res.body.userAuthorities.length).toEqual(1);
@@ -102,7 +101,7 @@ describe('User API', () => {
         "username": "vincentminde1",
         "firstName": "Vincent",
         "surname": "Minde",
-        "email": "vincentminde@gmail.com",
+        "email": "vincentminde1@gmail.com",
         "enabled": true,
         "password": "HRHIS2020",
         "userRoles": [
@@ -121,7 +120,7 @@ describe('User API', () => {
           expect(res.body.username).toEqual('vincentminde1');
           expect(res.body.firstName).toEqual('Vincent');
           expect(res.body.surname).toEqual('Minde');
-          expect(res.body.email).toEqual('vincentminde@gmail.com');
+          expect(res.body.email).toEqual('vincentminde1@gmail.com');
           expect(res.body.enabled).toEqual(true);
           expect(res.body.userRoles.length).toEqual(1);
         }
