@@ -236,7 +236,7 @@ describe('Training Module API', () => {
           })
 
           .expect((res) => {
-            organiserId = res.body.id; 
+            organiserId = res.body.id;
             expect(res.body.name).toBeDefined();
             expect(res.body.name).toEqual('CEDHA');
             expect(res.body.description).toBeDefined();
@@ -254,7 +254,7 @@ describe('Training Module API', () => {
           })
 
           .expect((res) => {
-            sponsorId = res.body.id;              
+            sponsorId = res.body.id;
             expect(res.body.name).toBeDefined();
             expect(res.body.name).toEqual('Intrahealth  International');
             expect(res.body.description).toBeDefined();
@@ -291,6 +291,44 @@ describe('Training Module API', () => {
             district: 'Kinondoni',
             organisationUnit: orgunitId,
           })
+          .expect((res) => {
+            venueId = res.body.id;
+            expect(res.body.name).toBeDefined();
+            expect(res.body.name).toEqual('CoICT');
+            expect(res.body.organisationUnit).toBeDefined();
+          }),
+      );
+    });
+
+    it(`Get Venues /api/training/venues (GET)`, () => {
+      return addAuthentication(
+        request(server.getHttpServer())
+          .get(`/api/training/venues`)
+          .expect((res) => {
+            venueId = res.body.id;
+            expect(res.body.name).toBeDefined();
+            expect(res.body.name).toEqual('CoICT');
+            expect(res.body.organisationUnit).toBeDefined();
+          }),
+      );
+    });
+
+    it(`Get One Venue /api/training/venues/:id (GET)`, () => {
+      return addAuthentication(
+        request(server.getHttpServer())
+          .get(`/api/training/venues/${venueId}`)
+          .expect((res) => {
+            venueId = res.body.id;
+            expect(res.body.name).toBeDefined();
+            expect(res.body.name).toEqual('CoICT');
+            expect(res.body.organisationUnit).toBeDefined();
+          }),
+      );
+    });
+    it(`Apply filters on Venues /api/training/venues?filter=name:eq:<name> (GET)`, () => {
+      return addAuthentication(
+        request(server.getHttpServer())
+          .get(`/api/training/venues?filter=name:eq:CoICT`)
           .expect((res) => {
             venueId = res.body.id;
             expect(res.body.name).toBeDefined();
@@ -425,7 +463,7 @@ describe('Training Module API', () => {
       );
     });
 
-    it(`Perform Filters on Session /api/training/sessions?filter:id:eq:sessionId (GET)`, () => {
+    it(`Perform Filters on Session /api/training/sessions?filter=id:eq:sessionId (GET)`, () => {
       return addAuthentication(
         request(server.getHttpServer())
           .get(`/api/training/sessions?filter=id:eq:${sessionId}`)
