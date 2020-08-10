@@ -230,7 +230,7 @@ export class TrainingAnalyticsService {
         filter = ` AND ${table}.uid = '${split[1]}'`;
       }
       if (split[0] == 'in') {
-        filter = ` AND ${table}.uid IN ('${split[1].spli(',').join("'',")}')`;
+        filter = ` AND ${table}.uid IN ('${split[1].split(',').join("'',")}')`;
       }
     }
     return filter;
