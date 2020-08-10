@@ -26,6 +26,7 @@ export class SessionGuard implements CanActivate {
           return true;
         }
       }
+      console.log(request.session)
     } catch (e) {
       Logger.error(e.message);
       throw new Error('Not In Session');
