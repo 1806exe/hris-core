@@ -449,10 +449,12 @@ export class TrainingAnalyticsService {
 
     if (otherDimensions) {
       _.each(_.keys(otherDimensions), (key) => {
-        otherDimensions[key] = otherDimensions[key]
-          .split(':')[1]
-          .split(',')
-          .join("','");
+        if (key != 'startDate' && key != 'endDate') {
+          otherDimensions[key] = otherDimensions[key]
+            .split(':')[1]
+            .split(',')
+            .join("','");
+        }
       });
 
       curriculumnFilter = otherDimensions['curriculumn']
@@ -542,7 +544,7 @@ export class TrainingAnalyticsService {
     //     `;
     //   }
     // });
-    console.log('logged query :: ', query);
+    //console.log('logged query :: ', query);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
     analytics.rows = rows.map((row) => {
