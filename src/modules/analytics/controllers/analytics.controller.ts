@@ -195,6 +195,10 @@ export class AnalyticsController {
         ou = split[1].split(';');
       } else {
         otherDimensions[split[0]] = split[1];
+
+        if (split[2]) {
+          otherDimensions[split[0]] += ':' + split[2];
+        }
       }
     });
 
@@ -257,11 +261,11 @@ export class AnalyticsController {
         };
       }
       if (!Array.isArray(query.dimension)) {
-        console.log(query.dimension);
+        //console.log('query dimensions :: ', query.dimension);
         query.dimension = [query.dimension];
       }
       if (!Array.isArray(query.pe) && query.pe) {
-        console.log('qe :: ', query.pe);
+        //console.log('qe :: ', query.pe);
         pe = query.pe.split(';');
       }
       query.dimension.forEach((dimension) => {
@@ -274,6 +278,10 @@ export class AnalyticsController {
         } else {
           //console.log('split :: ', split[0], split[1], split[2]);
           otherDimensions[split[0]] = split[1];
+
+          if (split[2]) {
+            otherDimensions[split[0]] += ':' + split[2];
+          }
         }
       });
       //console.log('other dimensions :: ', otherDimensions);
