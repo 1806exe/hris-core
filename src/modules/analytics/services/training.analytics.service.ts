@@ -441,7 +441,7 @@ export class TrainingAnalyticsService {
         `SELECT * FROM _periodstructure WHERE iso IN ('${pe.join("','")}')`,
       );
       if (rows.length > 0) {
-        console.log('rows :::: ', rows);
+        //console.log('rows :::: ', rows);
         periodFilter = `WHERE (${rows
           .map((row) => {
             return `ts.startdate BETWEEN '${row.startdate.toISOString()}' AND '${row.enddate.toISOString()}' 
@@ -458,6 +458,7 @@ export class TrainingAnalyticsService {
         OR ts.enddate BETWEEN '${startdate.toISOString()}' AND '${enddate.toISOString()}')`;
     }
 
+    //console.log('other dimensions :: ', otherDimensions);
     if (otherDimensions) {
       _.each(_.keys(otherDimensions), (key) => {
         if (key != 'startDate' && key != 'endDate') {
