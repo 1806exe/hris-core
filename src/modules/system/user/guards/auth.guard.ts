@@ -21,6 +21,3 @@ export class AuthGuard implements CanActivate {
     }
   }
 }
-export const SessionUser = createParamDecorator((data, req) => {
-  return req.session.passport.user;
-});
