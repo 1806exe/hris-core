@@ -169,4 +169,23 @@ export class TrainingSessionController extends BaseController<TrainingSession> {
       throw new NotFoundException('Record doesnot exist');
     }
   }
+
+  @Put(':session')
+  @UseGuards(SessionGuard)
+  async editSession(@Param() params, @Body() updatesessionDT: any, @Res() res) {
+    const session = await this.trainingSessionService.findOneByUid(
+      params.session,
+    );
+    console.log(session);
+    if (session) {
+      const editedsession = await this.trainingSessionService.editSession(
+        params.session,
+        updatesessionDT,
+      );
+
+      return res
+        .status(HttpStatus.OK)
+        .send(sanitizeResponseObject(editedsession));
+    }
+  }
 }

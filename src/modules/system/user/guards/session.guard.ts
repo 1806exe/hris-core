@@ -7,7 +7,6 @@ export class SessionGuard implements CanActivate {
     const httpContext = context.switchToHttp();
     const request = httpContext.getRequest();
     try {
-      console.log('request.session',request.session);
       if (request.session && request.session.user) {
         request.session.previousPath = request.path;
         return true;
@@ -27,6 +26,7 @@ export class SessionGuard implements CanActivate {
           return true;
         }
       }
+      console.log(request.session)
     } catch (e) {
       Logger.error(e.message);
       throw new Error('Not In Session');

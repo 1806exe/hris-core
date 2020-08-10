@@ -344,6 +344,7 @@ ALTER TABLE public.trainingsessionaccess
 
         ALTER TABLE public.formfieldmember ADD COLUMN IF NOT EXISTS created TIMESTAMP;
         ALTER TABLE public.formfieldmember ADD COLUMN IF NOT EXISTS lastupdated TIMESTAMP;
+        ALTER TABLE "user" RENAME COLUMN "token" TO "password";
         
         UPDATE trainingsession s SET venue = v.id
         FROM  trainingvenue v

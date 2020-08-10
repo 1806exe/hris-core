@@ -27,12 +27,13 @@ export class AnalyticsController {
     );
   }
   @Get('records/:formid')
+  @UseGuards(SessionGuard)
   async fetchRecordsAnalytics(
     @Param() params,
     @Query() query,
     @AuthenticatedUser() user,
   ) {
-    console.log('query:', query);
+    console.log('query1:', query);
     let pe;
     let ou;
     let otherDimensions = {};
@@ -80,6 +81,7 @@ export class AnalyticsController {
   }
 
   @Get('orgUnit/count')
+  @UseGuards(SessionGuard)
   async fetchAnalyticsOrgUnitCount(
     @Param() params,
     @Query() query,
@@ -135,6 +137,7 @@ export class AnalyticsController {
   }
 
   @Get('training/providers/:formid')
+  @UseGuards(SessionGuard)
   async fetchTrainingAnalytics(
     @Param() params,
     @Query() query,
@@ -159,19 +162,22 @@ export class AnalyticsController {
         message: 'Organisation Unit dimension not found',
       };
     }
+
+    console.log('DIMENSIONSSSS', analyticsDimensions)
     return await this.trainingAnalyticsService.getTrainingAnalyticsRecords(
       params.formid,
-      analyticsDimensions
+      analyticsDimensions,
     );
   }
 
   @Get('training/coverage')
+  @UseGuards(SessionGuard)
   async fetchTrainingCoverageAnalytics(
     @Param() params,
     @Query() query,
     @AuthenticatedUser() user,
   ) {
-    console.log('query:', query);
+    console.log('query:2', query);
     let pe;
     let ou;
     let otherDimensions = {};
@@ -186,7 +192,7 @@ export class AnalyticsController {
       console.log(query.dimension);
       query.dimension = [query.dimension];
     }
-    if (!Array.isArray(query.pe)) {
+    if (!Array.isArray(query.pe) && query.pe) {
       pe = query.pe.split(';');
     }
     query.dimension.forEach((dimension) => {
@@ -194,11 +200,20 @@ export class AnalyticsController {
       if (split[0] === 'ou') {
         ou = split[1].split(';');
       } else {
-        otherDimensions[split[0]] = split[1] + ':' + split[2];
+        otherDimensions[split[0]] = split[1];
+
+        if (split[2]) {
+          otherDimensions[split[0]] += ':' + split[2];
+        }
       }
     });
-    console.log(otherDimensions);
-    if (!pe || pe[0] === '') {
+
+    //console.log('other dimensions :: ', otherDimensions['startDate']);
+    if (
+      (!pe || pe[0] === '') &&
+      !otherDimensions['startDate'] &&
+      !otherDimensions['endDate']
+    ) {
       return {
         status: 'ERROR',
         message: 'Period dimension not found',
@@ -233,61 +248,83 @@ export class AnalyticsController {
   }
 
   @Get('training/sessions')
+  @UseGuards(SessionGuard)
   async fetchTrainingSessions(
     @Param() params,
     @Query() query,
     @AuthenticatedUser() user,
   ) {
-    console.log('query:', query);
+    console.log('query:3', query);
     let pe;
     let ou;
     let otherDimensions = {};
-    if (!query.dimension) {
-      return {
-        status: 'ERROR',
-        message:
-          'No dimension was provided. Please provide period(pe) and organisation unit(ou) dimension',
-      };
-    }
-    if (!Array.isArray(query.dimension)) {
-      console.log(query.dimension);
-      query.dimension = [query.dimension];
-    }
-    if (!Array.isArray(query.pe)) {
-      pe = query.pe.split(';');
-    }
-    query.dimension.forEach((dimension) => {
-      let split = dimension.split(':');
-      if (split[0] === 'ou') {
-        ou = split[1].split(';');
-      } else {
-        otherDimensions[split[0]] = split[1] + ':' + split[2];
+
+    try {
+      if (!query.dimension) {
+        return {
+          status: 'ERROR',
+          message:
+            'No dimension was provided. Please provide period(pe) and organisation unit(ou) dimension',
+        };
       }
-    });
-    console.log(otherDimensions);
-    if (!pe || pe[0] === '') {
-      return {
-        status: 'ERROR',
-        message: 'Period dimension not found',
-      };
-    }
-    if (!ou || ou[0] === '') {
-      return {
-        status: 'ERROR',
-        message: 'Organisation Unit dimension not found',
-      };
-    }
-    let filter = {};
-    if (query.filter) {
-      if (!Array.isArray(query.filter)) {
-        let split = query.filter.split(':');
-        filter[split[0]] = split[1] + ':' + split[2];
-      } else {
-        query.filter.forEach((fil) => {
-          let split = fil.split(':');
+      if (!Array.isArray(query.dimension)) {
+        //console.log('query dimensions :: ', query.dimension);
+        query.dimension = [query.dimension];
+      }
+      if (!Array.isArray(query.pe) && query.pe) {
+        //console.log('qe :: ', query.pe);
+        pe = query.pe.split(';');
+      }
+      query.dimension.forEach((dimension) => {
+        let split = dimension.split(':');
+        //console.log('split to check :: ', split);
+        if (split[0] === 'ou') {
+          ou = split[1].split(';');
+
+          //console.log('ou to check :: ', split[1]);
+        } else {
+          //console.log('split :: ', split[0], split[1], split[2]);
+          otherDimensions[split[0]] = split[1];
+
+          if (split[2]) {
+            otherDimensions[split[0]] += ':' + split[2];
+          }
+        }
+      });
+      //console.log('other dimensions :: ', otherDimensions);
+      if (
+        (!pe || pe[0] === '') &&
+        !otherDimensions['startDate'] &&
+        !otherDimensions['endDate']
+      ) {
+        return {
+          status: 'ERROR',
+          message: 'Period dimension not found',
+        };
+      }
+      if (!ou || ou[0] === '') {
+        return {
+          status: 'ERROR',
+          message: 'Organisation Unit dimension not found',
+        };
+      }
+      let filter = {};
+      if (query.filter) {
+        if (!Array.isArray(query.filter)) {
+          //console.log('query filter :: ', query.filter);
+          let split = query.filter.split(':');
           filter[split[0]] = split[1] + ':' + split[2];
-        });
+        } else {
+          query.filter.forEach((fil) => {
+            //console.log('fil :: ', fil);
+            let split = fil.split(':');
+            filter[split[0]] = split[1] + ':' + split[2];
+          });
+        }
       }
+      //console.log('do i get here?');
+    } catch (e) {
+      console.log('this is the error :: ', e);
     }
     return await this.trainingAnalyticsService.getTrainingSessions(
       ou,
