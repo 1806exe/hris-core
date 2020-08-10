@@ -29,14 +29,31 @@ export const extractAnalytics = (
       analyticsDimensions.endDate = split[1];
     } else {
       if(split[1]){
-        if(split[2]){
-          analyticsDimensions.other[split[0]] = {
+        if([
+          'certification',
+          'sections',
+          'units', 
+          'curriculums',
+          'topics',
+          'sponsors',
+          'organizers',
+          'deliverymode'
+        ].indexOf(split[0]) > -1){
+          analyticsDimensions[split[0]] = {
             left:split[0],
             operator:split[1],
             right:split[2]
           };
         }else{
-          analyticsDimensions.other[split[0]] = split[1];
+          if(split[2]){
+            analyticsDimensions.other[split[0]] = {
+              left:split[0],
+              operator:split[1],
+              right:split[2]
+            };
+          }else{
+            analyticsDimensions.other[split[0]] = split[1];
+          }
         }
         
       }else{

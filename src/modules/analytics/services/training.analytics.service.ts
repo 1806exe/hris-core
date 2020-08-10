@@ -17,6 +17,7 @@ export class TrainingAnalyticsService {
     private connetion: Connection,
   ) {}
   async getTrainingCoverageRecords(ou, pe, otherDimensions, context: any) {
+    console.log('otherDimensions:',otherDimensions);
     let analytics = {
       headers: [],
       metaData: {
@@ -135,6 +136,23 @@ export class TrainingAnalyticsService {
       }
       filter += trainingFilter;
     }
+    let providers = '';
+    if(otherDimensions.providers){
+      let splitComparison = otherDimensions.providers.split(':');
+      let operator = '=';
+      if(splitComparison[0].toLowerCase() == 'gt'){
+        operator = '>'
+      } else if(splitComparison[0].toLowerCase() == 'ge'){
+        operator = '>='
+      } else if(splitComparison[0].toLowerCase() == 'lt'){
+        operator = '<'
+      } else if(splitComparison[0].toLowerCase() == 'le'){
+        operator = '<='
+      }
+      providers = `
+        HAVING COUNT(record.*) ${operator} ${splitComparison[1]}
+      `
+    }
     let ouFilter = generateOUFilterQuery('ous', ou, orglevels, context.user);
     query = `SELECT ous.uid,
       ${orglevels
@@ -154,7 +172,9 @@ export class TrainingAnalyticsService {
             'ous.uidlevel' + orglevel.level + ', namelevel' + orglevel.level,
         )
         .join(', ')}
-      ,${groups.map((group) => 'ous."' + group.uid + '"').join(', ')}`;
+      ,${groups.map((group) => 'ous."' + group.uid + '"').join(', ')}
+      ${providers}
+      `;
     console.log(query);
     analytics.headers = orglevels.map((orglevel) => {
       return {
@@ -270,14 +290,28 @@ export class TrainingAnalyticsService {
         dimensions.ou.join("','") +
         "')",
     );
-
+    let trainingFilter = '';
+    if(dimensions.certification){
+      let certificationFilter = '';
+      if(typeof dimensions.certification == 'string'){
+        certificationFilter = ` AND ${dimensions.certification}`;
+      }else{
+        certificationFilter = ` AND (${dimensions.certification.right.split(';').map((certificationStatus)=>{
+          return 'sp.'+certificationStatus
+        }).join(' OR ')})`;
+      }
+      trainingFilter += `INNER JOIN sessionparticipant sp ON(sp."recordId" = data.recordid ${certificationFilter})`;
+      //TODO add filtering for sections units and all training fields
+    }
     //TODO improve performance for fetching alot of data
     query = `SELECT ${allowedColumns.map(
       (column) => 'data."' + column + '"',
     )} FROM _resource_table_${formid} data
       INNER JOIN _organisationunitstructure ous ON(ous.uid = data.ou AND (${levelquery.join(
         ' OR ',
-      )}))`;
+      )}))
+      ${trainingFilter}
+      `;
     /*if (pe) {
       let periodquery = pe.map(p => {
         let whereCondition = getWhereConditions(p);

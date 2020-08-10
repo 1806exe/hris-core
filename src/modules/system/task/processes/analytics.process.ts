@@ -64,6 +64,7 @@ export class AnalyticsGenerator extends BackgroundProcess {
         form.uid +
         '(' +
         'id SERIAL PRIMARY KEY,' +
+        'recordid bigint,' +
         'created timestamp without time zone NULL DEFAULT LOCALTIMESTAMP,' +
         'lastupdated timestamp without time zone NULL DEFAULT LOCALTIMESTAMP,' +
         // 'recordid integer NOT NULL DEFAULT nextval(\'record_recordid_seq\':: regclass)(INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1),'+
@@ -84,10 +85,10 @@ export class AnalyticsGenerator extends BackgroundProcess {
         'INSERT INTO _temp_resource_table_' +
         form.uid +
         '(' +
-        'instance,created,lastupdated,uid,ou,formid' +
+        'recordid, instance,created,lastupdated,uid,ou,formid' +
         additionalInsertColumns +
         ')' +
-        'SELECT DISTINCT r.instance,r.created,r.lastupdated,r.uid,ou.uid,r.formid' +
+        'SELECT DISTINCT r.id,r.instance,r.created,r.lastupdated,r.uid,ou.uid,r.formid' +
         // + ((fields.length > 0)?',':'')+
         fields
           .map((field, index) => {
