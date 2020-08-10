@@ -27,6 +27,7 @@ export class AnalyticsController {
     );
   }
   @Get('records/:formid')
+  @UseGuards(SessionGuard)
   async fetchRecordsAnalytics(
     @Param() params,
     @Query() query,
@@ -80,6 +81,7 @@ export class AnalyticsController {
   }
 
   @Get('orgUnit/count')
+  @UseGuards(SessionGuard)
   async fetchAnalyticsOrgUnitCount(
     @Param() params,
     @Query() query,
@@ -135,6 +137,7 @@ export class AnalyticsController {
   }
 
   @Get('training/providers/:formid')
+  @UseGuards(SessionGuard)
   async fetchTrainingAnalytics(
     @Param() params,
     @Query() query,
@@ -159,6 +162,8 @@ export class AnalyticsController {
         message: 'Organisation Unit dimension not found',
       };
     }
+
+    console.log('DIMENSIONSSSS', analyticsDimensions)
     return await this.trainingAnalyticsService.getTrainingAnalyticsRecords(
       params.formid,
       analyticsDimensions,
@@ -166,6 +171,7 @@ export class AnalyticsController {
   }
 
   @Get('training/coverage')
+  @UseGuards(SessionGuard)
   async fetchTrainingCoverageAnalytics(
     @Param() params,
     @Query() query,
@@ -238,6 +244,7 @@ export class AnalyticsController {
   }
 
   @Get('training/sessions')
+  @UseGuards(SessionGuard)
   async fetchTrainingSessions(
     @Param() params,
     @Query() query,
