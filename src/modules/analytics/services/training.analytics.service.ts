@@ -8,6 +8,7 @@ import {
 import * as _ from 'lodash';
 import { OrganisationUnitService } from '../../../modules/organisation-unit/services/organisation-unit.service';
 import { OrganisationUnit } from 'src/modules/organisation-unit/entities/organisation-unit.entity';
+import { start } from 'repl';
 
 @Injectable()
 export class TrainingAnalyticsService {
@@ -351,6 +352,8 @@ export class TrainingAnalyticsService {
     });
   }
   async getTrainingSessions(ou, pe, otherDimensions, context: any) {
+    //console.log('pes :: ', pe, 'other dimensions :: ', otherDimensions);
+
     let analytics = {
       headers: [
         {
@@ -438,6 +441,7 @@ export class TrainingAnalyticsService {
         `SELECT * FROM _periodstructure WHERE iso IN ('${pe.join("','")}')`,
       );
       if (rows.length > 0) {
+        console.log('rows :::: ', rows);
         periodFilter = `WHERE (${rows
           .map((row) => {
             return `ts.startdate BETWEEN '${row.startdate.toISOString()}' AND '${row.enddate.toISOString()}' 
@@ -445,6 +449,13 @@ export class TrainingAnalyticsService {
           })
           .join(' OR ')} )`;
       }
+    } else if (otherDimensions['startDate'] && otherDimensions['endDate']) {
+      let startdate = new Date(otherDimensions['startDate']);
+      let enddate = new Date(otherDimensions['endDate']);
+
+      //console.log('end date ::: ', enddate);
+      periodFilter = `WHERE (ts.startdate BETWEEN '${enddate.toISOString()}' AND '${enddate.toISOString()}' 
+        OR ts.enddate BETWEEN '${startdate.toISOString()}' AND '${enddate.toISOString()}')`;
     }
 
     if (otherDimensions) {

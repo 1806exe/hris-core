@@ -270,7 +270,7 @@ export class AnalyticsController {
         if (split[0] === 'ou') {
           ou = split[1].split(';');
 
-          console.log('ou to check :: ', split[1]);
+          //console.log('ou to check :: ', split[1]);
         } else {
           //console.log('split :: ', split[0], split[1], split[2]);
           otherDimensions[split[0]] = split[1];
