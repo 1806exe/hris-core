@@ -12,7 +12,7 @@ import { UserModule } from '../src/modules/system/user/user.module';
 import { TrainingModule } from '../src/modules/training/training.module';
 import { VisualizationModule } from '../src/modules/visualization/visualization.module';
 import { SessionModule } from 'nestjs-session';
-jest.setTimeout(30000);
+jest.setTimeout(300000);
 
 let database: any = {
   type: 'postgres',
