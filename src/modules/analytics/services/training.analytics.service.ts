@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Connection, Repository } from 'typeorm';
-import { AnalyticsDimensions } from '../../../core/interfaces/analytics-dimensions';
+import { AnalyticsDimensions, Comparison } from '../../../core/interfaces/analytics-dimensions';
 import {
   generateOUFilterQuery,
   getISOOrgUnits,
@@ -291,7 +291,16 @@ export class TrainingAnalyticsService {
         "')",
     );
     let trainingFilter = '';
-    if(dimensions.certification){
+    if(
+      dimensions.certification || 
+      dimensions.sections || 
+      dimensions.units || 
+      dimensions.curriculums || 
+      dimensions.topics || 
+      dimensions.sponsors || 
+      dimensions.organizers || 
+      dimensions.deliverymode
+      ){
       let certificationFilter = '';
       if(typeof dimensions.certification == 'string'){
         certificationFilter = ` AND ${dimensions.certification}`;
@@ -301,6 +310,49 @@ export class TrainingAnalyticsService {
         }).join(' OR ')})`;
       }
       trainingFilter += `INNER JOIN sessionparticipant sp ON(sp."recordId" = data.recordid ${certificationFilter})`;
+
+      let sectionFilter = '';
+      if(dimensions.sections){
+        sectionFilter = ` AND tsec.uid IN ('${(<Comparison>dimensions.sections).right.split(';').map((sectionid)=>{
+          return sectionid
+        }).join("','")}')`;
+      }
+
+      let unitFilter = '';
+      if(dimensions.units){
+        unitFilter = ` AND tu.uid IN ('${(<Comparison>dimensions.units).right.split(';').map((unitid)=>{
+          return unitid
+        }).join("','")}')`;
+      }
+
+      let curriculumFilter = '';
+      if(dimensions.curriculums){
+        curriculumFilter = ` AND tc.uid IN ('${(<Comparison>dimensions.curriculums).right.split(';').map((curriculumid)=>{
+          return curriculumid
+        }).join("','")}')`;
+      }
+
+      let organiserFilter = '';
+      if(dimensions.organizers){
+        organiserFilter = ` AND torganiser.uid IN ('${(<Comparison>dimensions.organizers).right.split(';').map((organizerid)=>{
+          return organizerid
+        }).join("','")}')`;
+      }
+
+      let sponsorFilter = '';
+      if(dimensions.sponsors){
+        sponsorFilter = ` AND torganiser.uid IN ('${(<Comparison>dimensions.sponsors).right.split(';').map((sponsorid)=>{
+          return sponsorid
+        }).join("','")}')`;
+      }
+      trainingFilter += `
+          INNER JOIN trainingsession ts ON(ts.id = sp."trainingsessionId")
+          INNER JOIN trainingsponsor tsponsor ON(tsponsor.id = ts.sponsor ${sponsorFilter})
+          INNER JOIN trainingsponsor torganiser ON(torganiser.id = ts.organiser ${organiserFilter})
+          INNER JOIN trainingcurriculum tc ON(tc.id = ts.curriculumid ${curriculumFilter})
+          INNER JOIN trainingunit tu ON(tu.id = tc.unitid ${unitFilter})
+          INNER JOIN trainingsections tsec ON(tsec.id = tc.sectionid ${sectionFilter})
+      `;
       //TODO add filtering for sections units and all training fields
     }
     //TODO improve performance for fetching alot of data

@@ -32,14 +32,18 @@ export const extractAnalytics = (
         if([
           'certification',
           'sections',
-          'units', 
+          'unit',
+          'units',
+          'curriculum',
           'curriculums',
+          'topic',
           'topics',
+          'sponsor',
           'sponsors',
           'organizers',
           'deliverymode'
         ].indexOf(split[0]) > -1){
-          analyticsDimensions[split[0]] = {
+          analyticsDimensions[(['unit','curriculum', 'topic','sponsor'].indexOf(split[0]) > -1?split[0]+'s':split[0])] = {
             left:split[0],
             operator:split[1],
             right:split[2]
