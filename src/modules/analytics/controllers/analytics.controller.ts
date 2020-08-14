@@ -209,16 +209,6 @@ export class AnalyticsController {
     });
 
     //console.log('other dimensions :: ', otherDimensions['startDate']);
-    if (
-      (!pe || pe[0] === '') &&
-      !otherDimensions['startDate'] &&
-      !otherDimensions['endDate']
-    ) {
-      return {
-        status: 'ERROR',
-        message: 'Period dimension not found',
-      };
-    }
     if (!ou || ou[0] === '') {
       return {
         status: 'ERROR',

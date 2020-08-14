@@ -43,7 +43,7 @@ export function generateOUFilterQuery(ousAlias, ou, orgUnitLevels, user) {
 
   const levelQuery = ouLevelIds.map(
     (orgUnitLevel) =>
-      `${ousAlias}.uidlevel${orgUnitLevel.substring(6)} IS NOT NULL`,
+      `${ousAlias}.level = ${orgUnitLevel.substring(6)}`,
   );
 
   const groupQuery = ouGroupIds.map(

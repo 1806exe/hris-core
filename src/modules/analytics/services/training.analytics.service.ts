@@ -70,6 +70,7 @@ export class TrainingAnalyticsService {
         if (trainingFilter == '') {
           trainingFilter =
             'LEFT JOIN trainingsession ON(sessionparticipant."trainingsessionId"=trainingsession.id ';
+            console.log('Training Filter:', pe);
         }
         if (Object.keys(otherDimensions).indexOf('deliverymodes') > -1) {
           trainingFilter += `trainingsession.deliverymode = '${
@@ -77,6 +78,13 @@ export class TrainingAnalyticsService {
           }') `;
         } else {
           trainingFilter += `) `;
+        }
+        if(pe){
+          trainingFilter += `
+            INNER JOIN _periodstructure pes ON(${pe.map(p => {
+              return `(trainingsession.startdate BETWEEN pes.startdate AND pes.enddate OR trainingsession.startdate BETWEEN pes.startdate AND pes.enddate) AND pes.iso='${p}'`;
+            })})
+          `
         }
       }
       if (
