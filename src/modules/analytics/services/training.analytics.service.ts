@@ -154,7 +154,7 @@ export class TrainingAnalyticsService {
       `
     }
     let ouFilter = generateOUFilterQuery('ous', ou, orglevels, context.user);
-    query = `SELECT ous.uid,
+    query = `SELECT TRIM(ous.uid) ou,
       ${orglevels
         .map(
           (orglevel) =>
@@ -196,7 +196,7 @@ export class TrainingAnalyticsService {
       name: 'providers',
     });
     analytics.headers = [{
-      id: 'uid',
+      id: 'ou',
       name: 'Organisation Unit',
     }].concat(analytics.headers);
     let rows = await this.connetion.manager.query(query);
@@ -209,9 +209,10 @@ export class TrainingAnalyticsService {
       return newRow;
     });
     query =
-      'SELECT ou.uid,ou.name FROM  organisationunit ou WHERE (' +
-      ou.map((o) => "ou.uid = '" + o + "'").join(' OR ') +
-      ') ';
+      `SELECT ou.uid,ou.name FROM  organisationunit ou WHERE ou.uid IN (
+        ${ou.map((o) => "'" + o + "'").join(",")}
+      ) `;
+      console.log('query :',query);
     let organisationunits = await this.connetion.manager.query(query);
     organisationunits.forEach((orgUnit) => {
       analytics.metaData.items[orgUnit.uid] = {
