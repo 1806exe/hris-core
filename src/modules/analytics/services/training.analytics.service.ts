@@ -51,9 +51,22 @@ export class TrainingAnalyticsService {
     //TODO improve performance for fetching alot of data
     let filter = '';
     if (Object.keys(otherDimensions).length > 0) {
+      let certifiedFilter = '';
+      if(otherDimensions.certification){
+        let split = otherDimensions.certification.split(':');
+        certifiedFilter = 'AND ' + split[1].split(';').map((cert) =>{
+          if(cert == 'assessed'){
+            return ` sessionparticipant.assessed `
+          }else if(cert == 'certified'){
+            return ` sessionparticipant.certified `
+          }else if(cert == 'notcertified'){
+            return ` NOT sessionparticipant.certified `
+          }
+        }).join(' AND ')
+      }
       let trainingFilter = '';
       filter =
-        'LEFT JOIN sessionparticipant ON(sessionparticipant."recordId"=record.id) ';
+        `LEFT JOIN sessionparticipant ON(sessionparticipant."recordId"=record.id ${certifiedFilter}) `;
       if (
         Object.keys(otherDimensions).filter((dim) =>
           [
