@@ -53,7 +53,7 @@ export class TrainingAnalyticsService {
     if (Object.keys(otherDimensions).length > 0) {
       let trainingFilter = '';
       filter =
-        'INNER JOIN sessionparticipant ON(sessionparticipant."recordId"=record.id) ';
+        'LEFT JOIN sessionparticipant ON(sessionparticipant."recordId"=record.id) ';
       if (
         Object.keys(otherDimensions).filter((dim) =>
           [
@@ -69,7 +69,7 @@ export class TrainingAnalyticsService {
       ) {
         if (trainingFilter == '') {
           trainingFilter =
-            'INNER JOIN trainingsession ON(sessionparticipant."trainingsessionId"=trainingsession.id ';
+            'LEFT JOIN trainingsession ON(sessionparticipant."trainingsessionId"=trainingsession.id ';
         }
         if (Object.keys(otherDimensions).indexOf('deliverymodes') > -1) {
           trainingFilter += `trainingsession.deliverymode = '${
@@ -101,9 +101,9 @@ export class TrainingAnalyticsService {
         );
 
         trainingFilter += `
-                INNER JOIN trainingcurriculum ON(trainingcurriculum.id=trainingsession.curriculumid ${curriculumFilter})
-                INNER JOIN trainingunit ON(trainingunit.id =trainingcurriculum.unitid ${unitFilter})
-                INNER JOIN trainingsections ON(trainingsections.id =trainingcurriculum.sectionid ${sectionFilter})
+                LEFT JOIN trainingcurriculum ON(trainingcurriculum.id=trainingsession.curriculumid ${curriculumFilter})
+                LEFT JOIN trainingunit ON(trainingunit.id =trainingcurriculum.unitid ${unitFilter})
+                LEFT JOIN trainingsections ON(trainingsections.id =trainingcurriculum.sectionid ${sectionFilter})
              `;
       }
       if (
