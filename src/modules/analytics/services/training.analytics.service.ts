@@ -195,6 +195,10 @@ export class TrainingAnalyticsService {
       id: 'providers',
       name: 'providers',
     });
+    analytics.headers = [{
+      id: 'uid',
+      name: 'Organisation Unit',
+    }].concat(analytics.headers);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
     analytics.rows = rows.map((row) => {
@@ -382,7 +386,6 @@ export class TrainingAnalyticsService {
       });
       query += ` INNER JOIN _periodstructure pes ON(${periodquery.join(' OR ')}) LIMIT 200000`;
     }*/
-    console.log('coverage query :: ', query);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
     analytics.rows = rows.map((row) => {
