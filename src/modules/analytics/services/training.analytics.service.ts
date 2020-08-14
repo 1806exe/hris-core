@@ -302,17 +302,21 @@ export class TrainingAnalyticsService {
       dimensions.deliverymode
       ){
       let certificationFilter = '';
-      if(typeof dimensions.certification == 'string'){
-        certificationFilter = ` AND ${dimensions.certification}`;
-      }else{
-        certificationFilter = ` AND (${dimensions.certification.right.split(';').map((certificationStatus)=>{
-          return 'sp.'+certificationStatus
-        }).join(' OR ')})`;
+      if(dimensions.certification){
+        if(typeof dimensions.certification == 'string'){
+          certificationFilter = ` AND ${dimensions.certification}`;
+        }else{
+          certificationFilter = ` AND (${dimensions.certification.right.split(';').map((certificationStatus)=>{
+            return 'sp.'+certificationStatus
+          }).join(' OR ')})`;
+        }
       }
       trainingFilter += `INNER JOIN sessionparticipant sp ON(sp."recordId" = data.recordid ${certificationFilter})`;
 
       let sectionFilter = '';
+      console.log(dimensions);
       if(dimensions.sections){
+        console.log(dimensions.sections);
         sectionFilter = ` AND tsec.uid IN ('${(<Comparison>dimensions.sections).right.split(';').map((sectionid)=>{
           return sectionid
         }).join("','")}')`;
