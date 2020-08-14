@@ -81,9 +81,20 @@ export class TrainingAnalyticsService {
         ).length > -1
       ) {
         if (trainingFilter == '') {
+          let setDates = '';
+          if(otherDimensions.startDate || otherDimensions.endDate){
+            setDates += ' AND (';
+            if(otherDimensions.startDate && otherDimensions.endDate){
+              setDates += `trainingsession.startdate BETWEEN '${otherDimensions.startDate}' AND '${otherDimensions.endDate}' OR trainingsession.enddate BETWEEN '${otherDimensions.startDate}' AND '${otherDimensions.endDate}'`
+            }else if(otherDimensions.startDate){
+              setDates += `'${otherDimensions.startDate}' >= trainingsession.startdate OR '${otherDimensions.startDate}' >= trainingsession.enddate `
+            }else if(otherDimensions.endDate){
+              setDates += `'${otherDimensions.endDate}' <= trainingsession.startdate OR '${otherDimensions.endDate}' <= trainingsession.enddate `
+            }
+            setDates += ')';
+          }
           trainingFilter =
-            'LEFT JOIN trainingsession ON(sessionparticipant."trainingsessionId"=trainingsession.id ';
-            console.log('Training Filter:', pe);
+            `LEFT JOIN trainingsession ON(sessionparticipant."trainingsessionId"=trainingsession.id ${setDates} `;
         }
         if (Object.keys(otherDimensions).indexOf('deliverymodes') > -1) {
           trainingFilter += `trainingsession.deliverymode = '${
@@ -95,7 +106,7 @@ export class TrainingAnalyticsService {
         if(pe){
           trainingFilter += `
             INNER JOIN _periodstructure pes ON(${pe.map(p => {
-              return `(trainingsession.startdate BETWEEN pes.startdate AND pes.enddate OR trainingsession.startdate BETWEEN pes.startdate AND pes.enddate) AND pes.iso='${p}'`;
+              return `(trainingsession.startdate BETWEEN pes.startdate AND pes.enddate OR trainingsession.enddate BETWEEN pes.startdate AND pes.enddate) AND pes.iso='${p}'`;
             })})
           `
         }
