@@ -197,7 +197,9 @@ export class AnalyticsController {
     }
     query.dimension.forEach((dimension) => {
       let split = dimension.split(':');
-      if (split[0] === 'ou') {
+      if (split[0] === 'pe') {
+        pe = split[1].split(';');
+      }else if (split[0] === 'ou') {
         ou = split[1].split(';');
       } else {
         otherDimensions[split[0]] = split[1];
