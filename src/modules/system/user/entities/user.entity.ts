@@ -1,32 +1,32 @@
 import {
-  Column,
+  BeforeInsert,
+  BeforeUpdate, Column,
   Entity,
   JoinColumn,
   JoinTable,
   ManyToMany,
-  ManyToOne,
+
   OneToMany,
-  OneToOne,
-  BeforeInsert,
-  BeforeUpdate,
+  OneToOne
 } from 'typeorm';
 import { UserCoreProps } from '../../../../core/entities/user-core-props.entity';
+import { generateUid } from '../../../../core/helpers/makeuid';
+import {
+  passwordCompare,
+  passwordHash
+} from '../../../../core/utilities/password-utilities';
 import { MessageMetadata } from '../../../message/entities/message-metadata.entity';
 import { MessageThreadMetadata } from '../../../message/entities/message-thread-metadata.entity';
 import { MessageThread } from '../../../message/entities/message-thread.entity';
 import { Message } from '../../../message/entities/message.entity';
 import { OrganisationUnit } from '../../../organisation-unit/entities/organisation-unit.entity';
-import { Record } from '../../../record/entities/record.entity';
-import { Report } from '../../../report/entities/report.entity';
+import { RecordRule } from '../../../record-rule/entities/record-rule/record-rule.entity';
+import { TrainingSessionAccess } from '../../../training/entities/training-session-access.entity';
 import { Dashboard } from '../../../visualization/entities/dashboard.entity';
 import { Visualization } from '../../../visualization/entities/visualization.entity';
 import { UserGroup } from '../../user-group/entities/user-group.entity';
 import { UserRole } from '../../user-role/entities/user-role.entity';
 import { UserSettings } from './user-settings.entity';
-import { TrainingSessionAccess } from '../../../training/entities/training-session-access.entity';
-import { passwordCompare, passwordHash } from '../../../../core/utilities/password-utilities';
-import { RecordRule } from '../../../record-rule/entities/record-rule/record-rule.entity';
-import { SessionParticipant } from '../../../../modules/training/entities/training-session-participant.entity';
 
 @Entity('user', { schema: 'public' })
 export class User extends UserCoreProps {
@@ -353,10 +353,11 @@ export class User extends UserCoreProps {
   @BeforeInsert()
   async encrypt() {
     this.password = await passwordHash(this.password);
+    this.uid = generateUid();
   }
   @BeforeUpdate()
   async encryptOnUpdate() {
-    if(this.password){
+    if (this.password) {
       this.password = await passwordHash(this.password);
     }
   }
