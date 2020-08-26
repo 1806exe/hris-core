@@ -2,6 +2,7 @@ export const entityTableMapper = {
   users: 'user',
   user: 'user',
   userRoles: 'userrole',
+  userRole: 'userrole',
   userAuthorities: 'userauthority',
   userGroups: 'usergroup',
   userSettings: 'usersetting',
