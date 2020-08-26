@@ -279,7 +279,11 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
         return genericFailureResponse(res, params);
       }
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      console.log(error);
+      res.status(500).json({ 
+        statusCode: 500,
+        message: error.message
+      });
     }
   }
 

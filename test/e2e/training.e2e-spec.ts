@@ -499,6 +499,16 @@ describe('Training Module API', () => {
       );
     });
 
+    it(`Get Participants, (GET)`, () => {
+      return addAuthentication(
+        request(server.getHttpServer())
+          .get(`/api/training/sessions/${sessionId}/participants`)
+          .expect((res) => {
+            console.log(res.body);
+          }),
+      );
+    });
+
     it(`Delete a Session /api/training/session/:id (DELETE)`, () => {
       return addAuthentication(
         request(server.getHttpServer())

@@ -12,6 +12,7 @@ import { UserModule } from '../src/modules/system/user/user.module';
 import { TrainingModule } from '../src/modules/training/training.module';
 import { VisualizationModule } from '../src/modules/visualization/visualization.module';
 import { SessionModule } from 'nestjs-session';
+jest.setTimeout(300000);
 
 let database: any = {
   type: 'postgres',
@@ -97,16 +98,16 @@ export const setUpServer = async () => {
     organisationUnits: [],
     userSettings: null,
   };
-  try{
+  try {
     await userService.create(user);
-  }catch(e){
-
-  }
+  } catch (e) {}
   global['app'] = app;
   server = app;
   return app;
 };
 export const tearDownServer = async () => {
-  await server.close();
-  await client.end();
+  if (server) {
+    await server.close();
+    await client.end();
+  }
 };

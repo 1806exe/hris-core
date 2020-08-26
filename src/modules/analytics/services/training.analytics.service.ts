@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Connection, Repository } from 'typeorm';
-import { AnalyticsDimensions } from '../../../core/interfaces/analytics-dimensions';
+import { AnalyticsDimensions, Comparison } from '../../../core/interfaces/analytics-dimensions';
 import {
   generateOUFilterQuery,
   getISOOrgUnits,
@@ -51,9 +51,22 @@ export class TrainingAnalyticsService {
     //TODO improve performance for fetching alot of data
     let filter = '';
     if (Object.keys(otherDimensions).length > 0) {
+      let certifiedFilter = '';
+      if(otherDimensions.certification){
+        let split = otherDimensions.certification.split(':');
+        certifiedFilter = 'AND ' + split[1].split(';').map((cert) =>{
+          if(cert == 'assessed'){
+            return ` sessionparticipant.assessed `
+          }else if(cert == 'certified'){
+            return ` sessionparticipant.certified `
+          }else if(cert == 'notcertified'){
+            return ` NOT sessionparticipant.certified `
+          }
+        }).join(' AND ')
+      }
       let trainingFilter = '';
       filter =
-        'INNER JOIN sessionparticipant ON(sessionparticipant."recordId"=record.id) ';
+        `LEFT JOIN sessionparticipant ON(sessionparticipant."recordId"=record.id ${certifiedFilter}) `;
       if (
         Object.keys(otherDimensions).filter((dim) =>
           [
@@ -68,8 +81,20 @@ export class TrainingAnalyticsService {
         ).length > -1
       ) {
         if (trainingFilter == '') {
+          let setDates = '';
+          if(otherDimensions.startDate || otherDimensions.endDate){
+            setDates += ' AND (';
+            if(otherDimensions.startDate && otherDimensions.endDate){
+              setDates += `trainingsession.startdate BETWEEN '${otherDimensions.startDate}' AND '${otherDimensions.endDate}' OR trainingsession.enddate BETWEEN '${otherDimensions.startDate}' AND '${otherDimensions.endDate}'`
+            }else if(otherDimensions.startDate){
+              setDates += `'${otherDimensions.startDate}' >= trainingsession.startdate OR '${otherDimensions.startDate}' >= trainingsession.enddate `
+            }else if(otherDimensions.endDate){
+              setDates += `'${otherDimensions.endDate}' <= trainingsession.startdate OR '${otherDimensions.endDate}' <= trainingsession.enddate `
+            }
+            setDates += ')';
+          }
           trainingFilter =
-            'INNER JOIN trainingsession ON(sessionparticipant."trainingsessionId"=trainingsession.id ';
+            `LEFT JOIN trainingsession ON(sessionparticipant."trainingsessionId"=trainingsession.id ${setDates} `;
         }
         if (Object.keys(otherDimensions).indexOf('deliverymodes') > -1) {
           trainingFilter += `trainingsession.deliverymode = '${
@@ -77,6 +102,13 @@ export class TrainingAnalyticsService {
           }') `;
         } else {
           trainingFilter += `) `;
+        }
+        if(pe){
+          trainingFilter += `
+            INNER JOIN _periodstructure pes ON(${pe.map(p => {
+              return `(trainingsession.startdate BETWEEN pes.startdate AND pes.enddate OR trainingsession.enddate BETWEEN pes.startdate AND pes.enddate) AND pes.iso='${p}'`;
+            })})
+          `
         }
       }
       if (
@@ -101,9 +133,9 @@ export class TrainingAnalyticsService {
         );
 
         trainingFilter += `
-                INNER JOIN trainingcurriculum ON(trainingcurriculum.id=trainingsession.curriculumid ${curriculumFilter})
-                INNER JOIN trainingunit ON(trainingunit.id =trainingcurriculum.unitid ${unitFilter})
-                INNER JOIN trainingsections ON(trainingsections.id =trainingcurriculum.sectionid ${sectionFilter})
+                LEFT JOIN trainingcurriculum ON(trainingcurriculum.id=trainingsession.curriculumid ${curriculumFilter})
+                LEFT JOIN trainingunit ON(trainingunit.id =trainingcurriculum.unitid ${unitFilter})
+                LEFT JOIN trainingsections ON(trainingsections.id =trainingcurriculum.sectionid ${sectionFilter})
              `;
       }
       if (
@@ -154,7 +186,7 @@ export class TrainingAnalyticsService {
       `
     }
     let ouFilter = generateOUFilterQuery('ous', ou, orglevels, context.user);
-    query = `SELECT ous.uid,
+    query = `SELECT TRIM(ous.uid) ou,
       ${orglevels
         .map(
           (orglevel) =>
@@ -195,6 +227,10 @@ export class TrainingAnalyticsService {
       id: 'providers',
       name: 'providers',
     });
+    analytics.headers = [{
+      id: 'ou',
+      name: 'Organisation Unit',
+    }].concat(analytics.headers);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
     analytics.rows = rows.map((row) => {
@@ -205,9 +241,10 @@ export class TrainingAnalyticsService {
       return newRow;
     });
     query =
-      'SELECT ou.uid,ou.name FROM  organisationunit ou WHERE (' +
-      ou.map((o) => "ou.uid = '" + o + "'").join(' OR ') +
-      ') ';
+      `SELECT ou.uid,ou.name FROM  organisationunit ou WHERE ou.uid IN (
+        ${ou.map((o) => "'" + o + "'").join(",")}
+      ) `;
+      console.log('query :',query);
     let organisationunits = await this.connetion.manager.query(query);
     organisationunits.forEach((orgUnit) => {
       analytics.metaData.items[orgUnit.uid] = {
@@ -291,16 +328,72 @@ export class TrainingAnalyticsService {
         "')",
     );
     let trainingFilter = '';
-    if(dimensions.certification){
+    if(
+      dimensions.certification || 
+      dimensions.sections || 
+      dimensions.units || 
+      dimensions.curriculums || 
+      dimensions.topics || 
+      dimensions.sponsors || 
+      dimensions.organizers || 
+      dimensions.deliverymode
+      ){
       let certificationFilter = '';
-      if(typeof dimensions.certification == 'string'){
-        certificationFilter = ` AND ${dimensions.certification}`;
-      }else{
-        certificationFilter = ` AND (${dimensions.certification.right.split(';').map((certificationStatus)=>{
-          return 'sp.'+certificationStatus
-        }).join(' OR ')})`;
+      if(dimensions.certification){
+        if(typeof dimensions.certification == 'string'){
+          certificationFilter = ` AND ${dimensions.certification}`;
+        }else{
+          certificationFilter = ` AND (${dimensions.certification.right.split(';').map((certificationStatus)=>{
+            return 'sp.'+certificationStatus
+          }).join(' OR ')})`;
+        }
       }
       trainingFilter += `INNER JOIN sessionparticipant sp ON(sp."recordId" = data.recordid ${certificationFilter})`;
+
+      let sectionFilter = '';
+      console.log(dimensions);
+      if(dimensions.sections){
+        console.log(dimensions.sections);
+        sectionFilter = ` AND tsec.uid IN ('${(<Comparison>dimensions.sections).right.split(';').map((sectionid)=>{
+          return sectionid
+        }).join("','")}')`;
+      }
+
+      let unitFilter = '';
+      if(dimensions.units){
+        unitFilter = ` AND tu.uid IN ('${(<Comparison>dimensions.units).right.split(';').map((unitid)=>{
+          return unitid
+        }).join("','")}')`;
+      }
+
+      let curriculumFilter = '';
+      if(dimensions.curriculums){
+        curriculumFilter = ` AND tc.uid IN ('${(<Comparison>dimensions.curriculums).right.split(';').map((curriculumid)=>{
+          return curriculumid
+        }).join("','")}')`;
+      }
+
+      let organiserFilter = '';
+      if(dimensions.organizers){
+        organiserFilter = ` AND torganiser.uid IN ('${(<Comparison>dimensions.organizers).right.split(';').map((organizerid)=>{
+          return organizerid
+        }).join("','")}')`;
+      }
+
+      let sponsorFilter = '';
+      if(dimensions.sponsors){
+        sponsorFilter = ` AND torganiser.uid IN ('${(<Comparison>dimensions.sponsors).right.split(';').map((sponsorid)=>{
+          return sponsorid
+        }).join("','")}')`;
+      }
+      trainingFilter += `
+          INNER JOIN trainingsession ts ON(ts.id = sp."trainingsessionId")
+          INNER JOIN trainingsponsor tsponsor ON(tsponsor.id = ts.sponsor ${sponsorFilter})
+          INNER JOIN trainingsponsor torganiser ON(torganiser.id = ts.organiser ${organiserFilter})
+          INNER JOIN trainingcurriculum tc ON(tc.id = ts.curriculumid ${curriculumFilter})
+          INNER JOIN trainingunit tu ON(tu.id = tc.unitid ${unitFilter})
+          INNER JOIN trainingsections tsec ON(tsec.id = tc.sectionid ${sectionFilter})
+      `;
       //TODO add filtering for sections units and all training fields
     }
     //TODO improve performance for fetching alot of data
@@ -326,7 +419,6 @@ export class TrainingAnalyticsService {
       });
       query += ` INNER JOIN _periodstructure pes ON(${periodquery.join(' OR ')}) LIMIT 200000`;
     }*/
-    console.log('coverage query :: ', query);
     let rows = await this.connetion.manager.query(query);
     analytics.height = rows.length;
     analytics.rows = rows.map((row) => {

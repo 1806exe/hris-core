@@ -195,7 +195,6 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
   async createSession(createSessionDTO: any) {
     const {
       curriculum,
-      deliveryMode,
       topics,
       orgunit,
       venue,
@@ -208,14 +207,12 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     Object.keys(createSessionDTO).forEach((key) => {
       session[key] = createSessionDTO[key];
     });
-
     session.organiser = await this.trainingSponsorRepository.findOne({
       where: { uid: organiser },
     });
     session.venue = await this.trainingVenueRepository.findOne({
       where: { uid: venue },
     });
-    session.deliverymode = deliveryMode;
     session.sponsor = await this.trainingSponsorRepository.findOne({
       where: { uid: sponsor },
     });
