@@ -128,6 +128,10 @@ TABLESPACE pg_default;
       await queryRunner.query(
         'ALTER TABLE "user" ADD COLUMN IF NOT EXISTS "enabled" BOOLEAN',
       );
+
+      await queryRunner.query(
+        'ALTER TABLE "user" ALTER COLUMN "enabled" DROP NOT NULL',
+      );
       await queryRunner.query(
         'ALTER TABLE "user" ADD COLUMN IF NOT EXISTS "userSettingsId" INTEGER',
       );
