@@ -194,8 +194,11 @@ TABLESPACE pg_default;
       );
 
       await queryRunner.query(
-        'ALTER TABLE "hris_user_group_members" RENAME TO "userrolemembers"',
-      );
+        'ALTER TABLE userrole ALTER COLUMN roles DROP NOT NULL',
+      ),
+        await queryRunner.query(
+          'ALTER TABLE "hris_user_group_members" RENAME TO "userrolemembers"',
+        );
       await queryRunner.query(
         'ALTER TABLE "userrolemembers" RENAME COLUMN group_id TO "userroleId"',
       );
@@ -203,7 +206,9 @@ TABLESPACE pg_default;
         'ALTER TABLE "userrolemembers" RENAME COLUMN user_id TO "userId"',
       );
 
-      await queryRunner.query('ALTER TABLE "user" ADD CONSTRAINT "UNIQUE_USERNAME" UNIQUE (username)');
+      await queryRunner.query(
+        'ALTER TABLE "user" ADD CONSTRAINT "UNIQUE_USERNAME" UNIQUE (username)',
+      );
     }
 
     let form = await queryRunner.getTable('hris_form');
@@ -1784,9 +1789,9 @@ CREATE INDEX "IDX_76bc448ca476788f7886a7569b"
         )}' WHERE id=${user.id}`,
       );
     }*/
-    await queryRunner.manager.query(`UPDATE public.user SET token='${await passwordHash(
-      'HRHIS2020',
-    )}'`);
+    await queryRunner.manager.query(
+      `UPDATE public.user SET token='${await passwordHash('HRHIS2020')}'`,
+    );
     await queryRunner.query(`
     CREATE TABLE public.organisationunitmembers
     (
