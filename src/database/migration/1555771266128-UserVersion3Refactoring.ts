@@ -203,7 +203,7 @@ TABLESPACE pg_default;
         'ALTER TABLE "userrolemembers" RENAME COLUMN user_id TO "userId"',
       );
 
-      //await queryRunner.query('ALTER TABLE GOOD ALTER COLUMN "id" RENAME TO userId;');
+      await queryRunner.query('ALTER TABLE "user" ADD CONSTRAINT "UNIQUE_USERNAME" UNIQUE (username)');
     }
 
     let form = await queryRunner.getTable('hris_form');
