@@ -142,9 +142,9 @@ TABLESPACE pg_default;
       );
       // await queryRunner.query('ALTER TABLE "user" ADD CONSTRAINT "UQ_b7a5e4a3b174e954b2dabf2ef9e" UNIQUE (email)); one duplicate user mail ****^^^Key (email)=(mwajey@yahoo.com) is duplicated.^^^*****
       await queryRunner.query(
-        'ALTER TABLE "user" ADD CONSTRAINT "UQ_bd91f2e189f3dd7ae490007e14e" UNIQUE (uid)',
+        'ALTER TABLE "user" ADD CONSTRAINT "UNIQUE_UID_USER" UNIQUE (uid)',
       );
-      await queryRunner.query(`ALTER TABLE "user" ADD CONSTRAINT  "FK_7154b7b71e3dd18b59ad8ee8b8f" FOREIGN KEY ("userSettingsId")
+      await queryRunner.query(`ALTER TABLE "user" ADD CONSTRAINT  "FK_USERSETTINGS_USER" FOREIGN KEY ("userSettingsId")
             REFERENCES public.usersetting (id) MATCH SIMPLE
             ON UPDATE CASCADE
             ON DELETE CASCADE
