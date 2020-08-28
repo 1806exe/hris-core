@@ -1,20 +1,20 @@
 import {
   BeforeInsert,
-  BeforeUpdate, Column,
+  BeforeUpdate,
+  Column,
   Entity,
   JoinColumn,
   JoinTable,
   ManyToMany,
-
   OneToMany,
   OneToOne,
-  Unique
+  Unique,
 } from 'typeorm';
 import { UserCoreProps } from '../../../../core/entities/user-core-props.entity';
 import { generateUid } from '../../../../core/helpers/makeuid';
 import {
   passwordCompare,
-  passwordHash
+  passwordHash,
 } from '../../../../core/utilities/password-utilities';
 import { MessageMetadata } from '../../../message/entities/message-metadata.entity';
 import { MessageThreadMetadata } from '../../../message/entities/message-thread-metadata.entity';
@@ -306,6 +306,7 @@ export class User extends UserCoreProps {
     cascade: true,
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
+    nullable: true,
   })
   @JoinColumn({ referencedColumnName: 'id' })
   userSettings: UserSettings;
