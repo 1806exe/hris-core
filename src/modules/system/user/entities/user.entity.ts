@@ -7,7 +7,8 @@ import {
   ManyToMany,
 
   OneToMany,
-  OneToOne
+  OneToOne,
+  Unique
 } from 'typeorm';
 import { UserCoreProps } from '../../../../core/entities/user-core-props.entity';
 import { generateUid } from '../../../../core/helpers/makeuid';
@@ -29,10 +30,11 @@ import { UserRole } from '../../user-role/entities/user-role.entity';
 import { UserSettings } from './user-settings.entity';
 
 @Entity('user', { schema: 'public' })
+@Unique(['username'])
 export class User extends UserCoreProps {
   static plural = 'users';
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'varchar', length: 255, unique: true })
   username: string;
 
   @Column({
