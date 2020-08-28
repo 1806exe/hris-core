@@ -159,7 +159,7 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       ],
     });
     if (facilitators == undefined || Object.keys(facilitators).length < 2) {
-      throw new NotFoundException(`Facilitator is not available `);
+      return { message: `Facilitator is not available ` };
     }
 
     const deletedFacilitator = await this.facilitatorRepository.delete(
@@ -187,7 +187,8 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       ],
     });
     if (participants == undefined || Object.keys(participants).length < 2) {
-      throw new NotFoundException(`Participant is not available `);
+      // throw new NotFoundException(`Participant is not available `);
+      return { message: `Participant is not available ` };
     }
 
     const deletedParticipants = await this.participantRepository.delete(
