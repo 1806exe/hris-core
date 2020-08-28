@@ -183,11 +183,7 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
           procCreateEntityDTO,
         );
         if (createdEntity !== undefined) {
-          const omitId = await _.omit(createdEntity, ['id']);
-          const sanitizedCreatedEntity = _.mapKeys(omitId, (value, key) => {
-            return key === 'uid' ? 'id' : key;
-          });
-          return postSuccessResponse(res, sanitizedCreatedEntity);
+          return postSuccessResponse(res, sanitizeResponseObject(createdEntity));
         } else {
           return genericFailureResponse(res);
         }
