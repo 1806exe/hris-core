@@ -165,7 +165,10 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     const deletedFacilitator = await this.facilitatorRepository.delete(
       facilitators,
     );
-    return deletedFacilitator;
+    return {
+      message: `Facilitator with ID ${record} deleted successfully`,
+      deletedFacilitator,
+    };
   }
 
   async deleteParticipant(uid: string, record: any) {
@@ -190,7 +193,10 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
     const deletedParticipants = await this.participantRepository.delete(
       participants,
     );
-    return deletedParticipants;
+    return {
+      message: `Participant with ID ${record} deleted successfully`,
+      deletedParticipants,
+    };
   }
   async createSession(createSessionDTO: any) {
     const {
