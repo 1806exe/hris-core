@@ -1,5 +1,10 @@
 import request from 'supertest';
-import { setUpServer, addAuthentication, tearDownServer, server } from '../set-up-e2e';
+import {
+  setUpServer,
+  addAuthentication,
+  tearDownServer,
+  server,
+} from '../set-up-e2e';
 
 beforeAll(async (done) => {
   await setUpServer();
@@ -11,51 +16,54 @@ afterAll(async (done) => {
 });
 let userRoleId;
 describe('User Role API', () => {
-
   test(`Testing Authentication /api/userRoles (GET)`, () => {
     return request(server.getHttpServer())
       .get(`/api/userRoles`)
       .expect(403)
-      .expect('{"statusCode":403,"message":"Forbidden resource","error":"Forbidden"}');
+      .expect(
+        '{"statusCode":403,"message":"Forbidden resource","error":"Forbidden"}',
+      );
   });
   it(`Adding User Role /api/userRoles (POST)`, () => {
-    return addAuthentication(request(server.getHttpServer())
-      .post(`/api/userRoles`))
-      .send({
-        "name": "Update Completeness",
-        "description": "Users with Ability to update completeness of organisation units through completeness report.",
-        "userAuthorities": [
-          {
-            "id": "BNt3nE1kOanyD",
-            "created": "2020-07-06T17:39:36.007Z",
-            "lastUpdated": "2020-07-06T17:39:36.007Z",
-            "name": "ORGANISATIONUNITCOMPLETENESS_AJAXUPDATE"
-          }
-        ]
-      })
-      //.expect(200)
-      .expect(
-        (res)=>{
+    return (
+      addAuthentication(request(server.getHttpServer()).post(`/api/userRoles`))
+        .send({
+          name: 'Update Completeness',
+          description:
+            'Users with Ability to update completeness of organisation units through completeness report.',
+          userAuthorities: [
+            {
+              id: 'BNt3nE1kOanyD',
+              created: '2020-07-06T17:39:36.007Z',
+              lastUpdated: '2020-07-06T17:39:36.007Z',
+              name: 'ORGANISATIONUNITCOMPLETENESS_AJAXUPDATE',
+            },
+          ],
+        })
+        //.expect(200)
+        .expect((res) => {
           userRoleId = res.body.id;
           expect(res.body.name).toEqual('Update Completeness');
-          expect(res.body.description).toEqual('Users with Ability to update completeness of organisation units through completeness report.');
+          expect(res.body.description).toEqual(
+            'Users with Ability to update completeness of organisation units through completeness report.',
+          );
           expect(res.body.userAuthorities.length).toEqual(1);
-        }
-      );
+        })
+    );
   });
 });
 let userId;
 describe('User API', () => {
-
   test(`Testing Authentication /api/users (GET)`, () => {
     return request(server.getHttpServer())
       .get(`/api/users`)
       .expect(403)
-      .expect('{"statusCode":403,"message":"Forbidden resource","error":"Forbidden"}');
+      .expect(
+        '{"statusCode":403,"message":"Forbidden resource","error":"Forbidden"}',
+      );
   });
   test(`Get Current User (GET)`, () => {
-    return addAuthentication(request(server.getHttpServer())
-      .get(`/api/me`))
+    return addAuthentication(request(server.getHttpServer()).get(`/api/me`))
       .expect(200)
       .expect((res) => {
         expect(res.body.username).toEqual('test');
@@ -66,23 +74,22 @@ describe('User API', () => {
       });
   });
   it(`Adding User /api/users (POST)`, () => {
-    return addAuthentication(request(server.getHttpServer())
-      .post(`/api/users`))
-      .send({
-        "username": "vincentminde",
-        "firstName": "Vincent",
-        "surname": "Minde",
-        "email": "vincentminde@gmail.com",
-        "enabled": true,
-        "password": "HRHIS2020",
-        "userRoles": [],
-        "userGroups": [],
-        "messages": [],
-        "organisationUnits": []
-      })
-      //.expect(200)
-      .expect(
-        (res)=>{
+    return (
+      addAuthentication(request(server.getHttpServer()).post(`/api/users`))
+        .send({
+          username: 'vincentminde',
+          firstName: 'Vincent',
+          surname: 'Minde',
+          email: 'vincentminde@gmail.com',
+          enabled: true,
+          password: 'HRHIS2020',
+          userRoles: [],
+          userGroups: [],
+          messages: [],
+          organisationUnits: [],
+        })
+        //.expect(200)
+        .expect((res) => {
           userId = res.body.id;
           expect(res.body.username).toEqual('vincentminde');
           expect(res.body.firstName).toEqual('Vincent');
@@ -90,32 +97,31 @@ describe('User API', () => {
           expect(res.body.email).toEqual('vincentminde@gmail.com');
           expect(res.body.enabled).toEqual(true);
           expect(res.body.password).toBeUndefined();
-        }
-      );
+        })
+    );
   });
 
   it(`Adding User with User Role /api/users (POST)`, () => {
-    return addAuthentication(request(server.getHttpServer())
-      .post(`/api/users`))
-      .send({
-        "username": "vincentminde1",
-        "firstName": "Vincent",
-        "surname": "Minde",
-        "email": "vincentminde1@gmail.com",
-        "enabled": true,
-        "password": "HRHIS2020",
-        "userRoles": [
-          {
-            "id":userRoleId
-          }
-        ],
-        "userGroups": [],
-        "messages": [],
-        "organisationUnits": []
-      })
-      //.expect(200)
-      .expect(
-        (res)=>{
+    return (
+      addAuthentication(request(server.getHttpServer()).post(`/api/users`))
+        .send({
+          username: 'vincentminde1',
+          firstName: 'Vincent',
+          surname: 'Minde',
+          email: 'vincentminde1@gmail.com',
+          enabled: true,
+          password: 'HRHIS2020',
+          userRoles: [
+            {
+              id: userRoleId,
+            },
+          ],
+          userGroups: [],
+          messages: [],
+          organisationUnits: [],
+        })
+        //.expect(200)
+        .expect((res) => {
           userId = res.body.id;
           expect(res.body.username).toEqual('vincentminde1');
           expect(res.body.firstName).toEqual('Vincent');
@@ -123,7 +129,18 @@ describe('User API', () => {
           expect(res.body.email).toEqual('vincentminde1@gmail.com');
           expect(res.body.enabled).toEqual(true);
           expect(res.body.userRoles.length).toEqual(1);
-        }
-      );
+        })
+    );
+  });
+  it(`Delet User /api/users/userId (DELETE)`, () => {
+    return addAuthentication(
+      request(server.getHttpServer())
+        .delete(`/api/users/${userId}`)
+        .expect((res) => {
+          expect(res.body.message).toBe(
+            `Object with id ${userId} deleted successfully`,
+          );
+        }),
+    );
   });
 });
