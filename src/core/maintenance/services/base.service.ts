@@ -170,12 +170,12 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
    *
    * @param entity
    */
-  async findOneByUid(param: string | {id:string}): Promise<T> {
+  async findOneByUid(param: string | { id: string }): Promise<T> {
     /**
      *
      */
     return await this.modelRepository.findOne({
-      where: { uid: _.has(param, 'id') ? (param as {id:string}).id : param },
+      where: { uid: _.has(param, 'id') ? (param as { id: string }).id : param },
     });
   }
 
@@ -297,7 +297,13 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
       /**
        *
        */
-      return await this.modelRepository.save(transformedEntity);
+      const savedEntity = await this.modelRepository.save(transformedEntity);
+      if ((this.modelRepository.metadata.tableName = 'user')) {
+        delete savedEntity.password;
+        return savedEntity;
+      } else {
+        return savedEntity;
+      }
     }
   }
 

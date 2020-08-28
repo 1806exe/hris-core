@@ -55,7 +55,8 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
      */
     if (query.paging === 'false' || '') {
       const allContents = await this.maintenanceBaseService.getWhereNoPaging(
-        query?.filter, query.fields
+        query?.filter,
+        query.fields,
       );
       return {
         [this.Model.plural]: _.map(allContents, sanitizeResponseObject),
@@ -183,7 +184,10 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
           procCreateEntityDTO,
         );
         if (createdEntity !== undefined) {
-          return postSuccessResponse(res, sanitizeResponseObject(createdEntity));
+          return postSuccessResponse(
+            res,
+            sanitizeResponseObject(createdEntity),
+          );
         } else {
           return genericFailureResponse(res);
         }
@@ -220,13 +224,17 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
         resolvedUpdateEntityDto,
       );
       if (payload) {
+        /*
         const omitId = _.omit(payload, ['id']);
         const entityResponse = _.mapKeys(omitId, (value, key) => {
           return key === 'uid' ? 'id' : key;
-        });
+        }); */
+
+        //TODO: Sanitize recursively the whole payload and replace uid with id
+
         return res.status(res.statusCode).json({
           message: `Item with id ${param.id} updated successfully.`,
-          payload: entityResponse,
+          payload: sanitizeResponseObject(payload),
         });
       } else {
         return res.status(res.statusCode).json({
@@ -276,9 +284,9 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
       }
     } catch (error) {
       console.log(error);
-      res.status(500).json({ 
+      res.status(500).json({
         statusCode: 500,
-        message: error.message
+        message: error.message,
       });
     }
   }
