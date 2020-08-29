@@ -268,16 +268,19 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
         const deleteResponse: DeleteResponse = await this.maintenanceBaseService.delete(
           isEntityExist.id,
         );
+        /*
         const omittedId = await _.omit(isEntityExist, ['id']);
         const sanitizedDeletedEntity = _.mapKeys(omittedId, (value, key) => {
           return key === 'uid' ? 'id' : key;
         });
+
+        */
         return deleteSuccessResponse(
           req,
           res,
           params,
           deleteResponse,
-          sanitizedDeletedEntity,
+          sanitizeResponseObject(isEntityExist),
         );
       } else {
         return genericFailureResponse(res, params);

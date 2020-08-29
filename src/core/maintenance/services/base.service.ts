@@ -174,9 +174,14 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
     /**
      *
      */
-    return await this.modelRepository.findOne({
+    const entity = await this.modelRepository.findOne({
       where: { uid: _.has(param, 'id') ? (param as { id: string }).id : param },
     });
+    if ((this.modelRepository.metadata.tableName = 'user')) {
+      return entity;
+    } else {
+      return entity;
+    }
   }
 
   /**
@@ -252,7 +257,16 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
 
     const transformedEntity = _.merge(savedEntity, objModel);
 
-    return await this.modelRepository.save(transformedEntity);
+    const createdEntity = await this.modelRepository.save(transformedEntity);
+    /*
+     *    TODO: Delete password if entity is User
+     */
+    if ((this.modelRepository.metadata.tableName = 'user')) {
+      delete createdEntity.password;
+      return createdEntity;
+    } else {
+      return createdEntity;
+    }
   }
 
   /**
@@ -273,6 +287,13 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
    *
    * @param entity
    * @param updates
+  /**
+   *
+   *
+   * @param {*} entity
+   * @param {*} updates
+   * @returns {Promise<UpdateResult>}
+   * @memberof MaintenanceBaseService
    */
   async update(entity: any, updates: any): Promise<UpdateResult> {
     /**
@@ -286,9 +307,6 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
         entity,
         updates,
       );
-      /**
-       *
-       */
       const transformedEntity: any = await UIDToIDTransformation(
         this.modelRepository,
         resolvedEntityDTO,
@@ -298,6 +316,9 @@ export class MaintenanceBaseService<T extends HRISBaseEntity> {
        *
        */
       const savedEntity = await this.modelRepository.save(transformedEntity);
+      /*
+       *    TODO: Delete password if entity is User
+       */
       if ((this.modelRepository.metadata.tableName = 'user')) {
         delete savedEntity.password;
         return savedEntity;
