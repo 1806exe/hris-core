@@ -15,6 +15,7 @@ afterAll(async (done) => {
   done();
 });
 let userRoleId;
+let orgUnitId;
 describe('User Role API', () => {
   test(`Testing Authentication /api/userRoles (GET)`, () => {
     return request(server.getHttpServer())
@@ -24,6 +25,32 @@ describe('User Role API', () => {
         '{"statusCode":403,"message":"Forbidden resource","error":"Forbidden"}',
       );
   });
+
+  it(`Creating model organisationUnit (POST)`, () => {
+    return addAuthentication(
+      request(server.getHttpServer()).post(`/api/organisationUnits`),
+    )
+      .send({
+        code: 'MOHCDGEC',
+        name: 'Ministry Of Health',
+        description: 'Ministry of Health and Social welfare',
+        shortName: 'MOHCDGEC',
+        active: true,
+        path: '/52893cd1b8359',
+      })
+      .expect((res) => {
+        orgUnitId = res.body.id;
+        expect(res.body.code).toBeDefined();
+        expect(res.body.name).toBeDefined();
+        expect(res.body.description).toBeDefined();
+        expect(res.body.description).toBe(
+          `Ministry of Health and Social welfare`,
+        );
+        expect(res.body.code).toBe('MOHCDGEC');
+        expect(res.body.name).toBe(`Ministry Of Health`);
+      });
+  });
+
   it(`Adding User Role /api/userRoles (POST)`, () => {
     return (
       addAuthentication(request(server.getHttpServer()).post(`/api/userRoles`))
@@ -118,7 +145,7 @@ describe('User API', () => {
           ],
           userGroups: [],
           messages: [],
-          organisationUnits: [],
+          organisationUnits: [{ id: orgUnitId }],
         })
         //.expect(200)
         .expect((res) => {
@@ -163,7 +190,7 @@ describe('User API', () => {
     );
   });
 
-  it(`Editing User /api/users (PUT)`, () => {
+  it(`Editing User /api/users/id (PUT)`, () => {
     return (
       addAuthentication(
         request(server.getHttpServer()).put(`/api/users/${userId}`),
@@ -174,6 +201,11 @@ describe('User API', () => {
           surname: 'Minde',
           email: 'minde@gmail.com',
           enabled: false,
+          organisationUnits: [
+            {
+              id: orgUnitId,
+            },
+          ],
         })
         //.expect(200)
         .expect((res) => {
@@ -183,8 +215,19 @@ describe('User API', () => {
           expect(res.body.payload.email).toEqual('minde@gmail.com');
           expect(res.body.payload.enabled).toBeUndefined();
           expect(res.body.payload.password).toBeUndefined();
-          expect(res.body.payload.message).toBeDefined
+          expect(res.body.payload.message).toBeDefined;
         })
+    );
+  });
+
+  it(`Get One user by ID /api/users/id (GET)`, () => {
+    return addAuthentication(
+      request(server.getHttpServer())
+        .get(`/api/users/${userId}`)
+        .expect((res) => {
+          expect(res.body.username).toBeDefined();
+          expect(res.body.firstName).toBeDefined();
+        }),
     );
   });
 
