@@ -195,7 +195,7 @@ export class AppsController extends BaseController<App> {
         '/' +
         params.id.toLowerCase() +
         '/' +
-        params['0'],
+        params['7'],
     );
   }
 }
