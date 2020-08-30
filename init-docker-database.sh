@@ -6,7 +6,7 @@ docker exec hris-db psql -h localhost -U postgres -c "GRANT ALL ON DATABASE hris
 docker exec hris-db psql -h localhost -U postgres -c "GRANT ALL ON DATABASE hris TO postgres;"
 docker exec hris-db psql -h localhost -U postgres -d hris -f /tmp/db/backup.sql
 echo 'Starting Migration'
-npm run migration:run
+npm run migration:docker
 echo 'Done Migration'
 echo 'Starting the API Container'
 docker container start hris-api
