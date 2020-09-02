@@ -67,4 +67,6 @@ export const entityTableMapper = {
   process: 'process',
   recordRules: 'recordrule',
   recordRuleActions: 'recordruleaction',
+  landingPage: 'app',
+  landingpage: 'app',
 };
