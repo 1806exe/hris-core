@@ -24,7 +24,11 @@ import {
   postSuccessResponse,
   genericFailureResponse,
 } from '../../../core/helpers/response.helper';
-import { SessionGuard } from '../../system/user/guards/session.guard';
+import {
+  SessionGuard,
+  SessionUser,
+} from '../../system/user/guards/session.guard';
+import { async } from 'rxjs/internal/scheduler/async';
 
 @Controller('api/' + App.plural)
 export class AppsController extends BaseController<App> {
@@ -38,7 +42,7 @@ export class AppsController extends BaseController<App> {
    */
   @Get()
   @UseGuards(SessionGuard)
-  async findAll(@Query() query): Promise<ApiResult> {
+  async findAl(@Query() query, @Req() req): Promise<ApiResult> {
     const results = await super.findAll(query);
     if (results.apps) {
       results.apps = results.apps.filter(
@@ -51,7 +55,12 @@ export class AppsController extends BaseController<App> {
         appicon: '../' + app.name.toLowerCase() + '/' + app.appicon,
       };
     });
-    return results;
+    if (req.session.user.userRoles[0].name.includes('Training')) {
+      const apps = results.apps.filter((app) => app.name.includes('training'));
+      return { apps: apps };
+    } else {
+      return results;
+    }
   }
   @Post('upload')
   @UseInterceptors(
