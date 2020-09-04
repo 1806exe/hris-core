@@ -128,36 +128,6 @@ describe('User API', () => {
     );
   });
 
-  it(`Adding Duplicate User /api/users (POST)`, () => {
-    return (
-      addAuthentication(request(server.getHttpServer()).post(`/api/users`))
-        .send({
-          username: 'vincentminde',
-          firstName: 'Vincent',
-          surname: 'Minde',
-          email: 'vincentminde@gmail.com',
-          enabled: true,
-          password: 'HRHIS2020',
-          userRoles: [],
-          userGroups: [],
-          messages: [],
-          organisationUnits: [],
-        })
-        //.expect(200)
-        .expect((res) => {
-          console.log(res.body)
-          /* userId = res.body.id;
-          expect(res.body.username).toEqual('vincentminde');
-          expect(res.body.firstName).toEqual('Vincent');
-          expect(res.body.surname).toEqual('Minde');
-          expect(res.body.email).toEqual('vincentminde@gmail.com');
-          expect(res.body.enabled).toEqual(true);
-          expect(res.body.password).toBeUndefined();
-          */
-        })
-    );
-  });
-
   it(`Adding User with User Role /api/users (POST)`, () => {
     return (
       addAuthentication(request(server.getHttpServer()).post(`/api/users`))
