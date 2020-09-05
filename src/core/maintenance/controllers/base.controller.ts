@@ -9,6 +9,8 @@ import {
   Req,
   Res,
   UseGuards,
+  ConflictException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as _ from 'lodash';
@@ -29,6 +31,7 @@ import {
   deleteSuccessResponse,
 } from '../../../core/helpers/maintenance-response.helper';
 import { unwatchFile } from 'fs';
+import { get } from 'http';
 
 export class MaintenanceBaseController<T extends HRISBaseEntity> {
   /**
@@ -174,6 +177,7 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
         createEntityDto,
         PayloadConfig,
       );
+      // console.log('PRO', procCreateEntityDTO);
       const isIDExist = await this.maintenanceBaseService.findOneByUid(
         procCreateEntityDTO,
       );
@@ -192,10 +196,15 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
           return genericFailureResponse(res);
         }
       }
-    } catch (error) {
-      res.status(400).json({ error: error.message });
     }
-  }
+      catch (error) {
+        if (error.code === '23505') {
+          throw new ConflictException('Entity already exists');
+        } else {
+          throw new InternalServerErrorException();
+        }
+      }
+    }
 
   /**
    *
