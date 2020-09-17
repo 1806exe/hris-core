@@ -198,11 +198,7 @@ export class MaintenanceBaseController<T extends HRISBaseEntity> {
       }
     }
       catch (error) {
-        if (error.code === '23505') {
-          throw new ConflictException('Entity already exists');
-        } else {
-          throw new InternalServerErrorException();
-        }
+        res.status(400).json({ error: error.message });
       }
     }
 
