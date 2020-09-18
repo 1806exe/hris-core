@@ -1,14 +1,6 @@
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { EntityCoreProps } from '../../../core/entities/entity-core-props';
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToMany,
-  OneToOne,
-  JoinColumn,
-} from 'typeorm';
 import { ReportGroup } from './report.group.entity';
-import { User } from '../../system/user/entities/user.entity';
 
 @Entity('report', { schema: 'public' })
 export class Report extends EntityCoreProps {

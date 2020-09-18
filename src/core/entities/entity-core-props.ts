@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { generateUid } from '../helpers/makeuid';
 import { TransactionTimestamp } from './transaction-timestamp.entity';
 
@@ -27,10 +27,11 @@ export class EntityCoreProps extends TransactionTimestamp {
   })
   description: string | null;
 
-  // TODO Find best way to associated last updated field with user entity
+  // TODO! Find best way to associated last updated field with user entity
+  /*
   @Column({ nullable: true, name: 'lastupdatedby' })
   lastUpdatedBy: string | null;
-
+*/
   @Column({
     type: 'char',
     nullable: true,

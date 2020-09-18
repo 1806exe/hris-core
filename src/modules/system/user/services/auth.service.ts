@@ -1,15 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { throwError } from 'rxjs';
+import { passwordCompare } from '../../../../core/utilities/password-utilities';
 import { sanitizeResponseObject } from '../../../../core/utilities/sanitize-response-object';
 import { User } from '../../../system/user/entities/user.entity';
-
 import { UserService } from './user.service';
-import { getBasicAuthanticationString } from '../../../../core/helpers/basic-auth-token';
-import {
-  passwordCompare,
-  passwordHash,
-} from '../../../../core/utilities/password-utilities';
-import { throwError } from 'rxjs';
-import { convertIdToUid } from '../../../../core/utilities/convert-id-to-uid';
 
 @Injectable()
 export class AuthService {

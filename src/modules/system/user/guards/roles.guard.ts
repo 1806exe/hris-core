@@ -35,6 +35,7 @@ const defaultOptions = {
   property: 'user',
   callback: (err, user, info) => {
     if (err || !user) {
+      console.log('Error when session expires', err.message)
       throw err || new UnauthorizedException();
     }
     return user;

@@ -1,13 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import Compression from 'compression';
-import * as Session from 'express-session';
-import Helmet from 'helmet';
 import bodyParser from 'body-parser';
-
+import Compression from 'compression';
+import Helmet from 'helmet';
 import { AppModule } from './app.module';
-
 import { getConfiguration } from './core/utilities/configuration';
+
+
 const config = getConfiguration();
 
 async function bootstrap() {

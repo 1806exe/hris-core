@@ -1,25 +1,20 @@
 import {
+  Body,
   Controller,
   Get,
+  Post,
   Req,
   Res,
-  HttpStatus,
   Session,
-  UseGuards,
-  Param,
-  Query,
-  Post,
-  Body,
+  UseGuards
 } from '@nestjs/common';
-import { User } from '../../../system/user/entities/user.entity';
-import { Request, Response } from 'express';
-import { AuthService } from '../services/auth.service';
-import { SessionGuard } from '../guards/session.guard';
-import { ApiResult } from '../../../../core/interfaces';
-import { AuthenticatedUser } from '../../../../core/helpers/user-decorator.helper';
 import { getSuccessResponse } from '../../../../core/helpers/response.helper';
+import { ApiResult } from '../../../../core/interfaces';
 import { sanitizeResponseObject } from '../../../../core/utilities/sanitize-response-object';
+import { User } from '../../../system/user/entities/user.entity';
 import { AuthGuard } from '../guards/auth.guard';
+import { SessionGuard } from '../guards/session.guard';
+import { AuthService } from '../services/auth.service';
 
 @Controller('api')
 export class AuthController {
@@ -87,8 +82,12 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(AuthGuard)
-  async login(@Req() request, @Body() params, @Res() res,@Session() session): Promise<ApiResult> {
-    
+  async login(
+    @Req() request,
+    @Body() params,
+    @Res() res,
+    @Session() session,
+  ): Promise<ApiResult> {
     console.log(session.user);
     if (session.user) {
       return getSuccessResponse(res, sanitizeResponseObject(session.user));

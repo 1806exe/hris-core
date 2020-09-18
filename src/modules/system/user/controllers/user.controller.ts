@@ -1,9 +1,7 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { UserService } from '../services/user.service';
-import { User } from '../../../system/user/entities/user.entity';
-import { AuthGuard } from '@nestjs/passport';
-import { BaseController } from '../../../../core/controllers/base.contoller';
+import { Controller } from '@nestjs/common';
 import { MaintenanceBaseController } from '../../../../core/maintenance/controllers/base.controller';
+import { User } from '../../../system/user/entities/user.entity';
+import { UserService } from '../services/user.service';
 
 @Controller('api/' + User.plural)
 // @UseGuards(AuthGuard())
