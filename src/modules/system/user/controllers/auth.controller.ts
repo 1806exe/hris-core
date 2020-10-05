@@ -88,7 +88,6 @@ export class AuthController {
     @Res() res,
     @Session() session,
   ): Promise<ApiResult> {
-    console.log(session.user);
     if (session.user) {
       return getSuccessResponse(res, sanitizeResponseObject(session.user));
     } else {
