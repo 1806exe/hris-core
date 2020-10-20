@@ -96,29 +96,28 @@ export class AnalyticsService {
         analytics.metaData.items[field.optionuid] = {
           name: field.option,
         };
-        for (const orgUnit of analytics.metaData.dimensions.ou) {
-          queries.push(
-            `SELECT '${
-              field.optionuid
-            }' as dx,'${orgUnit}' as ou,pe.iso as pe,COUNT(*) as value FROM _resource_table_${
-              field.formuid
-            } data
+        queries.push(
+          `SELECT '${
+            field.optionuid
+          }' as dx,ous.uid as ou,pe.iso as pe,COUNT(*) as value FROM _resource_table_${
+            field.formuid
+          } data
         INNER JOIN _organisationunitstructure ous ON(data.ou=ous.uid) 
         INNER JOIN _periodstructure pe ON((${isoPeriodIds
           .map((p) => `pe.iso='${p}'`)
           .join(' OR ')})) 
         WHERE data."${field.uid}" = '${
-              field.option
-            }' AND ${generateOUFilterQuery(
-              'ous',
-              analytics.metaData.dimensions.ou,
-              orgUnitLevels,
-              context.user,
-            )} 
-        GROUP BY pe.iso`,
-          );
-        }
+            field.option
+          }' AND ${generateOUFilterQuery(
+            'ous',
+            ou,
+            orgUnitLevels,
+            context.user,
+          )} 
+        GROUP BY pe.iso, ous.uid`,
+        );
       }
+
       // update period in analytics metadata
       analytics.metaData.dimensions.pe = isoPeriodIds;
       analytics.metaData.dimensions.pe.forEach((peId) => {
@@ -133,16 +132,25 @@ export class AnalyticsService {
         queries.join(' UNION '),
       );
 
+      analytics.metaData.dimensions.ou = [];
       // Attach result as analytics rows
       analytics.rows = result.map((data) => {
+        if(analytics.metaData.dimensions.ou.indexOf(data.ou) == -1){
+          analytics.metaData.dimensions.ou.push(data.ou);
+        }
         return [data.dx, data.ou, data.pe, data.value];
       });
-
       // Find organisation units to attach in analytics payload
-      const orgUnits = await this.orgUnitService.findIn({
+     /*
+      const orgUnits = await this.orgUnitService.findChildren({
         uid: analytics.metaData.dimensions.ou,
       });
-
+     */
+      
+     const orgUnits = await this.orgUnitService.findIn({
+      uid: analytics.metaData.dimensions.ou,
+    });
+  
       orgUnits.forEach((orgUnit) => {
         analytics.metaData.items[orgUnit.uid] = {
           name: orgUnit.name,
@@ -196,8 +204,7 @@ export class AnalyticsService {
         description: 'Calculates employees on duty',
         expression: 'COUNT(*)',
         formuid: '52893cd128bd2',
-        filter:
-          "${5289e934a6b16} IN ('On Duty','On leave','On sick leave')",
+        filter: "${5289e934a6b16} IN ('On Duty','On leave','On sick leave')",
         //"filter": "${end_of_reporting_period}>=${5289e934a9e8a}",
         aggregationtype: 'SUM',
         analyticstype: 'RECORDS',

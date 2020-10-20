@@ -74,4 +74,12 @@ export class OrganisationUnitService extends MaintenanceBaseService<
       totalCount,
     ];
   }
+  async findChildren(uid: any) {
+    const parent = await this.organisationUnitRepository.findOne({
+      where: { uid: uid['uid'][0] },
+    });
+    const query = `SELECT * FROM organisationunit WHERE parentid=${parent.id}`;
+    const orgunits = await this.organisationUnitRepository.manager.query(query);
+    return orgunits;
+  }
 }
