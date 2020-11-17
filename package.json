@@ -37,7 +37,7 @@
     "@nestjs/passport": "7.0.0",
     "@nestjs/platform-express": "^7.2.0",
     "@nestjs/schedule": "^0.4.1",
-    "@nestjs/swagger": "^4.6.0",
+    "@nestjs/swagger": "^4.7.5",
     "@nestjs/typeorm": "7.1.4",
     "@nestjs/websockets": "7.2.0",
     "@tsed/common": "^5.65.5",
