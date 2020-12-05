@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Connection, Repository } from 'typeorm';
-import { AnalyticsDimensions, Comparison } from '../../../core/interfaces/analytics-dimensions';
-import {
-  generateOUFilterQuery,
-  getISOOrgUnits,
-} from '../../../core/helpers/ou.helper';
 import * as _ from 'lodash';
-import { OrganisationUnitService } from '../../../modules/organisation-unit/services/organisation-unit.service';
-import { OrganisationUnit } from 'src/modules/organisation-unit/entities/organisation-unit.entity';
-import { start } from 'repl';
+import { Connection } from 'typeorm';
+import {
+  generateOUFilterQuery
+} from '../../../core/helpers/ou.helper';
+import { AnalyticsDimensions, Comparison } from '../../../core/interfaces/analytics-dimensions';
 
 @Injectable()
 export class TrainingAnalyticsService {

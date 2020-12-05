@@ -14,7 +14,6 @@ import { OrganisationUnitLevelService } from '../../organisation-unit/services/o
 import { OrganisationUnitService } from '../../organisation-unit/services/organisation-unit.service';
 import { getAnalyticsHeaders } from '../helpers/get-analytics-headers.helper';
 
-declare module namespace {}
 
 @Injectable()
 export class AnalyticsService {
