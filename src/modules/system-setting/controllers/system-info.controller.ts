@@ -49,6 +49,12 @@ export class SystemInfoController {
   }
   @Get('id')
   async generateRandomUids(@Query() query, @Res() res: Response): Promise<any> {
-    return res.status(HttpStatus.OK).send(generateUidRandomUids(query.limit));
+    if (query.limit) {
+      return res
+        .status(HttpStatus.OK)
+        .send(generateUidRandomUids(query?.limit));
+    } else {
+      return res.status(HttpStatus.OK).send(generateUidRandomUids(1));
+    }
   }
 }

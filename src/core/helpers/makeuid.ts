@@ -16,7 +16,7 @@ const randomSample = (uidArraySample = [], fn = Math.random) => {
 	return generatedId.join( '' );
   };
   
-  export const generateCodes = (numberOfUids: number, limit = 13, fn = Math.random) => {
+  export const generateUidRandomUids = (numberOfUids: number, limit = 13, fn = Math.random) => {
 	const generatedUids = [];
   
 	for ( let i = 0; i < numberOfUids; i++ ) {
