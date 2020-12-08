@@ -1,5 +1,16 @@
-import { Controller, Get, Param, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Query,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
+import { sanitizeResponseObject } from 'src/core/utilities/sanitize-response-object';
+import { generateUidRandomUids } from '../../../core/helpers/makeuid';
 import {
   genericFailureResponse,
   getSuccessResponse,
@@ -35,5 +46,9 @@ export class SystemInfoController {
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
+  }
+  @Get('id')
+  async generateRandomUids(@Query() query, @Res() res: Response): Promise<any> {
+    return res.status(HttpStatus.OK).send(generateUidRandomUids(query.limit));
   }
 }
