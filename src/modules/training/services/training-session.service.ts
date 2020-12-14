@@ -329,9 +329,10 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
       certified,
       assessed,
       certifiedby,
-      certificationdate,
+      startdate,
       assessedby,
-      assessmentdate,
+      startdate,
+      certificationdate
     } = updateParticipantDTO;
 
     await this.participantRepository.update(
@@ -349,8 +350,10 @@ export class TrainingSessionService extends BaseService<TrainingSession> {
           certificationdate && certificationdate != ''
             ? certificationdate
             : null,
-        assessmentdate:
-          assessmentdate && assessmentdate != null ? assessmentdate : null,
+        startdate:
+          startdate && startdate != null ? startdate : null,
+          enddate:
+          enddate && enddate != null ? enddate : null,
         assessedby:
           assessedby && assessedby != ''
             ? await this.userRepository.findOne({
