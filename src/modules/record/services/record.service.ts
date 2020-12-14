@@ -14,6 +14,7 @@ import { SessionParticipant } from '../../training/entities/training-session-par
 import { TrainingSession } from '../../training/entities/training-session.entity';
 import { RecordValue } from '../entities/record-value.entity';
 import { Record } from '../entities/record.entity';
+import * as _ from 'lodash';
 
 @Injectable()
 export class RecordService extends BaseService<Record> {
@@ -36,20 +37,13 @@ export class RecordService extends BaseService<Record> {
   }
 
   async createRecord(createRecordDto: any): Promise<Record> {
-    let record = new Record();
-    Object.keys(createRecordDto).forEach((key) => {
-      record[key] = createRecordDto[key];
-    });
-
-    record.organisationUnit = await this.organisationunitRepository.findOne({
-      where: { uid: createRecordDto.organisationUnit },
-    });
-    record.form = await this.formRepository.findOne({
-      where: { uid: createRecordDto.form },
-    });
-    await this.recordRepository.save(record);
-
-    return this.findOneByUid(record.uid);
+    if (!Array.isArray(createRecordDto)) {
+      return this.createOneRecord(createRecordDto);
+    }
+    if (Array.isArray(createRecordDto)) {
+      const record = await this.createMultipleRecords(createRecordDto);
+      return record;
+    }
   }
 
   async findAndCount(fields, filter, size, page): Promise<[Record[], number]> {
@@ -158,7 +152,7 @@ export class RecordService extends BaseService<Record> {
       Object.keys(updateRecordValueDto).forEach((key) => {
         recordValue[key] = updateRecordValueDto[key];
       });
-      await this.recordValueRepository.save(recordValue);
+      return await this.recordValueRepository.save(recordValue);
     } catch (e) {
       return e;
     }
@@ -284,5 +278,69 @@ export class RecordService extends BaseService<Record> {
         where: { recordId: recordid },
       }),
     };
+  }
+  async createRecordWithRecordValues(createRecordDto: {
+    organisationUnit: any;
+    form: any;
+    recordValues: any[];
+  }): Promise<any> {
+    const record = new Record();
+
+    record.organisationUnit = await this.organisationunitRepository.findOne({
+      where: { uid: createRecordDto.organisationUnit },
+    });
+    record.form = await this.formRepository.findOne({
+      where: { uid: createRecordDto.form },
+    });
+    const savedRecord = await this.recordRepository.save(record);
+    const arrayData = [];
+    for (const recordValue of await createRecordDto?.recordValues) {
+      const record = await this.createRecordValue(savedRecord.uid, recordValue);
+      arrayData.push(record);
+    }
+    if (arrayData.length === createRecordDto?.recordValues.length) {
+      const returnedRecord = await this.findOneByUid(savedRecord.uid);
+      return returnedRecord;
+    }
+  }
+  async createOneRecord(createRecordDto) {
+    if (
+      createRecordDto?.recordValues === undefined ||
+      createRecordDto?.recordValues?.length === 0
+    ) {
+      let record = new Record();
+      Object.keys(createRecordDto).forEach((key) => {
+        record[key] = createRecordDto[key];
+      });
+
+      record.organisationUnit = await this.organisationunitRepository.findOne({
+        where: { uid: createRecordDto.organisationUnit },
+      });
+      record.form = await this.formRepository.findOne({
+        where: { uid: createRecordDto.form },
+      });
+      await this.recordRepository.save(record);
+
+      return this.findOneByUid(record.uid);
+    }
+    if (
+      createRecordDto?.recordValues !== undefined ||
+      createRecordDto?.recordValues?.length > 0
+    ) {
+      return await this.createRecordWithRecordValues(createRecordDto);
+    }
+  }
+  async createMultipleRecords(createRecordDTO: any[]): Promise<any> {
+    const recordCounterArray = [];
+    for (const record of createRecordDTO) {
+      const recordsaved = await this.createRecordWithRecordValues(record);
+      recordCounterArray.push(recordsaved);
+      if (recordCounterArray.length === createRecordDTO.length) {
+        return {
+          message: `Records created successfully`,
+          payload: recordCounterArray,
+        };
+      }
+    }
   }
 }
