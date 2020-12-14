@@ -59,10 +59,10 @@ export class RecordService extends BaseService<Record> {
       },
     };
     let where: any = getWhereConditions(filter);
-
+    //TODO! performance improvements with filtering when fetching
     const orgunitsquery = this.organisationunitRepository.createQueryBuilder();
     const getOrgunits = await orgunitsquery.getMany();
-    const orgunits = await JSON.parse(
+    const orgunits:OrganisationUnit[] = await JSON.parse(
       JSON.stringify(getOrgunits).split('OrganisationUnit').join(''),
     );
 
@@ -77,10 +77,16 @@ export class RecordService extends BaseService<Record> {
       (form) => form.uid === whereParams.form,
     );
     const actualOrgUnit = await orgunits.filter(
-      (orgunit) => orgunit.uid === whereParams.organisationUnit,
+      (orgunit) =>{
+        if(whereParams.ouMode === 'DESCENDANTS'){
+          return orgunit.uid === whereParams.organisationUnit || orgunit.path.indexOf(whereParams.organisationUnit) > -1;
+        }else{
+          return orgunit.uid === whereParams.organisationUnit;
+        }
+      }
     );
 
-    where = { organisationUnit: actualOrgUnit[0].id, form: actualForm[0].id };
+    where = { organisationUnit: In(actualOrgUnit.map((ou)=>ou.id)), form: actualForm[0].id };
 
     let [records, number] = await this.recordRepository.findAndCount({
       select: getSelections(fields, metaData),
